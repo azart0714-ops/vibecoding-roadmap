@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вайбкодинг: Интерактивная Карта Развития (Roadmap L3-L8)</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  
+  <!-- Style Sheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- SVG Filters for Gradient Effects -->
+  <svg style="position: absolute; width: 0; height: 0;">
+    <defs>
+      <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+      </linearGradient>
+      <filter id="gradient-filter">
+        <feImage href="#icon-gradient" result="gradient" />
+        <feComposite in="SourceGraphic" in2="gradient" operator="in" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Grainy Noise Background Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+
+  <!-- App Container -->
+  <div class="app-container">
+    
+    <!-- Top Premium Navigation & Header -->
+    <header class="app-header">
+      <div class="header-main">
+        <div class="logo-area">
+          <div class="logo-icon">V</div>
+          <div class="logo-text">
+            <h1>Вайбкодинг</h1>
+            <span class="logo-sub">Интерактивная Карта Развития</span>
+          </div>
+        </div>
+        
+
+
+        <!-- View Toggle Buttons -->
+        <div class="view-toggle-wrapper">
+          <button id="toggle-bento" class="toggle-btn active" data-view="bento">
+            <i data-lucide="grid"></i>
+            <span>Level-s Vibecoding</span>
+          </button>
+          <button id="toggle-canvas" class="toggle-btn" data-view="canvas">
+            <i data-lucide="network"></i>
+            <span>Roadmap</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Summary Metric Bar & Progress -->
+      <div class="metric-bar">
+        <div class="metric-item progress-metric-item">
+          <div class="progress-info">
+            <span class="metric-label">Прогресс обучения:</span>
+            <span class="metric-value font-tech" id="overall-progress-text">0 / 31 (0%)</span>
+          </div>
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar-fill" id="overall-progress-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <button id="reset-progress-btn" class="reset-btn" title="Сбросить весь прогресс">
+          <i data-lucide="rotate-ccw"></i>
+          <span>Сбросить прогресс</span>
+        </button>
+      </div>
+      
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label"><i data-lucide="layers"></i> Уровни:</span>
+          <div class="filter-options" id="level-filters">
+            <button class="filter-btn active" data-level="all">Все</button>
+            <button class="filter-btn" data-level="L_Insights">L Insights</button>
+            <button class="filter-btn" data-level="L0">L0. Фундамент</button>
+            <button class="filter-btn" data-level="L1">L1. Планирование</button>
+            <button class="filter-btn" data-level="L2">L2. Принципы</button>
+            <button class="filter-btn" data-level="L3">L3. Среда</button>
+            <button class="filter-btn" data-level="L4">L4. Git</button>
+            <button class="filter-btn" data-level="L5">L5. ИИ-Делегирование</button>
+            <button class="filter-btn" data-level="L6">L6. Прототипы</button>
+            <button class="filter-btn" data-level="L7">L7. Разработка</button>
+            <button class="filter-btn" data-level="L8">L8. Swarm</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label"><i data-lucide="route"></i> Треки:</span>
+          <div class="filter-options" id="track-filters">
+            <button class="filter-btn active" data-track="all">Все</button>
+            <button class="filter-btn" data-track="fundamentals" data-color="#8b5cf6">🎯 Фундаментальные правила</button>
+            <button class="filter-btn" data-track="research" data-color="#06b6d4">🔍 Исследование</button>
+            <button class="filter-btn" data-track="planning" data-color="#10b981">📋 Планирование</button>
+            <button class="filter-btn" data-track="stack" data-color="#f97316">🛠 Стек & CLI</button>
+            <button class="filter-btn" data-track="engineering" data-color="#f97316">🚀 Инженерия MVP</button>
+            <button class="filter-btn" data-track="workflow" data-color="#f97316">👥 Swarm & Workflow</button>
+            <button class="filter-btn" data-track="product" data-color="#f97316">🧠 Продукт & Рынок</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main View Content Area -->
+    <main class="app-content">
+      
+      <!-- View 1: Bento Grid View (Default) -->
+      <div id="bento-view-container" class="view-panel active">
+        <div class="bento-grid" id="bento-grid-content">
+          <!-- Dynamically filled by JS -->
+        </div>
+      </div>
+
+      <!-- View 2: Interactive Mind Map Canvas View -->
+      <div id="canvas-view-container" class="view-panel">
+        <div class="canvas-instructions" data-hint="Зажмите левую кнопку мыши для панорамирования. Скролл — зум. Клик на узел — подробности.">
+          <i data-lucide="info"></i>
+          <span>Зажмите левую кнопку мыши для панорамирования. Используйте скролл для зума. Кликайте на узлы для просмотра.</span>
+        </div>
+        <div class="canvas-controls">
+          <button id="zoom-in" title="Приблизить"><i data-lucide="zoom-in"></i></button>
+          <button id="zoom-out" title="Отдалить"><i data-lucide="zoom-out"></i></button>
+          <button id="zoom-fit" title="Сбросить масштаб"><i data-lucide="maximize-2"></i></button>
+        </div>
+        
+        <div class="map-viewport" id="map-viewport">
+          <div class="map-canvas" id="map-canvas">
+            <!-- SVG connection lines rendered in background -->
+            <svg class="canvas-connections-svg" id="canvas-connections">
+              <defs>
+                <marker id="arrow-incomplete" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f97316" />
+                </marker>
+                <marker id="arrow-completed" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981" />
+                </marker>
+              </defs>
+            </svg>
+            
+            <!-- Nodes will be rendered dynamically by JS -->
+            <div class="canvas-nodes-container" id="canvas-nodes-container"></div>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+
+    <!-- Slide-out Side Drawer Panel for Node Details -->
+    <aside class="side-drawer" id="side-drawer">
+      <div class="drawer-header">
+        <div class="drawer-track-tag" id="drawer-track-tag">🛠 Стек & Инструменты</div>
+        <button class="close-drawer-btn" id="close-drawer" title="Закрыть панель">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      
+      <!-- Node Content Container -->
+      <div class="drawer-content" id="drawer-content-node">
+        <div class="drawer-title-area">
+          <span class="drawer-level-badge" id="drawer-level">Level L3</span>
+          <h2 id="drawer-title" class="drawer-title">Настройка Claude Code CLI</h2>
+        </div>
+
+        <p id="drawer-description" class="drawer-desc">Конфигурирование и запуск интерактивной консольной утилиты Claude Code.</p>
+
+        <!-- Tools section (Moved here under description) -->
+        <div class="drawer-section" style="margin-bottom: 24px;">
+          <h3><i data-lucide="wrench"></i> Рекомендуемые инструменты</h3>
+          <div class="tools-pills-container" id="drawer-tools">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- Steps list -->
+        <div class="drawer-section">
+          <div class="steps-section-header">
+            <label class="custom-checkbox-container master-steps-checkbox-container" title="Отметить все шаги">
+              <input type="checkbox" id="master-steps-checkbox">
+              <span class="checkbox-checkmark" style="--card-accent: var(--accent-emerald);"></span>
+            </label>
+            <h3>Пошаговый процесс (SOP)</h3>
+          </div>
+          <ul class="drawer-steps-list" id="drawer-steps">
+            <!-- Filled by JS -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Level Content Container -->
+      <div class="drawer-content" id="drawer-content-level" style="display: none; padding-top: 10px;">
+        <!-- Filled dynamically by JS -->
+      </div>
+    </aside>
+
+    <!-- Overlay under the side-drawer on smaller screens -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+  </div>
+
+  <!-- Data and logic scripts -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
