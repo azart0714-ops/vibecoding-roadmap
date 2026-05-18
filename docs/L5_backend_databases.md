@@ -83,41 +83,213 @@ Backend код, который выполняется по требованию 
 - **One-to-One** — один пользователь → один профиль
 
 #### 2.3. Провайдеры PostgreSQL
-- **Neon** — serverless PostgreSQL (бесплатно 0.5 GB)
-- **Supabase** — PostgreSQL + Auth + Storage (бесплатно 500 MB)
-- **Railway** — PostgreSQL + deployment ($5/мес)
+
+##### Neon vs Supabase vs Railway: Полное сравнение
+Для ИИ-разработки (vibecoding) выбор провайдера базы данных критически влияет на скорость и удобство отладки.
+
+| Критерий | Neon DB | Supabase | Railway |
+| :--- | :--- | :--- | :--- |
+| **Специализация** | Serverless Postgres с мгновенным ветвлением (Database Branching) | Open Source Firebase Alternative (БД + Auth + Storage) | Облачный хостинг полного цикла (App + Postgres + Redis) |
+| **Free Tier лимит** | 1 проект, 0.5 GB хранилища, 1 вычислительный узел | 2 проекта, 500 MB хранилища, 50,000 MAU для Auth | Нет бесплатного тарифа (ранее были 500ч, сейчас $5 лимит) |
+| **Ветвление (Branching)** | **Да (мгновенное через Copy-on-Write)** | Да (через Supabase CLI / migrations, но медленнее) | Да (через Environments, но поднимается новая БД) |
+| **Доп. сервисы** | Нет (только чистый Postgres) | Auth, Storage, Edge Functions, Realtime, Vector (`pgvector`) | Шаблоны деплоя 650+ сервисов, Redis, Cron |
+| **AI-Friendly Score** | **9.5/10** (Ветвление делает preview-сборки ИИ мгновенными) | **9.0/10** (Все сервисы из одной коробки облегчают промптинг) | **8.5/10** (Хорош для монолитов, но БД не имеет serverless-снапшотов) |
+| **Вердикт** | **Идеален для Next.js + Vercel / Neon Integration** | **Идеален для комплексных мобильных и web-приложений** | **Идеален для Docker/Node.js бэкендов общего назначения** |
+
+##### Database Branching — Game Changer для ИИ-разработки
+Традиционный подход к миграциям баз данных ломается, когда код пишет ИИ-агент. Он может сгенерировать невалидную миграцию или испортить структуру таблиц. Ветвление баз данных (Database Branching), популяризированное Neon, полностью решает эту проблему:
+1. **Изолированные Preview-окружения**: При создании PR или ветки в GitHub, Neon мгновенно (за 1 секунду) создает точную копию рабочей базы данных (структуру и данные) с помощью технологии Copy-on-Write.
+2. **Безопасное тестирование миграций**: ИИ-агент применяется новые миграции на тестовой ветке базы данных. Если миграция ломает логику или падает с ошибкой, основная (production) база остается абсолютно нетронутой.
+3. **Мгновенный откат (Rollback)**: В случае фатального бага на стейджинге, ветку базы данных можно просто удалить и пересоздать за секунду, не тратя часы на ручное восстановление из бэкапов.
+
+##### Supabase — Всё-в-одном решение
+Если Neon дает идеальную инфраструктуру для реляционных данных, то Supabase — это целая экосистема, которая сокращает время вывода MVP на рынок в 5 раз благодаря тому, что все компоненты бэкенда поставляются из единой консоли и управляются через один клиент:
+- **PostgreSQL**: Полноценная БД с поддержкой расширений, включая `pgvector` для хранения векторных эмбеддингов ИИ.
+- **Supabase Auth**: Встроенная система авторизации (Email, Google, GitHub, OAuth, MFA, Magic Links) с автоматической интеграцией в политики безопасности баз данных (Row Level Security - RLS).
+- **Supabase Storage**: Облачное хранилище для медиафайлов и документов с оптимизацией изображений на лету.
+- **Realtime Subscriptions**: Автоматическое прослушивание изменений в таблицах БД через WebSockets без необходимости писать свой сервер веб-сокетов.
+- **Edge Functions**: Бессерверные функции на Deno для выполнения кастомной логики на границе сети (Edge) с минимальной задержкой.
 
 📖 **Ресурсы**:
-- [PostgreSQL Tutorial](https://www.postgresqltutorial.com/)
-- [Neon](https://neon.tech/)
-- [Supabase](https://supabase.com/)
+- [Neon Branching Guide](https://neon.tech/docs/introduction/branching)
+- [Supabase Architecture](https://supabase.com/docs/guides/getting-started/architecture)
+- [Railway Databases](https://docs.railway.app/databases/postgresql)
 
 ---
 
 ### Раздел 3: Prisma ORM
 
 #### 3.1. Концепция
-- **Type-safe ORM** — автоматическая генерация типов из схемы
-- **Prisma Schema** — декларативное описание моделей БД
-- **Prisma Client** — автоматически генерируемый клиент для запросов
-- **Migrations** — версионирование изменений схемы БД
+- **Декларативность схемы**: Вы описываете сущности и связи простым, интуитивно понятным языком в файле `schema.prisma`. ИИ-агенты превосходно считывают и генерируют такие схемы без ошибок в синтаксисе SQL.
+- **Type-safe ORM**: Автоматическая кодогенерация типов TypeScript на основе вашей схемы. Если вы удалили колонку, TypeScript выдаст ошибку во всех файлах проекта, где она использовалась.
+- **Prisma Client**: Удобный автодополняемый API для работы с БД с полной поддержкой связей, транзакций и вложенных выборок.
+- **Формула Vibecoding**: *"Описываешь данные простым языком в схеме → Prisma генерирует всё остальное (миграции, типы, автодополнение, админку)"*. Это сводит ментальную нагрузку разработчика и ИИ к минимуму.
 
-#### 3.2. Основные команды
+#### 3.2. Prisma vs Drizzle vs TypeORM
+Каждая ORM имеет свои плюсы, но для AI-driven разработки Prisma остается безусловным лидером благодаря своей строгой декларативности.
+
+| Критерий | Prisma ORM | Drizzle ORM | TypeORM |
+| :--- | :--- | :--- | :--- |
+| **Схема данных** | **Декларативный `.prisma` файл** (ИИ считывает его идеально) | Описание на TypeScript (ИИ часто путается в импортах и типах) | Классы и декораторы TypeScript (избыточный бойлерплейт) |
+| **Type-Safety** | Отличная (генерируется автоматически при `prisma generate`) | Идеальная (нативная поддержка TS на этапе компиляции) | Средняя (декораторы могут не соответствовать реальной схеме) |
+| **Миграции** | **Полностью автоматические** (`prisma migrate dev`) | Полуавтоматические (требуют запуска `drizzle-kit generate`) | Ручные или авто-генерация (часто генерирует невалидный SQL) |
+| **Производительность**| Средняя (из-за Query Engine на Rust как промежуточного слоя) | **Максимальная** (тонкий слой над SQL-драйвером, без оверхеда) | Средняя (классический тяжелый ActiveRecord/DataMapper) |
+| **AI-Friendly Score** | **10/10** (Спецификация схемы лаконична, ИИ легко рефакторит ее) | **7.5/10** (ИИ совершает ошибки в сложных SQL-операторах Drizzle) | **6.0/10** (Слишком много шаблонного кода отвлекает ИИ от бизнес-логики) |
+| **Вердикт** | **Абсолютный лидер для быстрого прототипирования MVP с ИИ** | Отличный выбор для высоконагруженных систем вручную | Устаревший стандарт, не рекомендуется для vibecoding |
+
+#### 3.3. Основные команды
 - `prisma init` — инициализация Prisma в проекте
-- `prisma migrate dev` — создать и применить миграцию
-- `prisma generate` — генерировать Prisma Client
-- `prisma studio` — GUI для просмотра данных
-- `prisma db push` — синхронизировать схему (для dev)
+- `prisma migrate dev --name <migration_name>` — создание и применение безопасной миграции
+- `prisma generate` — принудительная генерация Prisma Client для обновления типов TS
+- `prisma studio` — запуск встроенного локального веб-интерфейса (GUI) для просмотра и редактирования таблиц
+- `prisma db push` — прямая синхронизация схемы с БД без создания файлов миграций (удобно для быстрых прототипов)
 
-#### 3.3. Prisma Client операции
+#### 3.4. Prisma Client операции
 - **create** — создание записи
-- **findMany** — получение списка
-- **findUnique** — получение по уникальному полю
-- **update** — обновление записи
-- **delete** — удаление записи
-- **include** — загрузка связанных данных
+- **findMany** — получение списка с фильтрами, сортировкой и пагинацией
+- **findUnique** — получение одной записи по уникальному полю или первичному ключу
+- **update** — безопасное обновление записи
+- **delete** — удаление записи из БД (Hard Delete)
+- **include** — жадная загрузка (Eager Loading) связанных сущностей за один запрос
 
-📖 **Ресурс**: [Prisma Documentation](https://www.prisma.io/docs)
+#### 3.5. Продвинутые паттерны Prisma для ИИ-разработки
+Чтобы ИИ-агенты писали масштабируемый код бэкенда, не плодили дубликаты и не перегружали контроллеры, используйте следующие архитектурные паттерны с готовыми примерами на TypeScript:
+
+##### 1. Repository Pattern (Слой доступа к данным)
+Изолирует работу с Prisma от бизнес-логики. ИИ-агент сможет легко менять методы БД, не затрагивая контроллеры API.
+
+```typescript
+// src/repositories/user.repository.ts
+import { PrismaClient, User, Prisma } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export class UserRepository {
+  // Получение пользователя по Email со всеми связями
+  async findByEmail(email: string): Promise<User | null> {
+    return prisma.user.findUnique({
+      where: { email },
+      include: { profile: true, posts: true },
+    });
+  }
+
+  // Создание пользователя с транзакционной инициализацией профиля
+  async createUserWithProfile(
+    userData: Prisma.UserCreateInput,
+    bio: string
+  ): Promise<User> {
+    return prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: userData,
+      });
+      await tx.profile.create({
+        data: {
+          bio,
+          userId: user.id,
+        },
+      });
+      return user;
+    });
+  }
+}
+```
+
+##### 2. Service Layer & DTO Pattern (Бизнес-логика и Валидация)
+Разделяет транспортный уровень API, валидацию входных данных и бизнес-правила.
+
+```typescript
+// src/dtos/create-user.dto.ts
+import { z } from 'zod';
+
+export const CreateUserSchema = z.object({
+  email: z.string().email('Некорректный формат Email'),
+  name: z.string().min(2, 'Имя должно быть не короче 2 символов'),
+  bio: z.string().max(300, 'Биография не должна превышать 300 символов').optional(),
+});
+
+export type CreateUserDto = z.infer<typeof CreateUserSchema>;
+
+// src/services/user.service.ts
+import { UserRepository } from '../repositories/user.repository';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { User } from '@prisma/client';
+
+export class UserService {
+  private userRepository = new UserRepository();
+
+  async registerUser(dto: CreateUserDto): Promise<User> {
+    // Проверка бизнес-логики: уникальность email
+    const existingUser = await this.userRepository.findByEmail(dto.email);
+    if (existingUser) {
+      throw new Error('Пользователь с таким email уже зарегистрирован');
+    }
+
+    // Сохранение пользователя в БД через репозиторий
+    return this.userRepository.createUserWithProfile(
+      {
+        email: dto.email,
+        name: dto.name,
+      },
+      dto.bio || ''
+    );
+  }
+}
+```
+
+##### 3. Prisma Extensions & Soft Delete (Мягкое удаление и Логирование)
+Использование современных Prisma Extensions для автоматизации мягкого удаления записей (Soft Delete) и логирования времени выполнения запросов.
+
+```typescript
+// src/lib/prisma-extended.ts
+import { PrismaClient } from '@prisma/client';
+
+const basePrisma = new PrismaClient();
+
+export const prismaExtended = basePrisma
+  // 1. Расширение для мягкого удаления (Soft Delete)
+  .$extends({
+    model: {
+      user: {
+        async softDelete(id: string) {
+          return basePrisma.user.update({
+            where: { id },
+            data: { deletedAt: new Date() },
+          });
+        },
+      },
+    },
+    // 2. Глобальный фильтр для исключения мягко удаленных записей при поиске
+    query: {
+      user: {
+        async findMany({ args, query }) {
+          args.where = { ...args.where, deletedAt: null };
+          return query(args);
+        },
+        async findUnique({ args, query }) {
+          args.where = { ...args.where, deletedAt: null };
+          return query(args);
+        },
+      },
+    },
+  })
+  // 3. Расширение для логирования производительности
+  .$extends({
+    query: {
+      async $allOperations({ model, operation, args, query }) {
+        const before = Date.now();
+        const result = await query(args);
+        const duration = Date.now() - before;
+        console.log(`[PRISMA DB] Query ${model}.${operation} executed in ${duration}ms`);
+        return result;
+      },
+    },
+  });
+```
+
+📖 **Ресурсы**:
+- [Prisma Client Advanced Patterns](https://www.prisma.io/docs/concepts/components/prisma-client)
+- [Prisma Extensions Guide](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions)
+- [Repository Pattern in NestJS/Prisma](https://docs.nestjs.com/recipes/prisma)
 
 ---
 

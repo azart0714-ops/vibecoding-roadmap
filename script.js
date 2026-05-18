@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const connectionsList = [
     // L_Insights -> L0 / L1 (Theoretical Insights into Product validation)
     { from: "lkey_philosophy", to: "l0_3_mvp_philosophy" },
+    { from: "lkey_philosophy", to: "l0_5_early_adoption" },
     { from: "lkey_security", to: "l0_1_pmf_basics" },
     { from: "lkey_architecture", to: "l1_2_value_proposition" },
     { from: "lkey_prompting", to: "l0_2_custdev" },
@@ -115,21 +116,33 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l0_3_mvp_philosophy", to: "l1_2_value_proposition" },
     { from: "l0_3_mvp_philosophy", to: "l1_4_roadmap_planning" },
     { from: "l0_4_do_things_not_scale", to: "l1_4_roadmap_planning" },
+    { from: "l0_5_early_adoption", to: "l1_2_value_proposition" },
 
     // L1 -> L2 (Research and Roadmap to AI Roles/Quality)
     { from: "l1_1_market_research", to: "l2_1_human_ai_roles" },
     { from: "l1_2_value_proposition", to: "l2_1_human_ai_roles" },
+    { from: "l1_2_value_proposition", to: "l2_9_database_safety" },
     { from: "l1_3_user_stories", to: "l2_3_iterative_development" },
+    { from: "l1_3_user_stories", to: "l2_6_golden_rule_prompting" },
+    { from: "l1_3_user_stories", to: "l2_7_prompt_types" },
+    { from: "l1_3_user_stories", to: "l2_8_prompt_language" },
     { from: "l1_4_roadmap_planning", to: "l2_4_context_preservation" },
     { from: "l1_4_roadmap_planning", to: "l2_2_anti_slop" },
+    { from: "l1_4_roadmap_planning", to: "l2_5_project_architecture" },
 
     // L2 -> L3 (Human-AI loop to Local Workspace Setup)
     { from: "l2_1_human_ai_roles", to: "l3_1_vscode" },
     { from: "l2_1_human_ai_roles", to: "l3_4_skills" },
+    { from: "l2_1_human_ai_roles", to: "l3_8_ai_models" },
     { from: "l2_2_anti_slop", to: "l3_2_claude_cli" },
     { from: "l2_3_iterative_development", to: "l3_3_project_memory" },
     { from: "l2_4_context_preservation", to: "l3_3_project_memory" },
     { from: "l2_4_context_preservation", to: "l3_5_prompt_caching" },
+    { from: "l2_5_project_architecture", to: "l3_3_project_memory" },
+    { from: "l2_6_golden_rule_prompting", to: "l3_1_vscode" },
+    { from: "l2_7_prompt_types", to: "l3_5_prompt_caching" },
+    { from: "l2_8_prompt_language", to: "l3_6_terminal_cli" },
+    { from: "l2_9_database_safety", to: "l3_6_terminal_cli" },
 
     // L3 -> L4 (Local Environment to Control & Git Versioning)
     { from: "l3_1_vscode", to: "l4_1_private_git" },
@@ -138,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l3_3_project_memory", to: "l4_3_feature_branches" },
     { from: "l3_4_skills", to: "l4_3_feature_branches" },
     { from: "l3_5_prompt_caching", to: "l4_5_release_tags" },
+    { from: "l3_8_ai_models", to: "l4_1_private_git" },
 
     // L4 -> L5 (Git Controls to Executive Autonomous Planning)
     { from: "l4_1_private_git", to: "l5_1_autonomous_planning" },
@@ -173,14 +187,52 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l7_4_staging_railway", to: "l8_3_subagents_orchestration" },
     { from: "l7_5_sandbox_payments", to: "l8_2_playwright_testing" },
     { from: "l7_6_api_standards", to: "l8_3_subagents_orchestration" },
-    { from: "l7_7_design_systems", to: "l8_2_playwright_testing" }
+    { from: "l7_7_design_systems", to: "l8_2_playwright_testing" },
+
+    // New Custom Connections for updates
+    { from: "l3_8_ai_models", to: "l3_10_skills_customization" },
+    { from: "l3_8_ai_models", to: "l3_11_github_prompts" },
+    { from: "l3_9_railway", to: "l7_4_staging_railway" },
+    { from: "l3_10_skills_customization", to: "l4_3_feature_branches" },
+    { from: "l4_8_api_restaurant", to: "l7_6_api_standards" },
+    { from: "l4_8_api_restaurant", to: "l4_9_stack_selection" },
+    { from: "l7_4_staging_railway", to: "l8_8_mcp" },
+    { from: "l7_6_api_standards", to: "l8_8_mcp" },
+    { from: "l8_8_mcp", to: "l8_9_skills_cookbook" },
+    { from: "l4_9_stack_selection", to: "l4_10_reusable_blocks" },
+    { from: "l7_9_security_headers", to: "l7_10_testing_principles" },
+    { from: "l8_9_skills_cookbook", to: "l8_10_agent_customization" },
+
+    // Milestone 6 Connections
+    { from: "l2_9_database_safety", to: "l2_10_ai_lies" },
+    { from: "l2_10_ai_lies", to: "l2_11_nullable_fields" },
+    { from: "l2_11_nullable_fields", to: "l2_12_validation_agent" },
+    { from: "l2_8_prompt_language", to: "l2_13_decomposition" },
+    { from: "l2_13_decomposition", to: "l2_14_ai_books" },
+    { from: "l2_12_validation_agent", to: "l2_15_security_hook" },
+    { from: "l2_15_security_hook", to: "l2_16_smart_testing" },
+    { from: "l2_16_smart_testing", to: "l2_17_nightly_tests" },
+    { from: "l0_5_early_adoption", to: "l0_6_savings_metrics" },
+    { from: "l0_6_savings_metrics", to: "l0_7_tools_cost" },
+
+    // Milestone 14 Connections (Prisma, DB Providers, Vercel)
+    { from: "l5_6_handoff_protocol", to: "l5_7_prisma_vibecoding" },
+    { from: "l5_7_prisma_vibecoding", to: "l5_8_db_providers" },
+    { from: "l5_8_db_providers", to: "l7_3_postgres_neon" },
+    { from: "l7_4_staging_railway", to: "l7_11_vercel_gold" },
+    { from: "l7_11_vercel_gold", to: "l8_1_swarm_workflow" }
   ];
 
   // Specific visual weights for Bento cards
   const bentoWeights = {
     l3_2_claude_cli: "weight-medium",
     l3_4_skills: "weight-medium",
+    l3_9_railway: "weight-medium",
+    l3_10_skills_customization: "weight-medium",
+    l3_11_github_prompts: "weight-medium",
     l4_4_diff_control: "weight-medium",
+    l4_8_api_restaurant: "weight-medium",
+    l4_9_stack_selection: "weight-medium",
     l5_1_autonomous_planning: "weight-medium",
     l5_5_persona_testing: "weight-medium",
     l6_1_bolt_lovable: "weight-large",
@@ -188,7 +240,29 @@ document.addEventListener("DOMContentLoaded", () => {
     l7_3_postgres_neon: "weight-large",
     l7_4_staging_railway: "weight-medium",
     l8_1_swarm_workflow: "weight-large",
-    l8_4_rag_memory: "weight-medium"
+    l8_4_rag_memory: "weight-medium",
+    l8_8_mcp: "weight-medium",
+    l8_9_skills_cookbook: "weight-medium",
+    l4_10_reusable_blocks: "weight-medium",
+    l7_10_testing_principles: "weight-medium",
+    l8_10_agent_customization: "weight-medium",
+
+    // Milestone 6 Bento weights
+    l2_10_ai_lies: "weight-medium",
+    l2_11_nullable_fields: "weight-medium",
+    l2_12_validation_agent: "weight-medium",
+    l2_13_decomposition: "weight-medium",
+    l2_14_ai_books: "weight-medium",
+    l2_15_security_hook: "weight-medium",
+    l2_16_smart_testing: "weight-medium",
+    l2_17_nightly_tests: "weight-medium",
+    l0_6_savings_metrics: "weight-medium",
+    l0_7_tools_cost: "weight-medium",
+
+    // Milestone 14 Bento Weights
+    l5_7_prisma_vibecoding: "weight-medium",
+    l5_8_db_providers: "weight-medium",
+    l7_11_vercel_gold: "weight-medium"
   };
 
   // 2. Initialize Renders
