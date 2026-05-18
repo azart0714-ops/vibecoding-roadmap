@@ -45,22 +45,22 @@
 - [x] **C3**: Агентная инженерия: практическое руководство — https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/ (интегрировано)
 - [x] **C4**: Хабр статья 1033648 — https://habr.com/ru/articles/1033648/ (интегрировано в L1-L2)
 
-##### Группа D: Инструменты и CLI (7 задач) 🔄 В ПРОЦЕССЕ (1/7)
+##### Группа D: Инструменты и CLI (7 задач) 🏆 ЗАВЕРШЕНО (7/7)
 - [x] **D1**: Every AI Coding CLI in 2026: The Complete Map (30+ Tools) — https://dev.to/soulentheo/every-ai-coding-cli-in-2026-the-complete-map-30-tools-compared-4gob
-- [ ] **D2**: Free AI CLI Tools: Gemini vs Codex vs Goose | Termdock — https://www.termdock.com/en/blog/free-ai-cli-tools-ranked
-- [ ] **D3**: The 5 Best AI CLI Tools for Coding in 2026: Complete Guide — https://pasqualepillitteri.it/en/news/586/best-ai-cli-tools-coding-2026
-- [ ] **D4**: Top 5 CLI coding agents in 2026 - Pinggy — https://pinggy.io/blog/top_cli_based_ai_coding_agents/
-- [ ] **D5**: Best AI for Coding (2026): Every Model Ranked by Real Benchmarks - Morph — https://www.morphllm.com/
-- [ ] **D6**: How to debug AI generated code? - DEV Community — ariana.dev
-- [ ] **D7**: Top Cursor Rules for Coding Agents - PromptHub — https://www.prompthub.us/blog/top-cursor-rules-for-coding-agents
+- [x] **D2**: Free AI CLI Tools: Gemini vs Codex vs Goose | Termdock — https://www.termdock.com/en/blog/free-ai-cli-tools-ranked
+- [x] **D3**: The 5 Best AI CLI Tools for Coding in 2026: Complete Guide — https://pasqualepillitteri.it/en/news/586/best-ai-cli-tools-coding-2026
+- [x] **D4**: Top 5 CLI coding agents in 2026 - Pinggy — https://pinggy.io/blog/top_cli_based_ai_coding_agents/
+- [x] **D5**: Best AI for Coding (2026): Every Model Ranked by Real Benchmarks - Morph — https://www.morphllm.com/
+- [x] **D6**: How to debug AI generated code? - DEV Community — ariana.dev
+- [x] **D7**: Top Cursor Rules for Coding Agents - PromptHub — https://www.prompthub.us/blog/top-cursor-rules-for-coding-agents
 
-##### Группа E: Продвинутые техники и воркфлоу (6 задач)
-- [ ] **E1**: Cursor AI Workflow for Complex Projects (That Actually Works) | N's Blog - Namanyay Goel — nmn.gl
-- [ ] **E2**: Cursor Prompts Guide: Mastering .cursorrules and AI Coding | QuantumByte — https://quantumbyte.ai/articles/cursor-prompts
-- [ ] **E3**: Mastering Vibe Coding: 8 Advanced Techniques for AI-Assisted Development - Agentman.ai — https://agentman.ai/blog/mastering-vibe-coding-8-advanced-techniques-for-ai-assisted-development
-- [ ] **E4**: Painless Vibe-Coding: A Complete Practical Guide from Real-Life Experience — DEV Community
-- [ ] **E5**: What Is Vibe Coding? Complete Guide to AI-Assisted Development (2026) | NxCode — https://www.nxcode.io/resources/news/what-is-vibe-coding-complete-guide-ai-development-2026
-- [ ] **E6**: Andrej Karpathy's LLM Wiki: Build a Personal Knowledge Base with Obsidian and Codeex in 5 Minutes | MindStudio — https://www.mindstudio.ai/blog/andrej-karpathy-llm-wiki-obsidian-codeex-second-brain
+##### Группа E: Продвинутые техники и воркфлоу (6 задач) 🏆 ЗАВЕРШЕНО (6/6)
+- [x] **E1**: Cursor AI Workflow for Complex Projects (That Actually Works) | N's Blog - Namanyay Goel — nmn.gl
+- [x] **E2**: Cursor Prompts Guide: Mastering .cursorrules and AI Coding | QuantumByte — https://quantumbyte.ai/articles/cursor-prompts
+- [x] **E3**: Mastering Vibe Coding: 8 Advanced Techniques for AI-Assisted Development - Agentman.ai — https://agentman.ai/blog/mastering-vibe-coding-8-advanced-techniques-for-ai-assisted-development
+- [x] **E4**: Painless Vibe-Coding: A Complete Practical Guide from Real-Life Experience — DEV Community
+- [x] **E5**: What Is Vibe Coding? Complete Guide to AI-Assisted Development (2026) | NxCode — https://www.nxcode.io/resources/news/what-is-vibe-coding-complete-guide-ai-development-2026
+- [x] **E6**: Andrej Karpathy's LLM Wiki: Build a Personal Knowledge Base with Obsidian and Codeex in 5 Minutes | MindStudio — https://www.mindstudio.ai/blog/andrej-karpathy-llm-wiki-obsidian-codeex-second-brain
 
 ---
 
@@ -307,20 +307,20 @@ Uithub: (Уровень 8) Сервис для быстрой упаковки G
 - [x] **Официальные гайды и ресурсы** ( awesome-lists, Reddit, документации)
 - [x] **Реальные метрики экономии** ( Cline, автотесты, дизайн-система)
 - [x] **Альтернативы Railway** (сравнительная таблица Vercel, Render, Fly.io, Heroku)
-- [ ] **Концепция Context Engineering** (гигиена токенов, локальные файлы правил)
-- [ ] **Reward Hacking Prevention** (промпты против TODO и костылей)
-- [ ] **Обязательный UI a11y-аудит** (чек-лист WCAG 2.1 AA для ИИ)
-- [ ] **SVG-импорты из v0.dev** (правила замены XML-кода на Lucide)
+- [x] **Концепция Context Engineering** (гигиена токенов, локальные файлы правил)
+- [x] **Reward Hacking Prevention** (промпты против TODO и костылей)
+- [x] **Обязательный UI a11y-аудит** (чек-лист WCAG 2.1 AA для ИИ)
+- [x] **SVG-импорты из v0.dev** (правила замены XML-кода на Lucide)
 
 ### L1: Планирование и дизайн
 - [x] **Чек-лист: Перед началом проекта** (стек, архитектура, MCP)
-- [ ] **Figma-прототипирование в Vibecoding**
-- [ ] **Изучение книг с помощью ИИ** (методология и список литературы)
+- [x] **Figma-прототипирование в Vibecoding**
+- [x] **Изучение книг с помощью ИИ** (методология и список литературы)
 
 ### L2: Принципы Vibecoding
 - [x] **Чек-лист: Перед коммитом** (тесты, ревью, отсутствие костылей)
 - [x] **ASCII-диаграмма: Feature-Based vs Монолит**
-- [ ] **Работа с ветками Git и безопасный CLI-доступ**
+- [x] **Работа с ветками Git и безопасный CLI-доступ**
 
 ### L7: Деплой и тестирование
 - [x] **Чек-лист: Перед деплоем** (миграции, бэкапы, откат)
