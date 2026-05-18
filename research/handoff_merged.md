@@ -2716,3 +2716,188 @@ Milestone 14 полностью завершен, стабилен и готов
 
 ---
 
+
+---
+
+## 📦 Milestone 15 (handoff_milestone_15.md)
+
+# 🏁 HANDOFF REPORT — MILESTONE 15
+
+---
+
+## 🎯 ЦЕЛЬ МИЛЕСТОУНА
+Глубокое исследование и выполнение **Этапа 5** исследовательского роадмапа: сбор и анализ материалов из Reddit-сообществ (r/ClaudeAI, r/LocalLLaMA, r/webdev, r/SaaS) и GitHub Awesome Lists (Awesome Cursor, Awesome Claude, Awesome Skills, Awesome MCP). Создание сжатого списка ресурсов для контекстно-ограниченных моделей (Cline / CLN), написание детального аналитического гайда и формирование нового бэклога доработок.
+
+---
+
+## 📁 СОЗДАННЫЕ И МОДИФИЦИРОВАННЫЕ ФАЙЛЫ
+
+### 🆕 Созданные файлы:
+1.  **[resources_list.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/resources_list.md)**
+    *   *Назначение*: Высокоплотный, оптимизированный по токенам список проверенных источников (Reddit, GitHub Awesome Lists, официальные доки) для передачи LLM с малым контекстом.
+2.  **[reddit_and_github_guides_analysis.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/reddit_and_github_guides_analysis.md)**
+    *   *Назначение*: Подробный аналитический отчет об инсайтах комьюнити (инженерия контекста, врата качества, управление правилами, режимы мышления, CLI-инструменты).
+3.  **[NEW_IMPROVEMENTS_BACKLOG.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/NEW_IMPROVEMENTS_BACKLOG.md)**
+    *   *Назначение*: Новый бэклог доработок, содержащий 8 конкретных, приоритизированных задач для добавления в уровни L0-L8 роадмапа.
+
+### 📝 Модифицированные файлы:
+1.  **[RESEARCH_ROADMAP.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/RESEARCH_ROADMAP.md)**
+    *   *Изменения*: Этап 5 полностью переведен в статус `✅ Завершен`, обновлены общие метрики (количество доработок увеличено до **91**), скорректированы следующие шаги.
+2.  **[IMPROVEMENTS_BACKLOG.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/IMPROVEMENTS_BACKLOG.md)**
+    *   *Изменения*: Строки 139–140 в итоговой статистике источников обновлены на `✅ Выполнено` со ссылками на новые аналитические документы.
+
+---
+
+## 🚀 ВЫПОЛНЕННЫЕ РАБОТЫ И ИНСАЙТЫ
+
+1.  **Составление директории ресурсов**:
+    *   Собраны лучшие GitHub Awesome-списки (Cursor rules, Claude Skills, MCP servers) и целевые сабреддиты.
+    *   Файл спроектирован так, чтобы занимать минимум токенов при передаче контекста сторонним AI-агентам.
+2.  **Анализ опыта сообщества (Reddit & GitHub)**:
+    *   *Инженерия Контекста*: Доказана необходимость жесткой фильтрации файлов в диалоге и регулярного перезапуска сессий (Context Reset) с бутстрапом через `plan.md`/`todo.md`.
+    *   *Инструменты правил*: Рассмотрены стандарты написания `CLAUDE.md` и передовые форматы `.mdc` для ветвления логики Cursor IDE.
+    *   *Качественные врата*: Описана трехэтапная проверка кода (Plan Mode -> Self-Verification -> Human Review).
+    *   *CLI Автоматизация*: Агентам необходимо давать доступ к `gh` CLI и Vercel/Railway CLI для автономного тестирования и деплоя.
+3.  **Формирование новых доработок**:
+    *   Сформулировано **8 новых задач** (от инженерии контекста до бюджетов рассуждений Thinking Budget), готовых к интеграции в роадмап.
+
+---
+
+## 🔮 ТЕКУЩИЙ СТАТУС И СЛЕДУЮЩИЕ ШАГИ
+
+*   **Текущий статус**: Этап 5 полностью готов и задокументирован. Статистика в центральном роадмапе обновлена и синхронизирована с бэклогом.
+*   **Следующая цель**: Начать **Этап 6** исследовательского роадмапа ("Анализ технических стеков и инструментов") или приступить к реализации критических доработок в документах L0-L8.
+
+
+---
+
+## 📦 Milestone 16 (handoff_milestone_16.md)
+
+# 🤝 HANDOFF REPORT — MILESTONE 16
+
+**Проект**: Vibecoding & AI Swarm Roadmap  
+**Цель вехи**: Выполнение Этапа 6 исследовательского роадмапа ("Анализ технических стеков и инструментов"), выявление ИИ-совместимых решений и формирование 8 новых доработок.  
+**Дата**: 18.05.2026  
+**Текущий статус**: ВЫПОЛНЕНО УСПЕШНО ✅ (Авто-тесты пройдены)
+
+---
+
+## 🛠️ ВЫПОЛНЕННЫЕ ДЕЙСТВИЯ
+
+В ходе выполнения Milestone 16 были решены следующие задачи:
+1.  **Создан отфильтрованный список ресурсов** (`research/resources_list_stage_6.md`), содержащий только проверенные, авторитетные материалы по Next.js, Prisma AI Safety, Drizzle ORM, Neon Postgres и современным UI-стекам.
+2.  **Проведен детальный сравнительный анализ стеков** (`research/tech_stacks_and_tools_analysis.md`) под углом ИИ-совместимости (Vibecoding / AI friendly). Проанализированы:
+    *   *Frontend*: Next.js App Router (с фокусом на Server Actions и "Co-location"), SPA (Vite + React) и Astro.
+    *   *ORM/DB*: Prisma (с точки зрения AI Safety Guardrails в CLI), Drizzle (Type-safety без лишней генерации) и Neon Postgres (Database Branching).
+    *   *Styling/UI*: Tailwind CSS (как единственный золотой стандарт для LLM) и Shadcn/ui (копипаст-компоненты).
+    *   *State & Auth*: Zustand (минимизация boilerplate) и Clerk Auth.
+3.  **Сформирован новый бэклог доработок** (`research/NEW_IMPROVEMENTS_BACKLOG_STAGE_6.md`) из **8 совершенно новых карточек** (№ 141 - 148), разделенных по критичности и DX-эффектам.
+4.  **Актуализирован центральный роадмап** (`RESEARCH_ROADMAP.md`):
+    *   Статус Этапа 6 изменен на **Завершен ✅**.
+    *   Общее число доработок роадмапа увеличено с **91** до **99**.
+    *   Обновлена статистика уровней и приоритетов.
+5.  **Написан автоматический валидационный скрипт** (`test_milestone_16.js`), проверяющий физическое наличие, корректность структуры и наполненность созданных документов, а также целостность центрального роадмапа. Скрипт выполнен с успешным результатом.
+
+---
+
+## 📂 СПИСОК СОЗДАННЫХ И ОБНОВЛЕННЫХ ФАЙЛОВ
+
+*   **[NEW]** [resources_list_stage_6.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/resources_list_stage_6.md) — Базовый список ресурсов для CLN с ограниченным контекстом.
+*   **[NEW]** [tech_stacks_and_tools_analysis.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/tech_stacks_and_tools_analysis.md) — Полный текст аналитического исследования.
+*   **[NEW]** [NEW_IMPROVEMENTS_BACKLOG_STAGE_6.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/NEW_IMPROVEMENTS_BACKLOG_STAGE_6.md) — 8 новых карточек улучшений (№ 141-148).
+*   **[NEW]** [test_milestone_16.js](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/test_milestone_16.js) — Валидационный авто-тест на Node.js.
+*   **[NEW]** [handoff_milestone_16.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/handoff_milestone_16.md) — Этот отчет.
+*   **[MODIFY]** [RESEARCH_ROADMAP.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/RESEARCH_ROADMAP.md) — Обновлен статус Этапа 6 и статистика исследования.
+
+---
+
+## 🧪 РЕЗУЛЬТАТЫ АВТОМАТИЧЕСКОГО ТЕСТИРОВАНИЯ
+
+Запуск валидатора `node test_milestone_16.js` завершился со следующим логом:
+```text
+🏁 Starting Milestone 16 Auto-Verification...
+
+✅ Success: research/resources_list_stage_6.md verified successfully (4935 bytes).
+✅ Success: research/tech_stacks_and_tools_analysis.md verified successfully (14790 bytes).
+✅ Success: research/NEW_IMPROVEMENTS_BACKLOG_STAGE_6.md verified successfully (8347 bytes).
+✅ Success: Central RESEARCH_ROADMAP.md has Stage 6 correctly marked as Completed ✅.
+✅ Success: Central RESEARCH_ROADMAP.md statistics correctly show 99 total improvements.
+
+🌟 Milestone 16 Auto-Verification PASSED SUCCESSFULLY!
+```
+
+---
+
+## 🎯 СЛЕДУЮЩИЕ ШАГИ И РЕКОМЕНДАЦИИ ДЛЯ СЛЕДУЮЩЕЙ СЕССИИ
+
+1.  **Следующий этап исследований**:
+    *   **Этап 7**: Дизайн и UX best practices. Анализ методик Tailwind CSS, Shadcn, Framer Motion, анимаций и отзывчивого дизайна под управлением ИИ.
+2.  **Запуск реализации**:
+    *   Общее число доработок роадмапа достигло **99** (из них 24 имеют **Критический** приоритет).
+    *   Рекомендуется начать внедрение доработок (начиная с карточки №106), фиксируя результаты в handoff-отчеты каждые 8 выполненных карточек с покрытием авто-тестами, согласно ранее утвержденным правилам.
+
+
+---
+
+## 📦 Milestone 17 (handoff_milestone_17.md)
+
+# 🤝 ОТЧЕТ О ПЕРЕДАЧЕ КОНТЕКСТА — MILESTONE 17 (ЭТАПЫ 7 & 8)
+
+Этот отчет фиксирует полное и успешное завершение **Этапа 7 ("Дизайн и UX best practices под управлением ИИ")** и **Этапа 8 ("Агентные системы и Swarm (L8)")** Исследовательского Роадмапа. С этим шагом исследовательская фаза роадмапа полностью завершена на **100%**!
+
+---
+
+## 📦 1. РЕЗУЛЬТАТЫ И ДОСТИЖЕНИЯ МИЛЬСТОУНА
+
+### 🎨 ЭТАП 7: ДИЗАЙН И UI/UX BEST PRACTICES
+1.  **Список ресурсов**: Создан [resources_list_stage_7.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/resources_list_stage_7.md), содержащий проверенные руководства по WCAG 2.1 AA, Tailwind CSS, Radix UI, Shadcn/ui CLI и Framer Motion.
+2.  **Аналитическое руководство**: Написано [ui_ux_design_best_practices.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/ui_ux_design_best_practices.md) (380+ строк), подробно описывающее:
+    *   Преимущества архитектуры "copy-paste" Shadcn/ui для ИИ.
+    *   Паттерны perceived performance (Skeleton Screens, Optimistic UI).
+    *   Стандарты доступности a11y (Focus Rings, Focus Traps, Keyboard Navigation).
+    *   Декларативные микро-анимации во Framer Motion и безопасный перенос SVG из v0.dev.
+3.  **Бэклог доработок**: Создан [NEW_IMPROVEMENTS_BACKLOG_STAGE_7.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/NEW_IMPROVEMENTS_BACKLOG_STAGE_7.md) с 8 новыми улучшениями (№ 149-156) для фронтенда и UX.
+
+### 🤖 ЭТАП 8: АГЕНТНЫЕ СИСТЕМЫ И SWARM
+1.  **Список ресурсов**: Создан [resources_list_stage_8.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/resources_list_stage_8.md) со ссылками на LangGraph, CrewAI, OpenAI Swarm, Mem0, Playwright и GitHub Actions.
+2.  **Аналитическое руководство**: Написано [swarm_and_agent_systems_analysis.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/swarm_and_agent_systems_analysis.md) (300+ строк), раскрывающее:
+    *   Протоколы передачи задач (Task Handoffs) и циклы обратной связи разработчик-QA.
+    *   Разделение ролей в ИИ-команде (Tech Lead, FE, BE, QA, Design).
+    *   Долговременную память агентов (`agent_db.json` и граф `long_term_kg.md`).
+    *   Инфраструктурные шлюзы (Playwright E2E тесты и GitHub Actions CI/CD).
+3.  **Бэклог доработок**: Создан [NEW_IMPROVEMENTS_BACKLOG_STAGE_8.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/NEW_IMPROVEMENTS_BACKLOG_STAGE_8.md) с 8 новыми улучшениями (№ 157-164) для swarm-координации.
+
+---
+
+## 📈 2. ИНТЕГРАЦИЯ В ЦЕНТРАЛЬНЫЙ РОАДМАП
+*   Центральный файл [RESEARCH_ROADMAP.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/RESEARCH_ROADMAP.md) был обновлен:
+    *   **Этап 7** и **Этап 8** переведены в статус **Завершен ✅**.
+    *   Все подэтапы отмечены как выполненные `[x]`.
+    *   Созданные файлы задокументированы в реестре.
+    *   Сводная статистика обновлена: общее число доработок роадмапа увеличено с **99** до **115**.
+    *   Обновлено распределение по уровням L0-L8 и приоритетам (Critical, High, Medium, Low).
+    *   Дата последнего обновления зафиксирована как `18.05.2026, 09:30`.
+    *   Общий прогресс исследования достиг **100%**!
+
+---
+
+## 🧪 3. АВТОМАТИЧЕСКАЯ ВЕРИФИКАЦИЯ
+*   Написан проверочный Node.js тест [test_milestone_17.js](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/test_milestone_17.js).
+*   Тест успешно запущен локально и подтвердил:
+    *   Существование и непустое содержимое всех 6 новых файлов.
+    *   Наличие отметок о завершении Этапов 7 и 8 в `RESEARCH_ROADMAP.md`.
+    *   Наличие новой итоговой цифры статистики (**115** собранных доработок).
+*   Статус верификации: **PASSED SUCCESSFULLY ✅**
+
+---
+
+## 💾 4. СПИСОК НОВЫХ ФАЙЛОВ В РЕПОЗИТОРИИ
+*   `research/resources_list_stage_7.md`
+*   `research/ui_ux_design_best_practices.md`
+*   `research/NEW_IMPROVEMENTS_BACKLOG_STAGE_7.md`
+*   `research/resources_list_stage_8.md`
+*   `research/swarm_and_agent_systems_analysis.md`
+*   `research/NEW_IMPROVEMENTS_BACKLOG_STAGE_8.md`
+*   `test_milestone_17.js`
+*   `research/handoff_milestone_17.md` (этот документ)
+
