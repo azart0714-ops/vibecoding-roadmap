@@ -809,6 +809,145 @@ Webhooks могут приходить дважды — используй idemp
 
 ---
 
+## 🛠 Раздел 11: Готовые интеграции и чеклисты (YooKassa, Brevo, DeepL, OpenAI Embeddings)
+
+Когда вы работаете соло, скорость интеграции решает всё. Ниже приведены пошаговые чеклисты и лаконичные примеры для подключения ключевых сервисов.
+
+### 11.1. Интеграция YooKassa (ЮKassa) для РФ-рынка
+Для локальных платежей в рублях YooKassa — стандарт. Чеклист интеграции:
+1. **Регистрация мерчанта**: Получение `Shop ID` и `Secret Key` (токен вида `test_...` или `live_...`).
+2. **Инициализация**: Установка SDK или выполнение прямых HTTP запросов с Basic Auth.
+3. **Генерация Payment**: Создание транзакции с заголовком `Idempotence-Key` (защита от двойных списаний).
+4. **Обработка Webhooks**: Прием `POST` событий от YooKassa, обязательное сопоставление IP-адресов отправителя и проверка статуса `payment.succeeded`.
+
+#### Пример создания платежа на Node.js:
+```typescript
+import { Yookassa } from 'yookassa-ts'; // или прямой fetch API
+
+const shopId = process.env.YOOKASSA_SHOP_ID!;
+const secretKey = process.env.YOOKASSA_SECRET_KEY!;
+
+export async function createYookassaPayment(amount: number, orderId: string, userEmail: string) {
+  const response = await fetch('https://api.yookassa.ru/v3/payments', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Idempotence-Key': orderId,
+      'Authorization': 'Basic ' + Buffer.from(`${shopId}:${secretKey}`).toString('base64'),
+    },
+    body: JSON.stringify({
+      amount: {
+        value: amount.toFixed(2),
+        currency: 'RUB',
+      },
+      payment_method_data: {
+        type: 'bank_card',
+      },
+      confirmation: {
+        type: 'redirect',
+        return_url: `${process.env.NEXT_PUBLIC_URL}/dashboard?status=check`,
+      },
+      description: `Оплата заказа #${orderId}`,
+      metadata: { orderId, userEmail },
+      capture: true, // Мгновенное подтверждение платежа без двухстадийного списания
+    }),
+  });
+
+  const payment = await response.json();
+  return payment.confirmation.confirmation_url;
+}
+```
+
+---
+
+### 11.2. Brevo (Transactional Email) — 300 писем в день абсолютно бесплатно
+Если вам не хватает лимитов Resend или нужен нулевой бюджет на старте, Brevo (бывший Sendinblue) дает стабильный бесплатный тариф: 300 писем/день без привязки карты.
+1. **Настройка домена**: Добавление TXT-записей SPF, DKIM и DMARC в вашу DNS-панель (критично для защиты от папки "Спам").
+2. **Получение API Key**: Создание ключа в Brevo SMTP & API панели.
+3. **Отправка через fetch / SDK**:
+
+```typescript
+export async function sendTransactionalEmail(to: string, subject: string, htmlContent: string) {
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': process.env.BREVO_API_KEY!,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      sender: { name: 'My Startup', email: 'hello@mystartup.com' },
+      to: [{ email: to }],
+      subject: subject,
+      htmlContent: htmlContent,
+    }),
+  });
+
+  return response.ok;
+}
+```
+
+---
+
+### 11.3. Локализация с DeepL API
+Для создания многоязычных MVP DeepL предоставляет самое качественное машинное автоперевод-API.
+- **Бесплатный лимит**: 500 000 символов в месяц бесплатно.
+- **Паттерн применения**: Перевод на этапе сборки/интеграции (статический экспорт) либо кэшируемый перевод налету в Redis.
+
+```typescript
+export async function translateText(text: string, targetLang: 'EN' | 'RU' | 'DE'): Promise<string> {
+  const response = await fetch('https://api-free.deepl.com/v2/translate', {
+    method: 'POST',
+    headers: {
+      'Authorization': `DeepL-Auth-Key ${process.env.DEEPL_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      text: [text],
+      target_lang: targetLang,
+    }),
+  });
+
+  const data = await response.json();
+  return data.translations[0].text;
+}
+```
+
+---
+
+### 11.4. OpenAI Vector Embeddings (Векторные эмбеддинги и семантический поиск)
+Используются для создания умного поиска по сайту, рекомендательных систем или AI-ассистентов (RAG).
+- **Суть**: Превращение любого текста (статьи, товара, вопроса) в массив из 1536 чисел (вектор), отражающих смысл текста.
+- **Интеграция**: Сначала получаем вектор через OpenAI API, затем сохраняем его в PostgreSQL с расширением `pgvector` и ищем похожие записи с помощью косинусного расстояния (`<=>`).
+
+#### Пример получения эмбеддинга на Node.js:
+```typescript
+import { OpenAI } from 'openai';
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+export async function getEmbedding(text: string): Promise<number[]> {
+  const response = await openai.embeddings.create({
+    model: 'text-embedding-3-small', // Экономичная и мощная модель
+    input: text,
+  });
+
+  return response.data[0].embedding;
+}
+```
+
+#### SQL-запрос для поиска похожих документов (в Prisma или raw SQL):
+```sql
+-- Поиск top-5 похожих статей на основе косинусного сходства векторов
+SELECT id, title, content, 1 - (embedding <=> '[0.0023, -0.0123, ...]') AS similarity
+FROM "Document"
+WHERE 1 - (embedding <=> '[0.0023, -0.0123, ...]') > 0.7
+ORDER BY similarity DESC
+LIMIT 5;
+```
+
+---
+
 ## 📖 Ресурсы для изучения
 
 ### Официальная документация

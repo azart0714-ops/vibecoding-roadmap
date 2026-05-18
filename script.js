@@ -220,7 +220,28 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l5_7_prisma_vibecoding", to: "l5_8_db_providers" },
     { from: "l5_8_db_providers", to: "l7_3_postgres_neon" },
     { from: "l7_4_staging_railway", to: "l7_11_vercel_gold" },
-    { from: "l7_11_vercel_gold", to: "l8_1_swarm_workflow" }
+    { from: "l7_11_vercel_gold", to: "l8_1_swarm_workflow" },
+
+    // C1/C2 paradigm connections
+    { from: "l0_6_savings_metrics", to: "l0_9_keyray_economics" },
+    { from: "l0_9_keyray_economics", to: "l0_7_tools_cost" },
+    { from: "l1_5_project_checklists", to: "l1_6_vibepming" },
+    { from: "l1_6_vibepming", to: "l1_7_backend_first" },
+    { from: "l1_7_backend_first", to: "l2_19_prompt_refinement" },
+    { from: "l2_18_commit_checklist", to: "l2_19_prompt_refinement" },
+    { from: "l2_19_prompt_refinement", to: "l2_20_future_editing" },
+    { from: "l2_20_future_editing", to: "l3_12_cursor_commands" },
+    { from: "l3_11_github_prompts", to: "l3_12_cursor_commands" },
+    { from: "l3_12_cursor_commands", to: "l4_11_webflow_figma" },
+    { from: "l4_10_reusable_blocks", to: "l4_11_webflow_figma" },
+    { from: "l4_11_webflow_figma", to: "l5_9_docker_multicontainer" },
+    { from: "l5_8_db_providers", to: "l5_9_docker_multicontainer" },
+    { from: "l5_9_docker_multicontainer", to: "l6_8_yookassa_brevo" },
+    { from: "l6_7_analytics_monitoring", to: "l6_8_yookassa_brevo" },
+    { from: "l6_8_yookassa_brevo", to: "l7_13_apple_dev" },
+    { from: "l7_12_deploy_checklist", to: "l7_13_apple_dev" },
+    { from: "l7_13_apple_dev", to: "l7_14_test_isolation" },
+    { from: "l7_14_test_isolation", to: "l8_1_swarm_workflow" }
   ];
 
   // Specific visual weights for Bento cards
@@ -262,7 +283,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Milestone 14 Bento Weights
     l5_7_prisma_vibecoding: "weight-medium",
     l5_8_db_providers: "weight-medium",
-    l7_11_vercel_gold: "weight-medium"
+    l7_11_vercel_gold: "weight-medium",
+
+    // C1/C2 Bento Weights
+    l0_9_keyray_economics: "weight-medium",
+    l1_6_vibepming: "weight-medium",
+    l1_7_backend_first: "weight-medium",
+    l2_19_prompt_refinement: "weight-medium",
+    l2_20_future_editing: "weight-medium",
+    l3_12_cursor_commands: "weight-medium",
+    l4_11_webflow_figma: "weight-medium",
+    l5_9_docker_multicontainer: "weight-medium",
+    l6_8_yookassa_brevo: "weight-medium",
+    l7_13_apple_dev: "weight-medium",
+    l7_14_test_isolation: "weight-medium"
   };
 
   // 2. Initialize Renders

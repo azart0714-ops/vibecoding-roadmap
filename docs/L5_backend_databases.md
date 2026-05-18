@@ -665,6 +665,95 @@ AI может не добавить индексы для часто испол�
 
 ---
 
+## 🐳 Раздел 11: Мультиконтейнерная архитектура Docker & Базы данных для соло-разработчиков
+
+Для обеспечения стабильного production-окружения соло-разработчику крайне важно автоматизировать развертывание и мониторинг бэкенда с помощью Docker.
+
+### 11.1. Мультиконтейнерная структура (Docker Compose)
+Современный стандарт автономного деплоя для соло-разработчика включает 4 связанных сервиса, запускаемых одной командой `docker-compose up -d`:
+1. **Приложение (Web App)**: API-сервер на Node.js (Next.js / Express) или Python, содержащий основную логику.
+2. **База данных (PostgreSQL)**: Изолированный контейнер БД с персистентным томом (Volume) на хосте для сохранности данных.
+3. **Nginx Proxy**: Легковесный обратный прокси (reverse proxy), который:
+   - Слушает порты 80/443 и перенаправляет трафик на порт API-приложения.
+   - Терминирует SSL (автоматически управляет сертификатами Let's Encrypt через Certbot).
+   - Фильтрует нежелательные вредоносные запросы и ограничивает размер загружаемых файлов.
+4. **Телеграм-мониторинг (Telebot Monitor)**:
+   - Легковесный скрипт-сателлит, имеющий доступ к Docker Socket (`/var/run/docker.sock`).
+   - Он слушает события демона Docker: если API-сервер или база данных падает, перезапускается или испытывает нехватку памяти (OOM), скрипт мгновенно отправляет уведомление в Telegram разработчику с логами падения.
+
+#### Пример docker-compose.yml:
+```yaml
+version: '3.8'
+
+services:
+  web-app:
+    build: .
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://user:pass@postgres-db:5432/mydb
+    depends_on:
+      - postgres-db
+    networks:
+      - app-network
+
+  postgres-db:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=mydb
+    networks:
+      - app-network
+
+  nginx-proxy:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - web-app
+    networks:
+      - app-network
+
+  telebot-monitor:
+    build: ./monitor
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - TELEGRAM_BOT_TOKEN=12345:token
+      - TELEGRAM_CHAT_ID=67890
+    networks:
+      - app-network
+
+volumes:
+  pg-data:
+
+networks:
+  app-network:
+    driver: bridge
+```
+
+### 11.2. Сравнение баз данных для MVP: SQLite vs Serverless PostgreSQL
+Для небольших проектов и быстрых тестов не всегда нужно разворачивать тяжелый кластер базы данных.
+
+| Критерий | SQLite (Файловая БД) | Serverless PostgreSQL (Neon / Supabase) |
+| :--- | :--- | :--- |
+| **Инфраструктура** | **Нулевой оверхед** (БД хранится в одном локальном `.db` файле) | Требует облачного провайдера или Docker-контейнера |
+| **Производительность** | Чтение: сверхбыстрое. Запись: блокировка всей БД при записи | Высокая, поддерживает тысячи конкурентных запросов |
+| **Резервное копирование** | Мгновенно: скопируйте `.db` файл в облако или бэкап-папку | Требует настройки pg_dump, AWS S3 или встроенных бэкапов |
+| **Ветвление баз данных** | Простым копированием файла на хосте | **Мгновенное (Neon Branching API)** |
+| **Когда использовать** | Telegram-боты, легкие CLI-утилиты, MVP без высокой нагрузки | Крупные веб-сервисы, высокая конкурентная запись, API |
+
+---
+
 ## 📚 AI Tools для Backend
 
 1. **ChatGPT/Claude** — проектирование API и схем БД
