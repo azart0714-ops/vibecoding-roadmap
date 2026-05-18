@@ -136,8 +136,8 @@
 - ✅ YouTube видео 2: "400 часов вайбкодинга" (часть 2) - ~1:00:00  
 - ✅ YouTube видео 3: Дополнительное видео - 4:23:59
 - ✅ Blake Crosley Guide - сохранён для детального анализа
-- ⏳ Reddit гайды - в очереди
-- ⏳ GitHub Awesome Lists - в очереди
+- ✅ Reddit гайды - проанализировано, результаты в [reddit_and_github_guides_analysis.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/reddit_and_github_guides_analysis.md)
+- ✅ GitHub Awesome Lists - проанализировано, результаты в [reddit_and_github_guides_analysis.md](file:///Users/rickalvarez/Documents/3%20AI%20command/vibecoding-roadmap/research/reddit_and_github_guides_analysis.md)
 
 ### Создано документов:
 - ✅ L0_fundamentals.md - 1432 строки
