@@ -1,0 +1,1704 @@
+<!doctype html>
+<html lang="ru-RU">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	
+	<!-- This site is optimized with the Yoast SEO plugin v24.0 - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Агентная инженерия: практическое руководство по AI-разработке &#8211; Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock</title>
+	<link rel="canonical" href="https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/" />
+	<meta property="og:locale" content="ru_RU" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Агентная инженерия: практическое руководство по AI-разработке &#8211; Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock" />
+	<meta property="og:description" content="Промпт-инженерия, CLAUDE.md, MCP, git worktrees и мульти-агентные пайплайны — конкретные техники и рекомендации, чтобы AI-агент писал код предсказуемо." />
+	<meta property="og:url" content="https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/" />
+	<meta property="og:site_name" content="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock" />
+	<meta property="article:published_time" content="2026-02-24T16:03:57+00:00" />
+	<meta property="article:modified_time" content="2026-02-24T16:11:20+00:00" />
+	<meta property="og:image" content="https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png" />
+	<meta property="og:image:width" content="1600" />
+	<meta property="og:image:height" content="900" />
+	<meta property="og:image:type" content="image/png" />
+	<meta name="author" content="Михаил Трофимов" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:label1" content="Написано автором" />
+	<meta name="twitter:data1" content="Михаил Трофимов" />
+	<meta name="twitter:label2" content="Примерное время для чтения" />
+	<meta name="twitter:data2" content="3 минуты" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#article","isPartOf":{"@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/"},"author":{"name":"Михаил Трофимов","@id":"https://codenrock.com/blog/#/schema/person/ff22e7a414b862cab11bd2e8cd6b3e7e"},"headline":"Агентная инженерия: практическое руководство по AI-разработке","datePublished":"2026-02-24T16:03:57+00:00","dateModified":"2026-02-24T16:11:20+00:00","mainEntityOfPage":{"@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/"},"wordCount":2504,"commentCount":0,"publisher":{"@id":"https://codenrock.com/blog/#organization"},"image":{"@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#primaryimage"},"thumbnailUrl":"https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png","keywords":["Anthropic","Claude Code","Codenrock","LLM","агентная инженерия","ИИ-агенты"],"articleSection":["Статьи"],"inLanguage":"ru-RU","potentialAction":[{"@type":"CommentAction","name":"Comment","target":["https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#respond"]}]},{"@type":"WebPage","@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/","url":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/","name":"Агентная инженерия: практическое руководство по AI-разработке &#8211; Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock","isPartOf":{"@id":"https://codenrock.com/blog/#website"},"primaryImageOfPage":{"@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#primaryimage"},"image":{"@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#primaryimage"},"thumbnailUrl":"https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png","datePublished":"2026-02-24T16:03:57+00:00","dateModified":"2026-02-24T16:11:20+00:00","inLanguage":"ru-RU","potentialAction":[{"@type":"ReadAction","target":["https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/"]}]},{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#primaryimage","url":"https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png","contentUrl":"https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png","width":1600,"height":900},{"@type":"WebSite","@id":"https://codenrock.com/blog/#website","url":"https://codenrock.com/blog/","name":"Блог Codenrock — Кейсы, истории успеха и интервью с экспертами","description":"","publisher":{"@id":"https://codenrock.com/blog/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://codenrock.com/blog/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"ru-RU"},{"@type":"Organization","@id":"https://codenrock.com/blog/#organization","name":"Codenrock","url":"https://codenrock.com/blog/","logo":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://codenrock.com/blog/#/schema/logo/image/","url":"https://cdn.codenrock.com/wp-content/uploads/2024/12/codenrock_logo.webp","contentUrl":"https://cdn.codenrock.com/wp-content/uploads/2024/12/codenrock_logo.webp","width":625,"height":153,"caption":"Codenrock"},"image":{"@id":"https://codenrock.com/blog/#/schema/logo/image/"},"sameAs":["https://t.me/codenrock_official","https://www.linkedin.com/company/codenrock/","https://rutube.ru/channel/39115705/","https://www.youtube.com/@Codenrock","https://vk.com/codenrock"]},{"@type":"Person","@id":"https://codenrock.com/blog/#/schema/person/ff22e7a414b862cab11bd2e8cd6b3e7e","name":"Михаил Трофимов","image":{"@type":"ImageObject","inLanguage":"ru-RU","@id":"https://codenrock.com/blog/#/schema/person/image/","url":"https://secure.gravatar.com/avatar/9057f65be834e8560f68ec9436eee882?s=96&d=retro&r=g","contentUrl":"https://secure.gravatar.com/avatar/9057f65be834e8560f68ec9436eee882?s=96&d=retro&r=g","caption":"Михаил Трофимов"},"description":"Я человек, увлечённый технологиями, образованием и поиском новых решений для сложных задач. Я сооснователь Codenrock — платформы, которая помогает организаторам хакатонов и IT-мероприятий эффективно взаимодействовать с участниками, а молодым специалистам и профессионалам находить вдохновение и возможности для развития. Мне нравится создавать проекты, которые помогают людям раскрывать свой потенциал и развивать новые навыки.","url":"https://codenrock.com/blog/author/bloggerxyz/"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel='dns-prefetch' href='//codenrock.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock &raquo; Лента комментариев к &laquo;Агентная инженерия: практическое руководство по AI-разработке&raquo;" href="https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/feed/" />
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://cdn.codenrock.com/wp-includes/css/dist/block-library/style.css?ver=6.7.5'  media='all' />
+<style id='wp-block-library-theme-inline-css' type='text/css'>
+.wp-block-audio :where(figcaption){
+  color:#555;
+  font-size:13px;
+  text-align:center;
+}
+.is-dark-theme .wp-block-audio :where(figcaption){
+  color:#ffffffa6;
+}
+
+.wp-block-audio{
+  margin:0 0 1em;
+}
+
+.wp-block-code{
+  border:1px solid #ccc;
+  border-radius:4px;
+  font-family:Menlo,Consolas,monaco,monospace;
+  padding:.8em 1em;
+}
+
+.wp-block-embed :where(figcaption){
+  color:#555;
+  font-size:13px;
+  text-align:center;
+}
+.is-dark-theme .wp-block-embed :where(figcaption){
+  color:#ffffffa6;
+}
+
+.wp-block-embed{
+  margin:0 0 1em;
+}
+
+.blocks-gallery-caption{
+  color:#555;
+  font-size:13px;
+  text-align:center;
+}
+.is-dark-theme .blocks-gallery-caption{
+  color:#ffffffa6;
+}
+
+:root :where(.wp-block-image figcaption){
+  color:#555;
+  font-size:13px;
+  text-align:center;
+}
+.is-dark-theme :root :where(.wp-block-image figcaption){
+  color:#ffffffa6;
+}
+
+.wp-block-image{
+  margin:0 0 1em;
+}
+
+.wp-block-pullquote{
+  border-bottom:4px solid;
+  border-top:4px solid;
+  color:currentColor;
+  margin-bottom:1.75em;
+}
+.wp-block-pullquote cite,.wp-block-pullquote footer,.wp-block-pullquote__citation{
+  color:currentColor;
+  font-size:.8125em;
+  font-style:normal;
+  text-transform:uppercase;
+}
+
+.wp-block-quote{
+  border-left:.25em solid;
+  margin:0 0 1.75em;
+  padding-left:1em;
+}
+.wp-block-quote cite,.wp-block-quote footer{
+  color:currentColor;
+  font-size:.8125em;
+  font-style:normal;
+  position:relative;
+}
+.wp-block-quote:where(.has-text-align-right){
+  border-left:none;
+  border-right:.25em solid;
+  padding-left:0;
+  padding-right:1em;
+}
+.wp-block-quote:where(.has-text-align-center){
+  border:none;
+  padding-left:0;
+}
+.wp-block-quote.is-large,.wp-block-quote.is-style-large,.wp-block-quote:where(.is-style-plain){
+  border:none;
+}
+
+.wp-block-search .wp-block-search__label{
+  font-weight:700;
+}
+
+.wp-block-search__button{
+  border:1px solid #ccc;
+  padding:.375em .625em;
+}
+
+:where(.wp-block-group.has-background){
+  padding:1.25em 2.375em;
+}
+
+.wp-block-separator.has-css-opacity{
+  opacity:.4;
+}
+
+.wp-block-separator{
+  border:none;
+  border-bottom:2px solid;
+  margin-left:auto;
+  margin-right:auto;
+}
+.wp-block-separator.has-alpha-channel-opacity{
+  opacity:1;
+}
+.wp-block-separator:not(.is-style-wide):not(.is-style-dots){
+  width:100px;
+}
+.wp-block-separator.has-background:not(.is-style-dots){
+  border-bottom:none;
+  height:1px;
+}
+.wp-block-separator.has-background:not(.is-style-wide):not(.is-style-dots){
+  height:2px;
+}
+
+.wp-block-table{
+  margin:0 0 1em;
+}
+.wp-block-table td,.wp-block-table th{
+  word-break:normal;
+}
+.wp-block-table :where(figcaption){
+  color:#555;
+  font-size:13px;
+  text-align:center;
+}
+.is-dark-theme .wp-block-table :where(figcaption){
+  color:#ffffffa6;
+}
+
+.wp-block-video :where(figcaption){
+  color:#555;
+  font-size:13px;
+  text-align:center;
+}
+.is-dark-theme .wp-block-video :where(figcaption){
+  color:#ffffffa6;
+}
+
+.wp-block-video{
+  margin:0 0 1em;
+}
+
+:root :where(.wp-block-template-part.has-background){
+  margin-bottom:0;
+  margin-top:0;
+  padding:1.25em 2.375em;
+}
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/**
+ * These rules are needed for backwards compatibility.
+ * They should match the button element rules in the base theme.json file.
+ */
+.wp-block-button__link {
+	color: #ffffff;
+	background-color: #32373c;
+	border-radius: 9999px; /* 100% causes an oval, but any explicit but really high value retains the pill shape. */
+
+	/* This needs a low specificity so it won't override the rules from the button element if defined in theme.json. */
+	box-shadow: none;
+	text-decoration: none;
+
+	/* The extra 2px are added to size solids the same as the outline versions.*/
+	padding: calc(0.667em + 2px) calc(1.333em + 2px);
+
+	font-size: 1.125em;
+}
+
+.wp-block-file__button {
+	background: #32373c;
+	color: #ffffff;
+	text-decoration: none;
+}
+
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 19.5px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36.5px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 22px;--wp--preset--font-size--huge: 49.5px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel='stylesheet' id='google-fonts-css' href='https://fonts.googleapis.com/css?family=Montserrat%3A400%2C400i%2C700&#038;subset=cyrillic&#038;display=swap&#038;ver=6.7.5'  media='all' />
+<link rel='stylesheet' id='reboot-style-css' href='https://cdn.codenrock.com/wp-content/themes/reboot/assets/css/style.min.css?ver=1.5.4'  media='all' />
+<link rel='stylesheet' id='contact-form-7-css' href='https://cdn.codenrock.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.0.1'  media='all' />
+<link rel='stylesheet' id='popup-maker-site-css' href='https://cdn.codenrock.com/wp-content/plugins/popup-maker/assets/css/pum-site.css?ver=1.20.3'  media='all' />
+<style id='popup-maker-site-inline-css' type='text/css'>
+/* Popup Google Fonts */
+@import url('//fonts.googleapis.com/css?family=Montserrat:100');
+
+/* Popup Theme 5513: Light Box */
+.pum-theme-5513, .pum-theme-lightbox { background-color: rgba( 0, 0, 0, 0.60 ) } 
+.pum-theme-5513 .pum-container, .pum-theme-lightbox .pum-container { padding: 20px; border-radius: 10px; border: 0px solid #000000; box-shadow: 0px 0px 30px 0px rgba( 2, 2, 2, 0.00 ); background-color: rgba( 58, 58, 58, 1.00 ) } 
+.pum-theme-5513 .pum-title, .pum-theme-lightbox .pum-title { color: #000000; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: inherit; font-weight: 100; font-size: 32px; line-height: 36px } 
+.pum-theme-5513 .pum-content, .pum-theme-lightbox .pum-content { color: #000000; font-family: inherit; font-weight: 100 } 
+.pum-theme-5513 .pum-content + .pum-close, .pum-theme-lightbox .pum-content + .pum-close { position: absolute; height: 26px; width: 26px; left: auto; right: -13px; bottom: auto; top: -13px; padding: 0px; color: #ffffff; font-family: Arial; font-weight: 100; font-size: 24px; line-height: 24px; border: 2px solid #ffffff; border-radius: 26px; box-shadow: 0px 0px 15px 1px rgba( 2, 2, 2, 0.75 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.00 ); background-color: rgba( 0, 0, 0, 1.00 ) } 
+
+/* Popup Theme 5519: Только контент - Для конструкторов страниц или редактора блоков */
+.pum-theme-5519, .pum-theme-content-only { background-color: rgba( 0, 0, 0, 0.70 ) } 
+.pum-theme-5519 .pum-container, .pum-theme-content-only .pum-container { padding: 0px; border-radius: 0px; border: 1px none #000000; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.00 ) } 
+.pum-theme-5519 .pum-title, .pum-theme-content-only .pum-title { color: #000000; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: inherit; font-weight: 400; font-size: 32px; line-height: 36px } 
+.pum-theme-5519 .pum-content, .pum-theme-content-only .pum-content { color: #8c8c8c; font-family: inherit; font-weight: 400 } 
+.pum-theme-5519 .pum-content + .pum-close, .pum-theme-content-only .pum-content + .pum-close { position: absolute; height: 18px; width: 18px; left: auto; right: 7px; bottom: auto; top: 7px; padding: 0px; color: #000000; font-family: inherit; font-weight: 700; font-size: 20px; line-height: 20px; border: 1px none #ffffff; border-radius: 15px; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.00 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.00 ); background-color: rgba( 255, 255, 255, 0.00 ) } 
+
+/* Popup Theme 5518: Плавающая панель, светло-голубая */
+.pum-theme-5518, .pum-theme-floating-bar { background-color: rgba( 255, 255, 255, 0.00 ) } 
+.pum-theme-5518 .pum-container, .pum-theme-floating-bar .pum-container { padding: 8px; border-radius: 0px; border: 1px none #000000; box-shadow: 1px 1px 3px 0px rgba( 2, 2, 2, 0.23 ); background-color: rgba( 238, 246, 252, 1.00 ) } 
+.pum-theme-5518 .pum-title, .pum-theme-floating-bar .pum-title { color: #505050; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: inherit; font-weight: 400; font-size: 32px; line-height: 36px } 
+.pum-theme-5518 .pum-content, .pum-theme-floating-bar .pum-content { color: #505050; font-family: inherit; font-weight: 400 } 
+.pum-theme-5518 .pum-content + .pum-close, .pum-theme-floating-bar .pum-content + .pum-close { position: absolute; height: 18px; width: 18px; left: auto; right: 5px; bottom: auto; top: 50%; padding: 0px; color: #505050; font-family: Sans-Serif; font-weight: 700; font-size: 15px; line-height: 18px; border: 1px solid #505050; border-radius: 15px; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.00 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.00 ); background-color: rgba( 255, 255, 255, 0.00 ); transform: translate(0, -50%) } 
+
+/* Popup Theme 5517: Рамка границы */
+.pum-theme-5517, .pum-theme-framed-border { background-color: rgba( 255, 255, 255, 0.50 ) } 
+.pum-theme-5517 .pum-container, .pum-theme-framed-border .pum-container { padding: 18px; border-radius: 0px; border: 20px outset #dd3333; box-shadow: 1px 1px 3px 0px rgba( 2, 2, 2, 0.97 ) inset; background-color: rgba( 255, 251, 239, 1.00 ) } 
+.pum-theme-5517 .pum-title, .pum-theme-framed-border .pum-title { color: #000000; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: inherit; font-weight: 100; font-size: 32px; line-height: 36px } 
+.pum-theme-5517 .pum-content, .pum-theme-framed-border .pum-content { color: #2d2d2d; font-family: inherit; font-weight: 100 } 
+.pum-theme-5517 .pum-content + .pum-close, .pum-theme-framed-border .pum-content + .pum-close { position: absolute; height: 20px; width: 20px; left: auto; right: -20px; bottom: auto; top: -20px; padding: 0px; color: #ffffff; font-family: Tahoma; font-weight: 700; font-size: 16px; line-height: 18px; border: 1px none #ffffff; border-radius: 0px; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.23 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.23 ); background-color: rgba( 0, 0, 0, 0.55 ) } 
+
+/* Popup Theme 5516: Режущий край */
+.pum-theme-5516, .pum-theme-cutting-edge { background-color: rgba( 0, 0, 0, 0.50 ) } 
+.pum-theme-5516 .pum-container, .pum-theme-cutting-edge .pum-container { padding: 18px; border-radius: 0px; border: 1px none #000000; box-shadow: 0px 10px 25px 0px rgba( 2, 2, 2, 0.50 ); background-color: rgba( 30, 115, 190, 1.00 ) } 
+.pum-theme-5516 .pum-title, .pum-theme-cutting-edge .pum-title { color: #ffffff; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: Sans-Serif; font-weight: 100; font-size: 26px; line-height: 28px } 
+.pum-theme-5516 .pum-content, .pum-theme-cutting-edge .pum-content { color: #ffffff; font-family: inherit; font-weight: 100 } 
+.pum-theme-5516 .pum-content + .pum-close, .pum-theme-cutting-edge .pum-content + .pum-close { position: absolute; height: 24px; width: 24px; left: auto; right: 0px; bottom: auto; top: 0px; padding: 0px; color: #1e73be; font-family: Times New Roman; font-weight: 100; font-size: 32px; line-height: 24px; border: 1px none #ffffff; border-radius: 0px; box-shadow: -1px 1px 1px 0px rgba( 2, 2, 2, 0.10 ); text-shadow: -1px 1px 1px rgba( 0, 0, 0, 0.10 ); background-color: rgba( 238, 238, 34, 1.00 ) } 
+
+/* Popup Theme 5515: Hello Box */
+.pum-theme-5515, .pum-theme-hello-box { background-color: rgba( 0, 0, 0, 0.75 ) } 
+.pum-theme-5515 .pum-container, .pum-theme-hello-box .pum-container { padding: 30px; border-radius: 80px; border: 14px solid #81d742; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.00 ); background-color: rgba( 255, 255, 255, 1.00 ) } 
+.pum-theme-5515 .pum-title, .pum-theme-hello-box .pum-title { color: #2d2d2d; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: Montserrat; font-weight: 100; font-size: 32px; line-height: 36px } 
+.pum-theme-5515 .pum-content, .pum-theme-hello-box .pum-content { color: #2d2d2d; font-family: inherit; font-weight: 100 } 
+.pum-theme-5515 .pum-content + .pum-close, .pum-theme-hello-box .pum-content + .pum-close { position: absolute; height: auto; width: auto; left: auto; right: -30px; bottom: auto; top: -30px; padding: 0px; color: #2d2d2d; font-family: Times New Roman; font-weight: 100; font-size: 32px; line-height: 28px; border: 1px none #ffffff; border-radius: 28px; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.23 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.23 ); background-color: rgba( 255, 255, 255, 1.00 ) } 
+
+/* Popup Theme 5514: Enterprise Blue */
+.pum-theme-5514, .pum-theme-enterprise-blue { background-color: rgba( 0, 0, 0, 0.70 ) } 
+.pum-theme-5514 .pum-container, .pum-theme-enterprise-blue .pum-container { padding: 28px; border-radius: 5px; border: 1px none #000000; box-shadow: 0px 10px 25px 4px rgba( 2, 2, 2, 0.50 ); background-color: rgba( 255, 255, 255, 1.00 ) } 
+.pum-theme-5514 .pum-title, .pum-theme-enterprise-blue .pum-title { color: #315b7c; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: inherit; font-weight: 100; font-size: 34px; line-height: 36px } 
+.pum-theme-5514 .pum-content, .pum-theme-enterprise-blue .pum-content { color: #2d2d2d; font-family: inherit; font-weight: 100 } 
+.pum-theme-5514 .pum-content + .pum-close, .pum-theme-enterprise-blue .pum-content + .pum-close { position: absolute; height: 28px; width: 28px; left: auto; right: 8px; bottom: auto; top: 8px; padding: 4px; color: #ffffff; font-family: Times New Roman; font-weight: 100; font-size: 20px; line-height: 20px; border: 1px none #ffffff; border-radius: 42px; box-shadow: 0px 0px 0px 0px rgba( 2, 2, 2, 0.23 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.23 ); background-color: rgba( 49, 91, 124, 1.00 ) } 
+
+/* Popup Theme 5512: Тема по умолчанию */
+.pum-theme-5512, .pum-theme-tema-po-umolchaniyu { background-color: rgba( 255, 255, 255, 1.00 ) } 
+.pum-theme-5512 .pum-container, .pum-theme-tema-po-umolchaniyu .pum-container { padding: 18px; border-radius: 0px; border: 1px none #000000; box-shadow: 1px 1px 3px 0px rgba( 2, 2, 2, 0.23 ); background-color: rgba( 249, 249, 249, 1.00 ) } 
+.pum-theme-5512 .pum-title, .pum-theme-tema-po-umolchaniyu .pum-title { color: #000000; text-align: left; text-shadow: 0px 0px 0px rgba( 2, 2, 2, 0.23 ); font-family: inherit; font-weight: 400; font-size: 32px; font-style: normal; line-height: 36px } 
+.pum-theme-5512 .pum-content, .pum-theme-tema-po-umolchaniyu .pum-content { color: #8c8c8c; font-family: inherit; font-weight: 400; font-style: inherit } 
+.pum-theme-5512 .pum-content + .pum-close, .pum-theme-tema-po-umolchaniyu .pum-content + .pum-close { position: absolute; height: auto; width: auto; left: auto; right: 0px; bottom: auto; top: 0px; padding: 8px; color: #ffffff; font-family: inherit; font-weight: 400; font-size: 12px; font-style: inherit; line-height: 36px; border: 1px none #ffffff; border-radius: 0px; box-shadow: 1px 1px 3px 0px rgba( 2, 2, 2, 0.23 ); text-shadow: 0px 0px 0px rgba( 0, 0, 0, 0.23 ); background-color: rgba( 0, 183, 205, 1.00 ) } 
+
+#pum-5521 {z-index: 1999999999}
+#pum-5520 {z-index: 1999999999}
+
+</style>
+<link rel='stylesheet' id='child_style-css' href='https://cdn.codenrock.com/wp-content/themes/reboot-child/style.css?ver=v6.7.4'  media='all' />
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/jquery/jquery.js?ver=3.7.1" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/jquery/jquery-migrate.js?ver=3.4.1" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://codenrock.com/blog/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://codenrock.com/blog/wp-json/wp/v2/posts/7335" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://codenrock.com/blog/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.7.5" />
+<link rel='shortlink' href='https://codenrock.com/blog/?p=7335' />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://codenrock.com/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcodenrock.com%2Fblog%2Fagentnaya-inzheneriya-prakticheskoe-rukovodstvo%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://codenrock.com/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcodenrock.com%2Fblog%2Fagentnaya-inzheneriya-prakticheskoe-rukovodstvo%2F&#038;format=xml" />
+		<script>
+			document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+		</script>
+				<style>
+			.no-js img.lazyload {
+				display: none;
+			}
+
+			figure.wp-block-image img.lazyloading {
+				min-width: 150px;
+			}
+
+						.lazyload, .lazyloading {
+				opacity: 0;
+			}
+
+			.lazyloaded {
+				opacity: 1;
+				transition: opacity 400ms;
+				transition-delay: 0ms;
+			}
+
+					</style>
+		<link rel="preload" href="https://codenrock.com/blog/wp-content/themes/reboot/assets/fonts/wpshop-core.ttf" as="font" crossorigin><link rel="prefetch" href="https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png" as="image" crossorigin>
+    <style>.site-logotype{max-width:150px}.site-logotype img{max-height:40px}.scrolltop:before{color:#009de6}.scrolltop{width:56px}.scrolltop{height:39px}.scrolltop{left: 10px}.post-card--horizontal .post-card__thumbnail img{border-radius: 6px}.post-card--related, .post-card--related .post-card__thumbnail img, .post-card--related .post-card__thumbnail a:before{border-radius: 6px}body{color:#363636}::selection, .card-slider__category, .card-slider-container .swiper-pagination-bullet-active, .post-card--grid .post-card__thumbnail:before, .post-card:not(.post-card--small) .post-card__thumbnail a:before, .post-card:not(.post-card--small) .post-card__category,  .post-box--high .post-box__category span, .post-box--wide .post-box__category span, .page-separator, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .btn, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .comment-respond .form-submit input, .page-links__item:hover{background-color:#009de6}.entry-image--big .entry-image__body .post-card__category a, .home-text ul:not([class])>li:before, .home-text ul.wp-block-list>li:before, .page-content ul:not([class])>li:before, .page-content ul.wp-block-list>li:before, .taxonomy-description ul:not([class])>li:before, .taxonomy-description ul.wp-block-list>li:before, .widget-area .widget_categories ul.menu li a:before, .widget-area .widget_categories ul.menu li span:before, .widget-area .widget_categories>ul li a:before, .widget-area .widget_categories>ul li span:before, .widget-area .widget_nav_menu ul.menu li a:before, .widget-area .widget_nav_menu ul.menu li span:before, .widget-area .widget_nav_menu>ul li a:before, .widget-area .widget_nav_menu>ul li span:before, .page-links .page-numbers:not(.dots):not(.current):before, .page-links .post-page-numbers:not(.dots):not(.current):before, .pagination .nav-links .page-numbers:not(.dots):not(.current):before, .pagination .nav-links .post-page-numbers:not(.dots):not(.current):before, .entry-image--full .entry-image__body .post-card__category a, .entry-image--fullscreen .entry-image__body .post-card__category a, .entry-image--wide .entry-image__body .post-card__category a{background-color:#009de6}.comment-respond input:focus, select:focus, textarea:focus, .post-card--grid.post-card--thumbnail-no, .post-card--standard:after, .post-card--related.post-card--thumbnail-no:hover, .spoiler-box, .btn-primary, .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle, .inp:focus, .entry-tag:focus, .entry-tag:hover, .search-screen .search-form .search-field:focus, .entry-content ul:not([class])>li:before, .entry-content ul.wp-block-list>li:before, .text-content ul:not([class])>li:before, .text-content ul.wp-block-list>li:before, .page-content ul:not([class])>li:before, .page-content ul.wp-block-list>li:before, .taxonomy-description ul:not([class])>li:before, .taxonomy-description ul.wp-block-list>li:before, .entry-content blockquote:not(.wpremark),
+        .input:focus, input[type=color]:focus, input[type=date]:focus, input[type=datetime-local]:focus, input[type=datetime]:focus, input[type=email]:focus, input[type=month]:focus, input[type=number]:focus, input[type=password]:focus, input[type=range]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=text]:focus, input[type=time]:focus, input[type=url]:focus, input[type=week]:focus, select:focus, textarea:focus{border-color:#009de6 !important}.post-card--small .post-card__category, .post-card__author:before, .post-card__comments:before, .post-card__date:before, .post-card__like:before, .post-card__views:before, .entry-author:before, .entry-date:before, .entry-time:before, .entry-views:before, .entry-comments:before, .entry-content ol:not([class])>li:before, .entry-content ol.wp-block-list>li:before, .text-content ol:not([class])>li:before, .text-content ol.wp-block-list>li:before, .entry-content blockquote:before, .spoiler-box__title:after, .search-icon:hover:before, .search-form .search-submit:hover:before, .star-rating-item.hover,
+        .comment-list .bypostauthor>.comment-body .comment-author:after,
+        .breadcrumb a, .breadcrumb span,
+        .search-screen .search-form .search-submit:before, 
+        .star-rating--score-1:not(.hover) .star-rating-item:nth-child(1),
+        .star-rating--score-2:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-2:not(.hover) .star-rating-item:nth-child(2),
+        .star-rating--score-3:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-3:not(.hover) .star-rating-item:nth-child(3),
+        .star-rating--score-4:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-4:not(.hover) .star-rating-item:nth-child(4),
+        .star-rating--score-5:not(.hover) .star-rating-item:nth-child(1), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(2), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(3), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(4), .star-rating--score-5:not(.hover) .star-rating-item:nth-child(5){color:#009de6}.entry-content a:not(.wp-block-button__link), .entry-content a:not(.wp-block-button__link):visited, .spanlink, .comment-reply-link, .pseudo-link, .widget_calendar a, .widget_recent_comments a, .child-categories ul li a{color:#009de6}.child-categories ul li a{border-color:#009de6}a:hover, a:focus, a:active, .spanlink:hover, .entry-content a:not(.wp-block-button__link):hover, .entry-content a:not(.wp-block-button__link):focus, .entry-content a:not(.wp-block-button__link):active, .top-menu ul li>a:hover, .top-menu ul li>span:hover, .main-navigation ul li a:hover, .main-navigation ul li span:hover, .footer-navigation ul li a:hover, .footer-navigation ul li span:hover, .comment-reply-link:hover, .pseudo-link:hover, .child-categories ul li a:hover{color:#24a8e5}.top-menu>ul>li>a:before, .top-menu>ul>li>span:before{background:#24a8e5}.child-categories ul li a:hover, .post-box--no-thumb a:hover{border-color:#24a8e5}.post-box--card:hover{box-shadow: inset 0 0 0 1px #24a8e5}.post-box--card:hover{-webkit-box-shadow: inset 0 0 0 1px #24a8e5}.site-header, .site-header a, .site-header .pseudo-link{color:#009de6}.humburger span{background:#009de6}.main-navigation, .footer-navigation, .footer-navigation .removed-link, .main-navigation .removed-link, .main-navigation ul li>a, .footer-navigation ul li>a{color:#009de6}.site-footer{background-color:#363636}body{line-height:1.3;}.h1, h1:not(.site-title){font-size:1.8em;line-height:1.1;}.h2, .related-posts__header, .section-block__title, h2{font-size:1.7em;}</style>
+<link rel="icon" href="https://cdn.codenrock.com/wp-content/uploads/2021/09/cropped-sign-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://cdn.codenrock.com/wp-content/uploads/2021/09/cropped-sign-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://cdn.codenrock.com/wp-content/uploads/2021/09/cropped-sign-180x180.png" />
+<meta name="msapplication-TileImage" content="https://cdn.codenrock.com/wp-content/uploads/2021/09/cropped-sign-270x270.png" />
+		<style type="text/css" id="wp-custom-css">
+			.calendar-block-margin-bottom {
+	margin-bottom: 15px !important;
+}
+
+.calendar-button {
+  width: 85% !important;
+}
+
+.calendar-new-post {
+	background-color: #c5e5fa;
+	padding-left: 30px;
+	padding-right: 20px;
+	padding-top: 20px;
+	padding-bottom: 70px;
+}		</style>
+		    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P8B9F9R');</script>
+<!-- End Google Tag Manager -->
+    </head>
+
+<body class="post-template-default single single-post postid-7335 single-format-standard wp-embed-responsive sidebar-right">
+    
+    
+    
+    <div id="page" class="site">
+        <a class="skip-link screen-reader-text" href="#content"><!--noindex-->Перейти к содержанию<!--/noindex--></a>
+
+        <div class="search-screen-overlay js-search-screen-overlay"></div>
+        <div class="search-screen js-search-screen">
+            
+<form role="search" method="get" class="search-form" action="https://codenrock.com/blog/">
+    <label>
+        <span class="screen-reader-text"><!--noindex-->Search for:<!--/noindex--></span>
+        <input type="search" class="search-field" placeholder="Поиск…" value="" name="s">
+    </label>
+    <button type="submit" class="search-submit"></button>
+</form>        </div>
+
+        
+
+<header id="masthead" class="site-header full" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="site-header-inner fixed">
+
+        <div class="humburger js-humburger"><span></span><span></span><span></span></div>
+
+        
+<div class="site-branding">
+
+    <div class="site-logotype"><a href="https://codenrock.com/blog/"><img data-src="https://codenrock.com/blog/wp-content/uploads/2024/01/coderock-logo_dark_small.png" width="499" height="168" alt="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="lazyload" style="--smush-placeholder-width: 499px; --smush-placeholder-aspect-ratio: 499/168;"><noscript><img src="https://codenrock.com/blog/wp-content/uploads/2024/01/coderock-logo_dark_small.png" width="499" height="168" alt="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock"></noscript></a></div></div><!-- .site-branding --><div class="top-menu"><ul id="top-menu" class="menu"><li id="menu-item-1665" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1665"><a href="https://codenrock.com">Соревнования</a></li>
+<li id="menu-item-822" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-822"><a href="https://codenrock.com/blog/category/articles/">Статьи</a></li>
+<li id="menu-item-756" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-756"><a href="https://codenrock.com/blog/category/cases/">Кейсы</a></li>
+<li id="menu-item-757" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-757"><a href="https://codenrock.com/blog/category/updates/">Обновления</a></li>
+<li id="menu-item-2075" class="popmake-5521 menu-item menu-item-type-custom menu-item-object-custom menu-item-2075"><a href="#form_submit">Оставить заявку</a></li>
+</ul></div>                <div class="header-search">
+                    <span class="search-icon js-search-icon"></span>
+                </div>
+            
+    </div>
+</header><!-- #masthead -->
+
+
+
+        
+    <nav id="site-navigation" class="main-navigation fixed" style="display: none;">
+        <div class="main-navigation-inner full">
+            <ul id="header_menu"></ul>
+        </div>
+    </nav>
+    <div class="container header-separator"></div>
+
+
+    <div class="mobile-menu-placeholder js-mobile-menu-placeholder"></div>
+        
+        
+    <div id="content" class="site-content fixed">
+
+        
+        <div class="site-content-inner">
+    
+        
+        <div id="primary" class="content-area" itemscope itemtype="http://schema.org/Article">
+            <main id="main" class="site-main article-card">
+
+                
+<article id="post-7335" class="article-post post-7335 post type-post status-publish format-standard has-post-thumbnail  category-articles tag-anthropic tag-claude-code tag-codenrock tag-llm tag-agentnaya-inzheneriya tag-ii-agenty">
+
+    
+        <div class="breadcrumb" id="breadcrumbs"><span><span class="breadcrumb_last" aria-current="page">Агентная инженерия: практическое руководство по AI-разработке</span></span></div>
+                                <h1 class="entry-title" itemprop="headline">Агентная инженерия: практическое руководство по AI-разработке</h1>
+                    
+        
+        
+    
+            <div class="entry-meta">
+            <span class="entry-author"><span class="entry-label">Автор</span> <span itemprop="author"><a href="https://codenrock.com/blog/author/bloggerxyz/" title="Записи Михаил Трофимов" rel="author">Михаил Трофимов</a></span></span>            <span class="entry-time"><span class="entry-label">На чтение</span> 16 мин</span>            <span class="entry-views"><span class="entry-label">Просмотров</span> <span class="js-views-count" data-post_id="7335">1.1к.</span></span>                        <span class="entry-date"><span class="entry-label">Опубликовано</span> <time itemprop="datePublished" datetime="2026-02-24">24/02/2026</time></span>
+                    </div>
+    
+    
+    <div class="entry-content" itemprop="articleBody">
+        <figure class="wp-block-image size-large"><span itemprop="image" itemscope itemtype="https://schema.org/ImageObject"><img itemprop="url image" decoding="async" width="1600" height="900"  data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png" alt="Агентная инженерия: практическое руководство по AI-разработке" class="wp-image-7348 lazyload" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png 1600w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-300x169.png 300w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-1024x576.png 1024w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-768x432.png 768w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-1536x864.png 1536w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-711x400.png 711w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-335x188.png 335w" data-sizes="(max-width: 1600px) 100vw, 1600px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 1600px; --smush-placeholder-aspect-ratio: 1600/900;" /><noscript><img itemprop="url image" decoding="async" width="1600" height="900"  src="https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png" alt="Агентная инженерия: практическое руководство по AI-разработке" class="wp-image-7348" srcset="https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2.png 1600w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-300x169.png 300w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-1024x576.png 1024w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-768x432.png 768w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-1536x864.png 1536w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-711x400.png 711w, https://codenrock.com/blog/wp-content/uploads/2026/02/banner-agentic-engineering-v2-335x188.png 335w" sizes="(max-width: 1600px) 100vw, 1600px" /></noscript><meta itemprop="width" content="1600"><meta itemprop="height" content="900"></span></figure>
+<p>AI-агенты уже пишут продакшен-код. Инструменты вроде Claude Code, Cursor и Windsurf используются в реальных проектах, генерируя тысячи строк, которые проходят ревью и деплоятся в прод. Но между «попросить модель написать функцию» и «выстроить процесс, в котором AI стабильно генерирует качественный код» — пропасть.</p>
+<p>Агентная инженерия (Agentic Engineering) — дисциплина, которая закрывает эту пропасть. Она отвечает на вопрос: как проектировать процессы, инструменты и контекст так, чтобы AI-агент работал предсказуемо. Не как генератор случайных сниппетов, а как управляемый участник команды.</p>
+<p>В этой статье — конкретные техники и рекомендации: от промптинга до мульти-агентных пайплайнов. Принципы универсальны. CLAUDE.md — для Claude Code, <code>.cursorrules</code> — для Cursor, <code>.github/copilot-instructions.md</code> — для Copilot. Выбирайте среду под свои задачи.</p>
+<p>Статья выходит в преддверии хакатона <a href="https://codenrock.com/contests/dev-to-dev-agentic-engineering-challenge">Dev-to-Dev: Agentic Engineering Challenge</a> (26 февраля — 1 марта, онлайн) — как раз тот формат, где все эти подходы можно обкатать на практике.</p>
+<hr />
+<div class="table-of-contents open"><div class="table-of-contents__header"><span class="table-of-contents__hide js-table-of-contents-hide">Содержание</span></div><ol class="table-of-contents__list js-table-of-contents-list">
+<li class="level-1"><a href="#1-prompt-inzheneriya-shest-priyomov-kotorye">1. Промпт-инженерия: шесть приёмов, которые реально работают при генерации кода</a></li><li class="level-2"><a href="#1-1-kontekst-freym-nachni-s-ogranicheniy">1.1. Контекст-фрейм: начни с ограничений, а не с задачи</a></li><li class="level-2"><a href="#1-2-primer-vhoda-vyhoda-vmesto-opisaniya">1.2. Пример входа-выхода вместо описания словами</a></li><li class="level-2"><a href="#1-3-negative-prompting-skazhite-chego-ne">1.3. Negative prompting: скажите, чего НЕ делать</a></li><li class="level-2"><a href="#1-4-chunking-odna-zadacha-odin-prompt">1.4. Chunking: одна задача — один промпт</a></li><li class="level-2"><a href="#1-5-spec-first-kontrakt-do-realizatsii">1.5. Spec-first: контракт до реализации</a></li><li class="level-2"><a href="#1-6-privyazka-k-realnosti-zapret-gallyutsinatsiy">1.6. Привязка к реальности: запрет галлюцинаций</a></li><li class="level-1"><a href="#2-claude-md-onbording-dokument-dlya-ai-agenta">2. CLAUDE.md: онбординг-документ для AI-агента</a></li><li class="level-2"><a href="#chto-eto-takoe">Что это такое</a></li><li class="level-2"><a href="#struktura-iz-pyati-sektsiy">Структура из пяти секций</a></li><li class="level-2"><a href="#tri-oshibki-kotorye-ubivayut-effektivnost">Три ошибки, которые убивают эффективность</a></li><li class="level-2"><a href="#prakticheskiy-sovet">Практический совет</a></li><li class="level-1"><a href="#3-model-context-protocol-kak-ustroen-most">3. Model Context Protocol: как устроен мост между агентом и реальным миром</a></li><li class="level-2"><a href="#arhitektura-tri-roli">Архитектура: три роли</a></li><li class="level-2"><a href="#tri-primitiva">Три примитива</a></li><li class="level-2"><a href="#transport-i-protokol">Транспорт и протокол</a></li><li class="level-2"><a href="#kak-agent-vybiraet-instrument">Как агент выбирает инструмент</a></li><li class="level-2"><a href="#praktika-stroim-mcp-server-za-5-shagov">Практика: строим MCP-сервер за 5 шагов</a></li><li class="level-2"><a href="#tri-grabli">Три грабли</a></li><li class="level-2"><a href="#ekosistema">Экосистема</a></li><li class="level-1"><a href="#4-git-worktrees-parallelnaya-rabota-s-ai">4. Git Worktrees: параллельная работа с AI без конфликтов</a></li><li class="level-2"><a href="#chto-eto-takoe-2">Что это такое</a></li><li class="level-2"><a href="#zachem-eto-ai-razrabotchiku">Зачем это AI-разработчику</a></li><li class="level-2"><a href="#kak-ispolzovat">Как использовать</a></li><li class="level-2"><a href="#worktrees-v-claude-code">Worktrees в Claude Code</a></li><li class="level-2"><a href="#prakticheskiy-pattern">Практический паттерн</a></li><li class="level-1"><a href="#5-patterny-oshibok-ai-generiruemogo-koda">5. Паттерны ошибок AI-генерируемого кода</a></li><li class="level-2"><a href="#5-1-gallyutsinatsii-api">5.1. Галлюцинации API</a></li><li class="level-2"><a href="#5-2-ustarevshiy-sintaksis">5.2. Устаревший синтаксис</a></li><li class="level-2"><a href="#5-3-security-dyry">5.3. Security-дыры</a></li><li class="level-2"><a href="#5-4-happy-path-only">5.4. Happy path only</a></li><li class="level-2"><a href="#5-5-phantom-dependencies">5.5. Phantom dependencies</a></li><li class="level-2"><a href="#kak-lovit-sistematicheski">Как ловить систематически</a></li><li class="level-1"><a href="#6-multi-agentnye-vorkflou-razdelyay-i-vlastvuy">6. Мульти-агентные воркфлоу: разделяй и властвуй</a></li><li class="level-2"><a href="#pattern-1-pipeline-konveyer">Паттерн 1: Pipeline (конвейер)</a></li><li class="level-2"><a href="#pattern-2-router-specialists-marshrutizator">Паттерн 2: Router + Specialists (маршрутизатор)</a></li><li class="level-2"><a href="#pattern-3-adversarial-sostyazatelnyy">Паттерн 3: Adversarial (состязательный)</a></li><li class="level-2"><a href="#realizatsiya">Реализация</a></li><li class="level-2"><a href="#kogda-eto-overinzhiniring">Когда это оверинжиниринг</a></li><li class="level-1"><a href="#zaklyuchenie">Заключение</a></li></ol></div><h2 id="1-prompt-inzheneriya-shest-priyomov-kotorye">1. Промпт-инженерия: шесть приёмов, которые реально работают при генерации кода</h2>
+<p>Промпт — это не пожелание. Это спецификация. Чем меньше модель додумывает — тем предсказуемее результат.</p>
+<h3 id="1-1-kontekst-freym-nachni-s-ogranicheniy">1.1. Контекст-фрейм: начни с ограничений, а не с задачи</h3>
+<p>Модель не знает ваш проект. Первые строки промпта — это рамка.</p>
+<p><strong>Плохо:</strong> «Напиши функцию валидации формы».</p>
+<p><strong>Хорошо:</strong> «Проект: Next.js 15, TypeScript strict, Zod, Prisma + PostgreSQL. Не используй any. Не добавляй зависимости. Напиши Zod-схему регистрации: email, пароль (мин. 8, 1 цифра, 1 спецсимвол), подтверждение пароля».</p>
+<p>Один абзац контекста экономит три итерации переписывания.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-cot-prompting.png" alt="Chain-of-Thought Prompting: стандартный промпт vs промпт с цепочкой рассуждений" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-cot-prompting.png" alt="Chain-of-Thought Prompting: стандартный промпт vs промпт с цепочкой рассуждений" class="wp-image"/></noscript><figcaption>Chain-of-Thought Prompting — один из ключевых приёмов: модель показывает промежуточные шаги рассуждения. Источник: Wei et al., 2022 / <a href="https://www.promptingguide.ai/techniques/cot">Prompt Engineering Guide</a></figcaption></figure>
+<h3 id="1-2-primer-vhoda-vyhoda-vmesto-opisaniya">1.2. Пример входа-выхода вместо описания словами</h3>
+<p><strong>Плохо:</strong> «Функция проверки email, возвращает объект с результатом и причиной».</p>
+<p><strong>Хорошо:</strong> покажите конкретные примеры. <code>user@domain.com</code> → valid: true. <code>test@</code> → valid: false, причина: нет домена. Пустая строка → valid: false, причина: пустой ввод.</p>
+<p>Два-три примера задают формат точнее, чем абзац требований. Модель копирует паттерн, а не интерпретирует описание.</p>
+<h3 id="1-3-negative-prompting-skazhite-chego-ne">1.3. Negative prompting: скажите, чего НЕ делать</h3>
+<p>«Рефакторни processOrder. НЕ меняй сигнатуру. НЕ добавляй зависимости. НЕ трогай /src/core/. Сохрани совместимость с тестами».</p>
+<p>Каждое «не» сужает пространство решений. Без ограничений модель может переписать полпроекта, «улучшая» то, что трогать не надо.</p>
+<h3 id="1-4-chunking-odna-zadacha-odin-prompt">1.4. Chunking: одна задача — один промпт</h3>
+<p><strong>Плохо:</strong> «Напиши CRUD API с авторизацией, валидацией и тестами».</p>
+<p><strong>Хорошо:</strong> разбейте на шаги. Сначала типы данных (User, CreateUserInput), потом сервисы (createUser, getUser), потом обработку ошибок, потом API-роуты. Каждый шаг — отдельный промпт. Ревьюите результат, двигаетесь дальше.</p>
+<p>Chunking решает фундаментальную проблему: при большом объёме задачи модель теряет фокус и начинает «срезать углы» — упрощает типы, забывает edge cases, генерирует шаблонный код.</p>
+<h3 id="1-5-spec-first-kontrakt-do-realizatsii">1.5. Spec-first: контракт до реализации</h3>
+<p>Не просите «напиши API». Опишите, как оно выглядит снаружи: POST /api/orders, тело запроса (productId, quantity, coupon), варианты ответов — 201 Created, 400 невалидное количество, 404 товар не найден, 409 нет в наличии, авторизация через JWT.</p>
+<p>Когда контракт определён, реализация становится механической задачей. А механические задачи — именно то, что модель делает лучше всего.</p>
+<h3 id="1-6-privyazka-k-realnosti-zapret-gallyutsinatsiy">1.6. Привязка к реальности: запрет галлюцинаций</h3>
+<p>Модели выдумывают методы и пакеты, которых не существует. Решение — дать фрагмент реальной схемы или документации прямо в промпте: «Prisma. Используй ТОЛЬКО findUnique/findFirst/findMany для чтения, create/update/upsert/delete для записи. НЕ используй raw SQL. Если не уверен в методе — спроси». И приложите кусок Prisma-схемы.</p>
+<p>Лучшая защита от галлюцинаций — реальный контекст. Чем больше конкретных фрагментов кода, типов и схем вы даёте модели, тем меньше она выдумывает.</p>
+<p><strong>Все шесть приёмов сводятся к одному принципу: промпт — это спецификация, а не пожелание.</strong></p>
+<hr />
+<h2 id="2-claude-md-onbording-dokument-dlya-ai-agenta">2. CLAUDE.md: онбординг-документ для AI-агента</h2>
+<p>Промпт-инженерия работает на уровне отдельного запроса. Но каждый раз прописывать стек, архитектуру и правила нереально. Всё, что вы пишете руками в промпте, можно зафиксировать один раз — и пусть агент загружает автоматически.</p>
+<h3 id="chto-eto-takoe">Что это такое</h3>
+<p>CLAUDE.md — это не документация и не README. Это онбординг для AI-агента. Точно так же, как вы вводите нового разработчика в проект — объясняете архитектуру, показываете паттерны, предупреждаете о граблях — вы делаете это для модели. Один раз. Дальше агент читает этот файл перед каждой задачей и работает в рамках ваших правил.</p>
+<p>Claude Code автоматически загружает CLAUDE.md при старте сессии. Cursor использует аналогичный механизм через <code>.cursorrules</code>, Windsurf — <code>.windsurfrules</code>. Принцип одинаковый, формат файла отличается.</p>
+<h3 id="struktura-iz-pyati-sektsiy">Структура из пяти секций</h3>
+<p><strong>Проект</strong> — краткое описание, стек, архитектура. Одним абзацем: «SaaS-платформа. Next.js 15, Prisma, PostgreSQL, мультисхемная архитектура».</p>
+<p><strong>Структура директорий</strong> — где что лежит. src/app/api/ — роуты, src/models/ — схемы, src/components/ — компоненты. Агент должен знать, куда класть новый файл.</p>
+<p><strong>Паттерны кода</strong> — один-два примера типичного эндпоинта или компонента. Не описание, а реальный фрагмент. Модель копирует стиль из примера.</p>
+<p><strong>Правила</strong> — что делать всегда: async/await вместо промисов, валидация через Zod, формат ошибок, согласование новых зависимостей.</p>
+<p><strong>Запрещено</strong> — что не делать никогда: any в TypeScript, console.log в продакшене, прямые SQL-запросы, изменение ядра без явного указания.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-claude-md-skills.png" alt="Progressive Disclosure: многоуровневая загрузка контекста агентом" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-claude-md-skills.png" alt="Progressive Disclosure: многоуровневая загрузка контекста агентом" class="wp-image"/></noscript><figcaption>Progressive Disclosure — агент загружает контекст послойно: от оглавления к деталям. Источник: <a href="https://claude.com/blog/equipping-agents-for-the-real-world-with-agent-skills">Anthropic Engineering Blog</a></figcaption></figure>
+<h3 id="tri-oshibki-kotorye-ubivayut-effektivnost">Три ошибки, которые убивают эффективность</h3>
+<p><strong>Слишком длинный.</strong> Больше 1000 строк сложно поддерживать в актуальном состоянии. Чем больше правил — тем чаще они противоречат друг другу, и модель начинает выбирать между конфликтующими инструкциями. Держите документ компактным.</p>
+<p><strong>Слишком абстрактный.</strong> «Пиши чистый код» — бесполезно. «Каждый API-эндпоинт возвращает <code>{ data, error, meta }</code> — вот пример» — работает. Без реальных фрагментов кода CLAUDE.md превращается в корпоративную миссию на стене.</p>
+<p><strong>Устаревший.</strong> Переименовали директорию, сменили ORM, обновили фреймворк — а CLAUDE.md описывает прошлую архитектуру. Агент будет генерировать код для проекта, которого больше нет.</p>
+<h3 id="prakticheskiy-sovet">Практический совет</h3>
+<p>Начните с 50 строк. Запустите агента, посмотрите, где он ошибается. Добавьте правило. Снова ошибся — добавьте пример. Через неделю у вас будет рабочий документ, выросший из реальных проблем. CLAUDE.md — живой артефакт, не высеченный в камне манифест.</p>
+<hr />
+<h2 id="3-model-context-protocol-kak-ustroen-most">3. Model Context Protocol: как устроен мост между агентом и реальным миром</h2>
+<p>Промпт и CLAUDE.md дают агенту знания о проекте. Но чтобы агент мог <em>действовать</em> — создавать задачи, отправлять письма, запрашивать данные из базы — ему нужен протокол взаимодействия с внешним миром. Это Model Context Protocol (MCP).</p>
+<h3 id="arhitektura-tri-roli">Архитектура: три роли</h3>
+<p><strong>Host</strong> — приложение, в котором живёт агент: Claude Code, Cursor, Windsurf. <strong>Client</strong> — компонент внутри хоста, который держит соединение с конкретным сервером. <strong>Server</strong> — отдельный процесс, предоставляющий возможности: доступ к файлам, базам данных, API-сервисам.</p>
+<p>Один Host содержит несколько Client, каждый Client подключён к одному Server. Host видит инструменты всех серверов и сам решает, какой вызвать.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-mcp-architecture.png" alt="MCP Architecture: Host, Client, Server" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-mcp-architecture.png" alt="MCP Architecture: Host, Client, Server" class="wp-image"/></noscript><figcaption>Архитектура Model Context Protocol: Host содержит несколько Client, каждый подключён к Server. Источник: <a href="https://modelcontextprotocol.io/docs/concepts/architecture">MCP Specification</a></figcaption></figure>
+<h3 id="tri-primitiva">Три примитива</h3>
+<p><strong>Tools</strong> — функции, которые агент вызывает: создать задачу, выполнить SQL-запрос, отправить письмо. Это основной примитив; 90% серверов используют только tools.</p>
+<p><strong>Resources</strong> — данные для чтения без побочных эффектов: файлы, конфиги, состояние системы. Resources нужны, когда агенту важно увидеть текущее состояние перед принятием решения.</p>
+<p><strong>Prompts</strong> — шаблоны для типовых сценариев. Используются реже, но полезны для стандартизации повторяющихся задач.</p>
+<h3 id="transport-i-protokol">Транспорт и протокол</h3>
+<p>Два варианта транспорта. <strong>stdio</strong> — для локальных серверов: хост запускает процесс и общается через stdin/stdout. Просто, быстро, без сети. <strong>Streamable HTTP</strong> — для удалённых серверов: HTTP-запросы + стриминг через Server-Sent Events. Подходит для облачных деплоев. (Streamable HTTP заменил устаревший SSE-транспорт — в старых туториалах можно встретить SSE, но новые серверы пишут на Streamable HTTP.)</p>
+<p>Под капотом — JSON-RPC 2.0. Каждый вызов инструмента — пара запрос/ответ. Всё типизировано через JSON Schema — модель точно знает, какие аргументы передать.</p>
+<h3 id="kak-agent-vybiraet-instrument">Как агент выбирает инструмент</h3>
+<p>При подключении сервер отдаёт список: имя, описание, схема параметров. Модель читает <code>name</code> и <code>description</code> каждого инструмента и решает, какой подходит. Принципиальный момент: <strong>описание инструмента — это промпт для модели, а не комментарий для человека.</strong></p>
+<p>Описание «работает с данными» бесполезно. Описание «Возвращает список открытых задач проекта. Принимает статус фильтрации. Если задач нет — пустой массив» — работает. Плохое описание = tool не будет вызван, даже если он делает именно то, что нужно.</p>
+<h3 id="praktika-stroim-mcp-server-za-5-shagov">Практика: строим MCP-сервер за 5 шагов</h3>
+<p><strong>Шаг 1. Инициализация.</strong> <code>npx @modelcontextprotocol/create-server todo-server</code> — готовая структура проекта: index.ts, tsconfig, зависимости.</p>
+<p><strong>Шаг 2. Tools.</strong> У каждого tool четыре составляющих: имя (<code>add_todo</code>), описание на естественном языке, схема параметров через Zod и обработчик — async-функция. Критически важно: у каждого параметра <code>.describe()</code>. Агент читает именно эти описания.</p>
+<p><strong>Шаг 3. Resources.</strong> Текущее состояние данных в JSON — чтение без побочных эффектов.</p>
+<p><strong>Шаг 4. Подключение.</strong> В <code>.mcp.json</code> добавляете сервер: имя и команду запуска. Перезапуск IDE — агент видит tools.</p>
+<p><strong>Шаг 5. Отладка.</strong> <code>npx @modelcontextprotocol/inspector</code> — визуальный клиент, показывающий то, что видит агент: список tools, параметры, описания. Можно вызвать любой tool вручную.</p>
+<h3 id="tri-grabli">Три грабли</h3>
+<p><strong>Абстрактные описания.</strong> «Работает с задачами» — агент не поймёт. «Добавляет задачу в TODO-список. Принимает название и приоритет. Возвращает ID» — поймёт сразу.</p>
+<p><strong>Нет error handling.</strong> Когда tool падает с необработанным исключением, агент получает stack trace и пытается его «починить» — обычно делая хуже. Оборачивайте в try/catch и возвращайте понятное сообщение.</p>
+<p><strong>Переусложнённые параметры.</strong> Tool с 10 обязательными полями — лабиринт. Агент запутается и начнёт галлюцинировать значения. Лучше пять простых tools, чем один универсальный.</p>
+<h3 id="ekosistema">Экосистема</h3>
+<p>MCP отвязывает инструмент от модели. Написали сервер один раз — он работает с Claude, GPT, Gemini, с любой моделью, поддерживающей протокол. Каталог готовых серверов: <a href="https://github.com/modelcontextprotocol/servers">github.com/modelcontextprotocol/servers</a>. Спецификация: <a href="https://spec.modelcontextprotocol.io">spec.modelcontextprotocol.io</a>.</p>
+<hr />
+<h2 id="4-git-worktrees-parallelnaya-rabota-s-ai">4. Git Worktrees: параллельная работа с AI без конфликтов</h2>
+<p>Одна из неочевидных проблем AI-разработки: агент занят долгой задачей в одной ветке, а вам нужно параллельно делать что-то в другой. Переключать ветки нельзя — агент работает с файлами. Клонировать репозиторий заново — долго и неудобно. Решение — git worktrees.</p>
+<h3 id="chto-eto-takoe-2">Что это такое</h3>
+<p>Git worktree — это дополнительная рабочая копия того же репозитория, привязанная к другой ветке. Один <code>.git</code>, несколько директорий с кодом. Каждая может быть открыта в своей сессии AI-агента одновременно.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-worktrees.png" alt="Git Worktrees для параллельной AI-разработки" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-worktrees.png" alt="Git Worktrees для параллельной AI-разработки" class="wp-image"/></noscript><figcaption>Git Worktrees позволяют запускать несколько AI-агентов параллельно над одним проектом. Источник: <a href="https://nx.dev/blog/git-worktrees-ai-agents">Nx Blog</a></figcaption></figure>
+<h3 id="zachem-eto-ai-razrabotchiku">Зачем это AI-разработчику</h3>
+<p><strong>Параллельные сессии.</strong> Агент пишет фичу в <code>feature/auth</code> — вы открываете вторую сессию Claude Code в worktree на <code>feature/api</code> и работаете одновременно. Никаких конфликтов, никаких <code>git stash</code>.</p>
+<p><strong>Изолированные эксперименты.</strong> Хотите попробовать радикальный рефакторинг? Создайте worktree, дайте агенту задачу. Если результат не понравился — просто удалите директорию. Основная ветка не тронута.</p>
+<p><strong>Code review.</strong> Нужно проверить чужой PR? Worktree на ветку PR — и агент ревьюит код, пока ваша основная работа не прерывается.</p>
+<h3 id="kak-ispolzovat">Как использовать</h3>
+<p>Создать worktree:</p>
+<p><code>git worktree add ../my-project-feature feature/new-api</code></p>
+<p>Теперь в <code>../my-project-feature</code> — полная копия проекта на ветке <code>feature/new-api</code>. Открываете там отдельную сессию Claude Code — и работаете параллельно с основной.</p>
+<p>Список всех worktrees:</p>
+<p><code>git worktree list</code></p>
+<p>Удалить, когда больше не нужен:</p>
+<p><code>git worktree remove ../my-project-feature</code></p>
+<h3 id="worktrees-v-claude-code">Worktrees в Claude Code</h3>
+<p>В Claude Code есть встроенная поддержка worktrees. При запуске подзадач через Task tool можно указать <code>isolation: "worktree"</code> — агент автоматически создаст временный worktree, выполнит задачу в изолированной копии репозитория, и вернёт результат. Если изменения не нужны — worktree удалится сам. Если нужны — вы получите путь и ветку для мёрджа.</p>
+<p>Это особенно полезно для мульти-агентных воркфлоу: каждый агент работает в своём worktree, никто не мешает друг другу.</p>
+<h3 id="prakticheskiy-pattern">Практический паттерн</h3>
+<p>Типичная структура для AI-разработки:</p>
+<pre><code>~/projects/
+├── my-app/              # основная ветка (main)
+├── my-app-feature-auth/ # worktree: feature/auth (сессия агента 1)
+├── my-app-feature-api/  # worktree: feature/api (сессия агента 2)
+└── my-app-hotfix/       # worktree: hotfix/urgent (ручная работа)
+</code></pre>
+<p>Все четыре директории — один репозиторий, один <code>.git</code>. Коммиты видны везде. Ветки мёрджатся как обычно.</p>
+<hr />
+<h2 id="5-patterny-oshibok-ai-generiruemogo-koda">5. Паттерны ошибок AI-генерируемого кода</h2>
+<p>Код компилируется, линтер молчит, тесты зелёные. А потом — метод, которого не существует, пакет-призрак из npm и SQL-инъекция в единственном эндпоинте. AI-генерация порождает не больше багов, чем ручной код, но паттерны другие. Знание паттернов — половина решения.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-code-hallucinations.png" alt="Таксономия галлюцинаций в AI-генерируемом коде: Mapping, Naming, Resource, Logic" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-code-hallucinations.png" alt="Таксономия галлюцинаций в AI-генерируемом коде: Mapping, Naming, Resource, Logic" class="wp-image"/></noscript><figcaption>Классификация галлюцинаций в AI-коде: 4 категории, 8 подтипов. Источник: <a href="https://arxiv.org/abs/2405.00253">CodeHalu, AAAI 2025</a></figcaption></figure>
+<h3 id="5-1-gallyutsinatsii-api">5.1. Галлюцинации API</h3>
+<p>Модель уверенно вызывает метод, которого нет в библиотеке. Классика из Prisma: AI пишет <code>prisma.user.findByEmail("test@example.com")</code> — выглядит логично, но такого метода не существует. Правильно — <code>findUnique</code> с параметром <code>where: { email }</code>. Модель «помнит» паттерны из тысяч ORM и микширует их.</p>
+<p>Strict TypeScript ловит это на этапе компиляции. Без строгих типов — уедет в прод.</p>
+<h3 id="5-2-ustarevshiy-sintaksis">5.2. Устаревший синтаксис</h3>
+<p>AI обучен на миллионах репозиториев, значительная часть — legacy. <code>componentDidMount</code> вместо <code>useEffect</code>. <code>var</code> вместо <code>const/let</code>. <code>new Buffer()</code> вместо <code>Buffer.from()</code>. В открытых репозиториях deprecated-кода накоплено за десятилетия, и модели неизбежно на нём обучаются.</p>
+<p>Лечение — явно указать в CLAUDE.md: «React только хуки. Node.js &gt;= 20. Не используй deprecated API».</p>
+<h3 id="5-3-security-dyry">5.3. Security-дыры</h3>
+<p>Модель не различает trusted и untrusted input. Типичный случай: AI подставляет пользовательский ввод прямо в SQL-строку — классическая SQL-инъекция. Правильно — параметризованные запросы.</p>
+<p>То же с XSS (<code>innerHTML = userInput</code>), path traversal (<code>fs.readFile(userInput)</code>), command injection (<code>exec(userInput)</code>). AI оптимизирует на «работает», а не на «безопасно». Безопасность — отдельная задача, которую нужно явно ставить.</p>
+<h3 id="5-4-happy-path-only">5.4. Happy path only</h3>
+<p>AI отлично пишет основной сценарий, но систематически забывает: <code>null</code> / <code>undefined</code> — что если пользователь не найден? Пустой массив — <code>items[0].name</code> упадёт с TypeError. Сетевые таймауты — fetch без AbortController и таймаута может висеть минутами, блокируя ресурсы. Race conditions — два запроса обновляют один ресурс.</p>
+<p>Модель пишет код для идеального мира. Пользователи живут в неидеальном.</p>
+<h3 id="5-5-phantom-dependencies">5.5. Phantom dependencies</h3>
+<p>AI импортирует пакет, которого нет в npm. Например, <code>json-schema-validator-pro</code> — название правдоподобно, но пакет не существует. AI его выдумал.</p>
+<p>Это не просто ошибка сборки. Исследования показывают, что AI-модели стабильно генерируют одни и те же несуществующие имена пакетов. Атакующие регистрируют такие имена и заливают вредоносный код — dependency confusion на AI-галлюцинациях. Каждый незнакомый import — <code>npm info</code> перед установкой.</p>
+<h3 id="kak-lovit-sistematicheski">Как ловить систематически</h3>
+<ul>
+<li><strong>Strict TypeScript + ESLint</strong> — ловит галлюцинации API и deprecated-паттерны на этапе компиляции. Первая линия обороны, бесплатная.</li>
+<li><strong>AI vs AI</strong> — один агент пишет, другой ревьюит с промптом «найди уязвимости и edge cases». Но важно: тесты — отдельным запросом, по спецификации, а не по коду. Если AI неверно понял задачу — и код, и тесты, написанные вместе, будут «согласованно» неправильными.</li>
+<li><strong>npm audit + npm info</strong> — проверка зависимостей на существование и уязвимости.</li>
+<li><strong>CLAUDE.md с запрещёнными паттернами</strong> — явный список «не делай так» снижает повторение ошибок на порядок.</li>
+</ul>
+<hr />
+<h2 id="6-multi-agentnye-vorkflou-razdelyay-i-vlastvuy">6. Мульти-агентные воркфлоу: разделяй и властвуй</h2>
+<p>Вы дали агенту задачу: спроектируй, напиши, покрой тестами, задокументируй. Контекст на 50 000 токенов, промпт на два экрана. Результат — каша. Проблема не в модели. Один агент не может быть архитектором, кодером, тестировщиком и техписом одновременно.</p>
+<p>Чем уже задача — тем точнее результат. Мульти-агентный воркфлоу — это когда несколько агентов с разными ролями и контекстами решают одну задачу.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-prompt-chaining.png" alt="Pipeline (Prompt Chaining) — конвейерный воркфлоу" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-prompt-chaining.png" alt="Pipeline (Prompt Chaining) — конвейерный воркфлоу" class="wp-image"/></noscript><figcaption>Паттерн Pipeline: каждый агент получает результат предыдущего и передаёт дальше. Источник: <a href="https://www.anthropic.com/research/building-effective-agents">Anthropic — Building Effective Agents</a></figcaption></figure>
+<h3 id="pattern-1-pipeline-konveyer">Паттерн 1: Pipeline (конвейер)</h3>
+<p><strong>Architect → Coder → Reviewer → Tester.</strong> Каждый агент получает результат предыдущего. Architect создаёт спецификацию и интерфейсы. Coder реализует строго по спецификации. Reviewer ищет баги и security-проблемы. Tester пишет тесты.</p>
+<p>Ключевое: каждый видит только свой кусок контекста. Изолированный контекст заставляет агента работать строго в своей роли.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-routing.png" alt="Routing — маршрутизация задач к специализированным агентам" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-routing.png" alt="Routing — маршрутизация задач к специализированным агентам" class="wp-image"/></noscript><figcaption>Паттерн Routing: маршрутизатор анализирует задачу и направляет к нужному специалисту. Источник: <a href="https://www.anthropic.com/research/building-effective-agents">Anthropic — Building Effective Agents</a></figcaption></figure>
+<h3 id="pattern-2-router-specialists-marshrutizator">Паттерн 2: Router + Specialists (маршрутизатор)</h3>
+<p><strong>Router → [DB Agent | API Agent | UI Agent | DevOps Agent].</strong> Router анализирует задачу и направляет к специалисту. «Добавь индекс в таблицу» — к DB Agent. «Сверстай форму» — к UI Agent. Каждый имеет свой системный промпт с узким контекстом: DB Agent знает схему базы, UI Agent — дизайн-систему. Когда задача затрагивает несколько областей — Router декомпозирует и отправляет подзадачи параллельно.</p>
+<figure class="wp-block-image size-large"><img decoding="async" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-evaluator-optimizer.png" alt="Evaluator-Optimizer — состязательный воркфлоу" class="wp-image lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><noscript><img decoding="async" src="https://cdn.codenrock.com/wp-content/uploads/2026/02/img-evaluator-optimizer.png" alt="Evaluator-Optimizer — состязательный воркфлоу" class="wp-image"/></noscript><figcaption>Паттерн Adversarial (Evaluator-Optimizer): генератор создаёт, критик проверяет, цикл повторяется. Источник: <a href="https://www.anthropic.com/research/building-effective-agents">Anthropic — Building Effective Agents</a></figcaption></figure>
+<h3 id="pattern-3-adversarial-sostyazatelnyy">Паттерн 3: Adversarial (состязательный)</h3>
+<p><strong>Generator ↔ Critic → итоговый результат.</strong> Generator пишет код. Critic ломает: edge cases, невалидные входы, race conditions. Generator исправляет. Цикл повторяется, пока Critic не примет.</p>
+<p>Это формализация приёма «AI vs AI» из раздела про ошибки, но возведённая в архитектурный принцип. Две-три итерации находят баги, которые ручное ревью пропускает.</p>
+<h3 id="realizatsiya">Реализация</h3>
+<p>В Claude Code мульти-агентность реализуется через Task tool — запуск подзадачи в чистом контексте. Подагент не видит историю основного разговора, а только то, что ему передали. Это и есть изоляция: подагент-тестировщик не знает, что «хотел» кодер, и тестирует непредвзято. Агенты обмениваются через файлы: Architect пишет spec.md, Coder читает spec.md и пишет код, Tester читает код и пишет тесты. Никакого общего контекста — только артефакты.</p>
+<p>В сочетании с git worktrees это особенно мощно: каждый агент работает в изолированной копии репозитория, изменения мёрджатся только после ревью.</p>
+<h3 id="kogda-eto-overinzhiniring">Когда это оверинжиниринг</h3>
+<p>Правило: если задача декомпозируется на роли — используйте мульти-агентный воркфлоу. Если нет — одного агента достаточно. Конвейер из четырёх агентов для функции на 10 строк — пустая трата контекста и времени.</p>
+<hr />
+<h2 id="zaklyuchenie">Заключение</h2>
+<p>Агентная инженерия — это не про замену разработчика на AI. Это про изменение того, чем разработчик занимается. Вместо написания кода — проектирование архитектуры, формулирование спецификаций, настройка контекста и контроль качества.</p>
+<p>Практический минимум, который стоит внедрить уже сейчас:</p>
+<ol>
+<li><strong>Промпт-инженерия</strong> — контекст, примеры, ограничения, спецификация. Перестать давать абстрактные задачи.</li>
+<li><strong>CLAUDE.md</strong> — 50 строк онбординга для агента. Расширять по мере обнаружения ошибок.</li>
+<li><strong>MCP</strong> — подключить готовые серверы для инструментов, которыми пользуетесь. Попробовать написать свой.</li>
+<li><strong>Git worktrees</strong> — параллельная работа нескольких агентов над одним проектом без конфликтов.</li>
+<li><strong>Защита от ошибок</strong> — strict TypeScript, тесты отдельно от кода, явные запреты.</li>
+<li><strong>Мульти-агентные воркфлоу</strong> — для задач, которые декомпозируются на роли.</li>
+</ol>
+<p>Каждый из этих элементов работает сам по себе. Вместе они образуют систему, в которой AI-агент из непредсказуемого генератора сниппетов превращается в управляемого участника разработки.</p>
+<p>Все эти подходы можно попробовать на практике на хакатоне <a href="https://codenrock.com/contests/dev-to-dev-agentic-engineering-challenge">Dev-to-Dev: Agentic Engineering Challenge</a> — 26 февраля — 1 марта, онлайн, бесплатно. Как раз тот формат, где агентная инженерия проверяется делом.</p>    </div><!-- .entry-content -->
+
+    <div class="question-bk">
+    </div>
+
+</article>
+
+
+
+
+<div class="entry-tags"><a href="https://codenrock.com/blog/tag/anthropic/" class="entry-tag">Anthropic</a> <a href="https://codenrock.com/blog/tag/claude-code/" class="entry-tag">Claude Code</a> <a href="https://codenrock.com/blog/tag/codenrock/" class="entry-tag">Codenrock</a> <a href="https://codenrock.com/blog/tag/llm/" class="entry-tag">LLM</a> <a href="https://codenrock.com/blog/tag/agentnaya-inzheneriya/" class="entry-tag">агентная инженерия</a> <a href="https://codenrock.com/blog/tag/ii-agenty/" class="entry-tag">ИИ-агенты</a> </div>
+
+
+
+    <div class="entry-social">
+      
+        <div class="social-buttons"><span class="social-button social-button--vkontakte" data-social="vkontakte" data-image="https://cdn.codenrock.com/wp-content/uploads/2026/02/banner-agentic-engineering-v2-150x150.png"></span><span class="social-button social-button--facebook" data-social="facebook"></span><span class="social-button social-button--telegram" data-social="telegram"></span><span class="social-button social-button--odnoklassniki" data-social="odnoklassniki"></span><span class="social-button social-button--twitter" data-social="twitter"></span><span class="social-button social-button--sms" data-social="sms"></span><span class="social-button social-button--whatsapp" data-social="whatsapp"></span></div>    </div>
+
+ 
+
+
+<div class="wpcf7-in-post">
+
+   
+<div class="wpcf7 no-js" id="wpcf7-f1126-p7335-o2" lang="ru-RU" dir="ltr" data-wpcf7-id="1126">
+<div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
+<form action="/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#wpcf7-f1126-p7335-o2" method="post" class="wpcf7-form init" aria-label="Контактная форма" novalidate="novalidate" data-status="init">
+<div style="display: none;">
+<input type="hidden" name="_wpcf7" value="1126" />
+<input type="hidden" name="_wpcf7_version" value="6.0.1" />
+<input type="hidden" name="_wpcf7_locale" value="ru_RU" />
+<input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f1126-p7335-o2" />
+<input type="hidden" name="_wpcf7_container_post" value="7335" />
+<input type="hidden" name="_wpcf7_posted_data_hash" value="" />
+<input type="hidden" name="_wpcf7_recaptcha_response" value="" />
+</div>
+<h4><br />
+Оставьте заявку, мы подберем для вас лучшие решения для работы с ИТ-сообществом
+</h4>
+<div class="form-flex">
+	<p><label> Имя<br />
+<span class="wpcf7-form-control-wrap" data-name="surname-name"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" value="" type="text" name="surname-name" /></span> </label>
+	</p>
+	<p><label> Email<br />
+<span class="wpcf7-form-control-wrap" data-name="email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" aria-required="true" aria-invalid="false" value="" type="email" name="email" /></span> </label>
+	</p>
+	<p><label> Телефон<br />
+<span class="wpcf7-form-control-wrap" data-name="phone"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" value="" type="tel" name="phone" /></span> </label>
+	</p>
+	<p><label> Компания<br />
+<span class="wpcf7-form-control-wrap" data-name="company"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" value="" type="text" name="company" /></span> </label>
+	</p>
+</div>
+<input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="url" />
+<!--<style>
+.wpcf7-submit {
+color:#fff;
+border:1px solid #009de6;
+background-color:#009de6;
+border-radius:8px;
+font-size:20px;
+width:170px;
+height:40px;
+padding:0px 15px;
+display:block;
+margin-top:20px;
+}
+</style>-->
+<p><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Отправить" />
+</p>
+
+
+<!--<style>
+.wpcf7-text{
+color:#363636;
+border:1px solid #363636;
+background-color:transparent;
+border-radius:8px;
+-moz-border-radius:8px;
+-webkit-border-radius:8px;
+font-size:18px;
+font-weight:400;
+height:40px;
+}
+</style>-->
+<!--
+<style>
+.wpcf7-form {background-color: #363636; color: #fff; padding: 15px; border-radius: 8px; max-width: 600px; margin: 0 auto;margin-bottom: 35px;}
+.wpcf7-form h4 {font-size: 18px; margin-bottom: 15px;}
+.wpcf7-form input[type="text"], .wpcf7-form input[type="email"], .wpcf7-form input[type="tel"] {color: #fff; border: 1px solid #fff; background-color: transparent; border-radius: 8px; font-size: 18px; font-weight: 400; height: 40px; padding: 0 10px; width: 100%; margin-bottom: 15px;}
+.wpcf7-form input[type="text"].wpcf7-form-control:not([aria-required="true"]) {border-color: #555;}
+.wpcf7-form input[type="submit"] {cursor:pointer;color: #fff; border: 1px solid #009de6; background-color: #009de6; border-radius: 8px; font-size: 18px; font-weight: 700; height: 40px; padding: 0 15px; display: block; width: 100%; margin-top: 15px;}
+.wpcf7-spinner {display: inline-block; width: 20px; height: 20px; margin-left: 10px; border: 2px solid #fff; border-top-color: #009de6; border-radius: 50%;}
+.wpcf7-response-output {margin-top: 15px; font-size: 16px; font-weight: 700;}
+@media (max-width: 768px) {.wpcf7-form {padding: 20px;} .wpcf7-form input[type="submit"] {font-size: 16px;}}
+</style>
+-->
+<p><script>
+document.addEventListener('DOMContentLoaded', function() {
+ var url = window.location.href;
+ console.log("url" + url);
+
+ var hiddenInputs = document.querySelectorAll('input.wpcf7-form-control.wpcf7-hidden');
+ hiddenInputs.forEach(function(input) {
+ input.value = url;
+ });
+});
+</script>
+</p><input type='hidden' class='wpcf7-pum' value='{"closepopup":false,"closedelay":0,"openpopup":false,"openpopup_id":0}' /><div class="wpcf7-response-output" aria-hidden="true"></div>
+</form>
+</div>
+</div>
+
+
+
+<meta itemscope itemprop="mainEntityOfPage" itemType="https://schema.org/WebPage" itemid="https://codenrock.com/blog/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/" content="Агентная инженерия: практическое руководство по AI-разработке">
+    <meta itemprop="dateModified" content="2026-02-24">
+<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" style="display: none;"><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><img itemprop="url image" data-src="https://codenrock.com/blog/wp-content/uploads/2024/01/coderock-logo_dark_small.png" alt="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" class="lazyload" style="--smush-placeholder-width: 499px; --smush-placeholder-aspect-ratio: 499/168;"><noscript><img itemprop="url image" src="https://codenrock.com/blog/wp-content/uploads/2024/01/coderock-logo_dark_small.png" alt="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock"></noscript></div><meta itemprop="name" content="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock"><meta itemprop="telephone" content="Будьте в курсе лучших кейсов хакатонов, ML-турниров, CTF и соревнований по спортивному программированию на Codenrock"><meta itemprop="address" content="https://codenrock.com/blog"></div>
+<div id="comments" class="comments-area">
+
+    	<div id="respond" class="comment-respond">
+		<div id="reply-title" class="comment-reply-title">Добавить комментарий <small><a rel="nofollow" id="cancel-comment-reply-link" href="/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#respond" style="display:none;">Отменить ответ</a></small></div><p class="must-log-in">Для отправки комментария вам необходимо <a href="https://codenrock.com/blog/wp-login.php?redirect_to=https%3A%2F%2Fcodenrock.com%2Fblog%2Fagentnaya-inzheneriya-prakticheskoe-rukovodstvo%2F">авторизоваться</a>.</p>	</div><!-- #respond -->
+	
+
+    
+</div><!-- #comments -->
+
+            </main><!-- #main -->
+        </div><!-- #primary -->
+
+        
+<aside id="secondary" class="widget-area" itemscope itemtype="http://schema.org/WPSideBar">
+    <div class="sticky-sidebar js-sticky-sidebar">
+
+        
+        <div id="block-2" class="widget widget_block"><a  target="_blank" class="panel tg__bk " href="https://t.me/codenrock_official?roistat_visit=1985980"><div  class="panel "><div   class="panel-body"><div  class="title-main-panel">Telegram канал 🔗</div> <p   class="description-main-panel">Добавляйтесь в TG, чтобы быстрее всех получать анонсы соревнований и хакатонов </p></div></div></a>
+
+<div  class="panel tg__bk form-letter__bk" >
+ <div   class="panel-body">
+  <div  class="title-main-panel">Подпишитесь на обновления</div>
+    <div class="form subs-in">
+      
+<div class="wpcf7 no-js" id="wpcf7-f5489-p7335-o3" lang="ru-RU" dir="ltr" data-wpcf7-id="5489">
+<div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
+<form action="/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#wpcf7-f5489-p7335-o3" method="post" class="wpcf7-form init" aria-label="Контактная форма" novalidate="novalidate" data-status="init">
+<div style="display: none;">
+<input type="hidden" name="_wpcf7" value="5489" />
+<input type="hidden" name="_wpcf7_version" value="6.0.1" />
+<input type="hidden" name="_wpcf7_locale" value="ru_RU" />
+<input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f5489-p7335-o3" />
+<input type="hidden" name="_wpcf7_container_post" value="7335" />
+<input type="hidden" name="_wpcf7_posted_data_hash" value="" />
+<input type="hidden" name="_wpcf7_recaptcha_response" value="" />
+</div>
+<p><span class="wpcf7-form-control-wrap" data-name="your-email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" autocomplete="email" aria-required="true" aria-invalid="false" value="" type="email" name="your-email" /></span><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Подписаться" />
+</p><input type='hidden' class='wpcf7-pum' value='{"closepopup":false,"closedelay":0,"openpopup":false,"openpopup_id":0}' /><div class="wpcf7-response-output" aria-hidden="true"></div>
+</form>
+</div>
+
+   </div>
+   <div class="form-gdpr "> 
+    Продолжая, вы принимаете <a href="https://codenrock.com/docs/ru/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B8%20%D0%BF%D0%B5%D1%80%D1%81%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85.pdf">политику конфиденциальности</a>.
+  </div>
+
+</div>
+</div></div><div id="wpshop_widget_articles-2" class="widget widget_wpshop_widget_articles"><div class="widget-header">Популярные</div><div class="widget-articles">
+<article class="post-card post-card--vertical">
+      <div class="post-card__thumbnail">
+            <a href="https://codenrock.com/blog/idei-dlya-onlajn-meropriyatij/">
+                <img width="332" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ.png" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="Идеи для онлайн-мероприятий" decoding="async" data-srcset="https://codenrock.com/blog/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ.png 900w, https://codenrock.com/blog/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ-300x170.png 300w, https://codenrock.com/blog/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ-768x435.png 768w" data-sizes="(max-width: 332px) 100vw, 332px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 332px; --smush-placeholder-aspect-ratio: 332/188;" /><noscript><img width="332" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ.png" class="attachment-reboot_small size-reboot_small wp-post-image" alt="Идеи для онлайн-мероприятий" decoding="async" srcset="https://codenrock.com/blog/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ.png 900w, https://codenrock.com/blog/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ-300x170.png 300w, https://codenrock.com/blog/wp-content/uploads/2020/07/Idei-dlya-onlaĭn-meropriyatiĭ-768x435.png 768w" sizes="(max-width: 332px) 100vw, 332px" /></noscript>
+                <span class="post-card__category">Статьи</span>            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://codenrock.com/blog/idei-dlya-onlajn-meropriyatij/">Идеи для онлайн-мероприятий</a></div>
+
+                    <div class="post-card__description">
+                Более 80% компаний из списка Fortune 100 ежегодно проводят            </div>
+        
+                    <div class="post-card__meta">
+                                    <span class="post-card__comments">0</span>
+                                <span class="post-card__views">21.3к.</span>            </div>
+            </div>
+</article>
+<article class="post-card post-card--vertical">
+      <div class="post-card__thumbnail">
+            <a href="https://codenrock.com/blog/kak-organizovat-offline-i-online-hackathon/">
+                <img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-335x188.jpeg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-335x188.jpeg 335w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-300x169.jpeg 300w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-1024x576.jpeg 1024w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-768x432.jpeg 768w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-1536x863.jpeg 1536w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-712x400.jpeg 712w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-870x489.jpeg 870w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578.jpeg 2048w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-335x188.jpeg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-335x188.jpeg 335w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-300x169.jpeg 300w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-1024x576.jpeg 1024w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-768x432.jpeg 768w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-1536x863.jpeg 1536w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-712x400.jpeg 712w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578-870x489.jpeg 870w, https://codenrock.com/blog/wp-content/uploads/2022/08/imgonline-com-ua-Frame-blurred-4pVmDeh7zdxhRl8_________-e1678573827578.jpeg 2048w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript>
+                <span class="post-card__category">Статьи</span>            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://codenrock.com/blog/kak-organizovat-offline-i-online-hackathon/">Как организовать офлайн и онлайн-хакатон</a></div>
+
+                    <div class="post-card__description">
+                В этой статье хотим «освежить память» и рассказать            </div>
+        
+                    <div class="post-card__meta">
+                                    <span class="post-card__comments">0</span>
+                                <span class="post-card__views">18.1к.</span>            </div>
+            </div>
+</article>
+<article class="post-card post-card--vertical">
+      <div class="post-card__thumbnail">
+            <a href="https://codenrock.com/blog/hakatony-zachem-nuzhny-kak-podgotovitsya-i-kalendar-hakatonov-i-it-sorevnovanij/">
+                <img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2023/06/image3-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="banner hackathon" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2023/06/image3-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-870x489.jpg 870w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3.jpg 1920w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2023/06/image3-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="banner hackathon" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2023/06/image3-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3-870x489.jpg 870w, https://codenrock.com/blog/wp-content/uploads/2023/06/image3.jpg 1920w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript>
+                <span class="post-card__category">Новости</span>            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://codenrock.com/blog/hakatony-zachem-nuzhny-kak-podgotovitsya-i-kalendar-hakatonov-i-it-sorevnovanij/">Хакатоны: зачем нужны, как подготовиться и календарь хакатонов и ИТ-соревнований</a></div>
+
+                    <div class="post-card__description">
+                В данной статье мы расскажем о том, что такое хакатоны            </div>
+        
+                    <div class="post-card__meta">
+                                    <span class="post-card__comments">0</span>
+                                <span class="post-card__views">17.4к.</span>            </div>
+            </div>
+</article>
+<article class="post-card post-card--vertical">
+      <div class="post-card__thumbnail">
+            <a href="https://codenrock.com/blog/professionalnye-prazdniki-v-it/">
+                <img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2023/04/IT-Holydays-16_9-2-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-870x489.jpg 870w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2.jpg 1920w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2023/04/IT-Holydays-16_9-2-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2-870x489.jpg 870w, https://codenrock.com/blog/wp-content/uploads/2023/04/IT-Holydays-16_9-2.jpg 1920w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript>
+                <span class="post-card__category">Статьи</span>            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://codenrock.com/blog/professionalnye-prazdniki-v-it/">Календарь профессиональных праздников в ИТ</a></div>
+
+                    <div class="post-card__description">
+                В ИТ-отрасли профессиональные праздники отмечаются            </div>
+        
+                    <div class="post-card__meta">
+                                    <span class="post-card__comments">0</span>
+                                <span class="post-card__views">16.9к.</span>            </div>
+            </div>
+</article>
+<article class="post-card post-card--vertical">
+      <div class="post-card__thumbnail">
+            <a href="https://codenrock.com/blog/30-idej-dlya-hakatona-kotorye-prodvigayut-innovaczii/">
+                <img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2021/07/Blogging-Tips-LinkedIn-Post-Header-9-e1678567699556-335x188.png" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="hackathon" decoding="async" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2021/07/Blogging-Tips-LinkedIn-Post-Header-9-e1678567699556-335x188.png" class="attachment-reboot_small size-reboot_small wp-post-image" alt="hackathon" decoding="async" loading="lazy" /></noscript>
+                <span class="post-card__category">Статьи</span>            </a>
+        </div>
+    
+    <div class="post-card__body">
+        <div class="post-card__title"><a href="https://codenrock.com/blog/30-idej-dlya-hakatona-kotorye-prodvigayut-innovaczii/">30 идей для хакатона, которые продвигают инновации</a></div>
+
+                    <div class="post-card__description">
+                Если великие умы думают одинаково, то хакатоны – отличный            </div>
+        
+                    <div class="post-card__meta">
+                                    <span class="post-card__comments">0</span>
+                                <span class="post-card__views">15.6к.</span>            </div>
+            </div>
+</article></div></div>
+        
+    </div>
+</aside><!-- #secondary -->
+
+    
+    <div id="related-posts" class="related-posts fixed"><div class="related-posts__header">Вам также может понравиться</div><div class="post-cards post-cards--vertical">
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/pervyj-v-rossii-hakaton-dlya-kinoindustrii-kak-wink-i-codenrock-zapustili-ii-sorevnovanie-s-1200-uchastnikami/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/05/image1-1-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1.jpg 1500w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/05/image1-1-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1.jpg 1500w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/pervyj-v-rossii-hakaton-dlya-kinoindustrii-kak-wink-i-codenrock-zapustili-ii-sorevnovanie-s-1200-uchastnikami/">Первый в России хакатон для киноиндустрии: как Wink и Codenrock запустили ИИ-соревнование с 1200+ участниками</a></div><div class="post-card__description">Wink AI Challenge — ИИ-соревнование для киноиндустрии</div><div class="post-card__meta"><span class="post-card__views">36</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/sdelano-v-rossii-dajdzhest-%e2%84%9641-novostej-iz-mira-it-nauki-kosmosa-i-tehnologij/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/05/image1-335x188.jpeg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/image1-335x188.jpeg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-300x169.jpeg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1024x576.jpeg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-768x432.jpeg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-711x400.jpeg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1.jpeg 1427w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/05/image1-335x188.jpeg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/image1-335x188.jpeg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-300x169.jpeg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1024x576.jpeg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-768x432.jpeg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-711x400.jpeg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1.jpeg 1427w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/sdelano-v-rossii-dajdzhest-%e2%84%9641-novostej-iz-mira-it-nauki-kosmosa-i-tehnologij/">Сделано в России: дайджест №41 новостей из мира ИТ, науки, космоса и технологий</a></div><div class="post-card__description">Российские достижения на этой неделе — просто космос</div><div class="post-card__meta"><span class="post-card__views">60</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/tehnologii-pamyati-kak-ii-i-czifrovye-arhivy-sohranyayut-istoriyu-pobedy/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/05/image1-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/image1-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1.jpg 1427w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/05/image1-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/image1-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/image1.jpg 1427w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/tehnologii-pamyati-kak-ii-i-czifrovye-arhivy-sohranyayut-istoriyu-pobedy/">Технологии памяти: как ИИ и цифровые архивы сохраняют историю Победы</a></div><div class="post-card__description">С Днём Победы! Это день, когда мы напоминаем себе</div><div class="post-card__meta"><span class="post-card__views">105</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/kalendar-hakatonov-8-22-maya-2026-goda/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/05/calender25_16x9-011-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011.jpg 1920w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/05/calender25_16x9-011-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/05/calender25_16x9-011.jpg 1920w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/kalendar-hakatonov-8-22-maya-2026-goda/">Календарь хакатонов 8-22 мая 2026 года</a></div><div class="post-card__description">Майские праздники — хорошее время, чтобы подумать</div><div class="post-card__meta"><span class="post-card__views">236</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/kod-dym-i-metall-kak-proshyol-true-tech-champ-2025/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-335x188.png" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-335x188.png 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-300x169.png 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-1024x576.png 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-768x432.png 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-711x400.png 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21.png 1200w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-335x188.png" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-335x188.png 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-300x169.png 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-1024x576.png 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-768x432.png 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21-711x400.png 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/kejs_mts-2025_16x9_04-21.png 1200w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/kod-dym-i-metall-kak-proshyol-true-tech-champ-2025/">Код, дым и металл: как прошёл True Tech Champ 2025</a></div><div class="post-card__description">Третий сезон всероссийского ИТ-чемпионата от МТС собрал</div><div class="post-card__meta"><span class="post-card__views">101</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/sdelano-v-rossii-dajdzhest-%e2%84%9640-novostej-iz-mira-it-nauki-kosmosa-i-tehnologij/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/04/image1-3-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3.jpg 1920w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/04/image1-3-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-3.jpg 1920w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/sdelano-v-rossii-dajdzhest-%e2%84%9640-novostej-iz-mira-it-nauki-kosmosa-i-tehnologij/">Сделано в России: дайджест №40 новостей из мира ИТ, науки, космоса и технологий</a></div><div class="post-card__description">В новом выпуске смотрим, как российские разработчики</div><div class="post-card__meta"><span class="post-card__views">91</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/sdelano-v-rossii-dajdzhest-%e2%84%9639-novostej-iz-mira-it-nauki-kosmosa-i-tehnologij/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/04/image1-2-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2.jpg 1920w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/04/image1-2-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-1536x864.jpg 1536w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-2.jpg 1920w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/sdelano-v-rossii-dajdzhest-%e2%84%9639-novostej-iz-mira-it-nauki-kosmosa-i-tehnologij/">Сделано в России: дайджест №39 новостей из мира ИТ, науки, космоса и технологий</a></div><div class="post-card__description">На этой неделе в центре внимания — точность.</div><div class="post-card__meta"><span class="post-card__views">108</span></div>
+</div>
+
+<div class="post-card post-card--related">
+    <div class="post-card__thumbnail"><a href="https://codenrock.com/blog/kejs-ozon-e-cup-2025-kak-2900-inzhenerov-sozdali-ml-resheniya-dlya-millionov-polzovatelej/"><img width="335" height="188" data-src="https://cdn.codenrock.com/wp-content/uploads/2026/04/image1-1-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image lazyload" alt="" decoding="async" loading="lazy" data-srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1.jpg 1500w" data-sizes="auto, (max-width: 335px) 100vw, 335px" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="--smush-placeholder-width: 335px; --smush-placeholder-aspect-ratio: 335/188;" /><noscript><img width="335" height="188" src="https://cdn.codenrock.com/wp-content/uploads/2026/04/image1-1-335x188.jpg" class="attachment-reboot_small size-reboot_small wp-post-image" alt="" decoding="async" loading="lazy" srcset="https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-335x188.jpg 335w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-300x169.jpg 300w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-1024x576.jpg 1024w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-768x432.jpg 768w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1-711x400.jpg 711w, https://codenrock.com/blog/wp-content/uploads/2026/04/image1-1.jpg 1500w" sizes="auto, (max-width: 335px) 100vw, 335px" /></noscript></a></div><div class="post-card__title"><a href="https://codenrock.com/blog/kejs-ozon-e-cup-2025-kak-2900-inzhenerov-sozdali-ml-resheniya-dlya-millionov-polzovatelej/">Кейс Ozon E-CUP 2025: как 2900+ инженеров создали ML-решения для миллионов пользователей</a></div><div class="post-card__description">Команда Ozon Tech провела крупнейшее соревнование по</div><div class="post-card__meta"><span class="post-card__views">214</span></div>
+</div>
+</div></div>
+
+</div><!--.site-content-inner-->
+
+
+</div><!--.site-content-->
+
+
+
+
+
+<div class="site-footer-container ">
+
+    
+
+    <footer id="colophon" class="site-footer site-footer--style-gray full">
+        <div class="site-footer-inner fixed">
+
+                        <div class="row visible-md visible-lg visible-xs ft-inner">
+                <div class="col-lg-4 col-md-4">
+                    <a href="/">
+                        <img style="margin-top: 20px; " data-src="https://contestfiles.storage.yandexcloud.net/contests/h3kiwSYJ_1733338197.svg" class="img-responsive sm-text-center footer-logo lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="><noscript><img style="margin-top: 20px; " src="https://contestfiles.storage.yandexcloud.net/contests/h3kiwSYJ_1733338197.svg" class="img-responsive sm-text-center footer-logo"></noscript>
+
+                    </a>
+
+
+                    <ul class="list-inline social-networks sm-text-center" >
+                        <li>
+                            <a target="_blank" href=" https://t.me/codenrock_official">
+                                <svg width="24px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160.66 131.75">
+                                    <defs>
+                                        <style>.cls-1 {
+                                            fill: #009de6;
+                                        }</style>
+                                    </defs>
+                                    <g id="Слой_2" data-name="Слой 2">
+                                        <g id="Слой_1-2" data-name="Слой 1">
+                                            <path class="cls-1" d="M155.81,0a4.7,4.7,0,0,0-1.74.33L3.14,57.68a4.86,4.86,0,0,0,.17,9.15l35,11.82,21.1,42.23s0,0,0,0l0,.11h0a2.3,2.3,0,0,0,2,1.28,2.24,2.24,0,0,0,1.45-.54L82.74,105,60.67,88.25l1.72,22L46.52,77.4l84.34-50.66L60.67,88.25l54.64,41.47A9.93,9.93,0,0,0,131,124.21L160.51,6.05A4.87,4.87,0,0,0,155.81,0Z"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://vk.com/codenrock?roistat_visit=1992728">
+                                <svg width="31" height="17px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 309.31 171.27">
+                                    <defs>
+                                        <style>.cls-1 {
+                                            fill: #009de6;
+                                        }</style>
+                                    </defs>
+                                    <g id="Слой_2" data-name="Слой 2">
+                                        <g id="Слой_1-2" data-name="Слой 1">
+                                            <path class="cls-1" d="M303.45,171.27H247.31A16.59,16.59,0,0,1,235.15,166l-39.32-32.71c-2-2.24-5.9-3-7.79-.7-4.84,5.9-4.49,13.22-6.79,29.81a10.58,10.58,0,0,1-10.62,8.91H132.2a37.23,37.23,0,0,1-15.76-3.48C94.36,157.34,34.15,120.27.26,16.55A5.42,5.42,0,0,1,5.4,9.47h54a5.39,5.39,0,0,1,4.84,3.12c12.34,26.92,27.45,51.3,45.64,72.79a3.65,3.65,0,0,0,6.49-.53C122,71,132.43,37.45,112.19,13.6a4.18,4.18,0,0,1,1.47-6.55c20.55-8.56,40.67-9.8,60.21-1.07a11.62,11.62,0,0,1,6.79,10.45l4.55,69.19a5,5,0,0,0,5.84,4.9C213.6,85.73,226.88,52,240,16.73a11,11,0,0,1,10.33-7.26H300a6.57,6.57,0,0,1,6.62,7.61c-4.67,25-29.81,57.44-43,73.08a14.48,14.48,0,0,0-.06,18.66l44.39,52.83A5.86,5.86,0,0,1,303.45,171.27Z"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://www.youtube.com/channel/UCAKAK3KqIOutQEyZ6mgN3HQ?roistat_visit=1992728">
+                                <svg width="29" height="21" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 316.22 222.79">
+                                    <defs>
+                                        <style>.cls-1 {
+                                            fill: #009de6;
+                                        }</style>
+                                    </defs>
+                                    <g id="Слой_2" data-name="Слой 2">
+                                        <g id="Слой_1-2" data-name="Слой 1">
+                                            <path class="cls-1" d="M309.61,34.79A39.73,39.73,0,0,0,281.66,6.65C257,0,158.11,0,158.11,0S59.23,0,34.57,6.65a39.74,39.74,0,0,0-28,28.14C0,59.61,0,111.4,0,111.4S0,163.18,6.61,188a39.74,39.74,0,0,0,28,28.14c24.66,6.65,123.54,6.65,123.54,6.65s98.89,0,123.55-6.65A39.73,39.73,0,0,0,309.61,188c6.61-24.82,6.61-76.6,6.61-76.6S316.22,59.61,309.61,34.79ZM125.77,158.41v-94l82.65,47Z"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" href="https://www.linkedin.com/company/codenrock/?roistat_visit=1992728">
+                                <svg width="23" height="23" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 198.04 198.13">
+                                    <defs>
+                                        <style>.cls-1 {
+                                            fill: #009de6;
+                                        }</style>
+                                    </defs>
+                                    <g id="Слой_2" data-name="Слой 2">
+                                        <g id="Слой_1-2" data-name="Слой 1">
+                                            <rect class="cls-1" x="3.93" y="66.04" width="40.89" height="132.09"></rect>
+                                            <path class="cls-1" d="M24.18,48.75A24.38,24.38,0,1,0,0,24.37,24.28,24.28,0,0,0,24.18,48.75Z"></path>
+                                            <path class="cls-1" d="M110.17,128.79c0-18.56,8.55-29.63,24.92-29.63,15,0,22.25,10.62,22.25,29.63v69.34H198V114.5C198,79.12,178,62,150,62a46.06,46.06,0,0,0-39.81,21.83V66H71V198.13h39.22Z"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <style>
+                    @media (max-width: 768px) {
+                        .social-networks {
+                            margin-right: auto;
+                            margin-left: auto;
+                        }
+                    }
+                    @media (max-width: 992px) {
+                        footer .social-networks li {
+                            margin-right: 10px;
+                            margin-top: 0px;
+                        }
+                    }
+                    </style>                            <style>
+                    .footer_email:hover {
+                        color: rgb(0, 157, 230) !important;
+                    }
+
+                    .footer_phone:hover {
+                        color: #ffffff !important;
+                    }
+
+                    .footer_phone {
+                        color: #ffffff !important;
+                    }
+                </style>
+                <div class="ft-text   ">
+                    Отдел продаж:
+                    <a href="tel:+74993806065" class="footer_tel"  >+7 499 380 60 65</a>
+                </div>
+                <div class="ft-text ft-text2">
+                    Техническая поддержка:
+                    <a href="mailto:support@codenrock.com" class="footer_email"  >support@codenrock.com</a>
+                </div>
+
+
+                <p class="sm-text-center footer-copyright" style="  color: #ffffff; opacity: 0.3">Copyright © 2024. All rights reserved.</p>
+
+                <style>
+                @media (max-width: 992px) {
+                    .footer-copyright {
+                        font-size: 13px;
+                    }
+                }
+            </style>                       
+        </div>
+        <div class="col-lg-3 col-md-3">
+            <div class="ft-title">
+                Компаниям
+            </div>
+
+            <ul class="list-unstyled sm-text-center">
+                <li> <a href="/companies" class="white-link footer-link" target="_blank">Для компаний</a></li><li> <a href="/blog/" class="white-link footer-link" target="_blank">Блог</a></li><li> <a href="https://help.codenrock.com/docs/bystryi-start?roistat_visit=1992877" class="white-link footer-link" target="_blank">Документация</a></li><li> <a href="/online-platform-for-hackathons" class="white-link footer-link" target="_blank">Платформа для хакатонов и ИТ-соревнований</a></li><li> <a href="/machinelearning" class="white-link footer-link" target="_blank">ML-соревнования</a></li><li> <a href="/hackathon" class="white-link footer-link" target="_blank">Хакатоны</a></li><li> <a href="/gamesfordevelopers" class="white-link footer-link" target="_blank">Игры для ИТ-аудитории</a></li><li> <a href="/idea" class="white-link footer-link" target="_blank">Codenrock Идея</a></li><li> <a href="/one_day_offer" class="white-link footer-link" target="_blank">One Day Offer</a></li><li> <a href="/hakatony-dlya-sotrudnikov" class="white-link footer-link" target="_blank">ИТ-мероприятия для сотрудников</a></li><li> <a href="/meetup" class="white-link footer-link" target="_blank">Митапы</a></li><li> <a href="/studentlab" class="white-link footer-link" target="_blank">Student Lab</a></li><li> <a href="/lead_generation" class="white-link footer-link" target="_blank">Продвижение ИТ-мероприятий</a></li><li> <a href="/webinar" class="white-link footer-link" target="_blank">Вебинары</a></li><li> <a href="/edu-organizaciya-hakatona" class="white-link footer-link" target="_blank">Курс «Организация хакатонов»</a></li><li> <a href="/brandbook" class="white-link footer-link" target="_blank">Материалы бренда</a></li>  
+                
+            </ul>
+        </div>
+        <div class="col-lg-2 col-md-2">
+            <div class="ft-title">
+                Участникам
+            </div>
+            <ul class="list-unstyled sm-text-center">
+              <li> <a href="/events" class="white-link footer-link" target="_blank">Все события</a></li><li> <a href="/discussions" class="white-link footer-link" target="_blank">Обсуждения</a></li>  
+
+        </ul>
+    </div>
+    <div class="col-lg-3 col-md-3">
+     <div class="ft-title">
+         Правила и политики
+     </div>
+     <ul class="list-unstyled sm-text-center">
+ 
+  <li> <a href="https://codenrock.com/privacy_policy.pdf" class="white-link footer-link" target="_blank">Политика конфиденциальности</a></li><li> <a href="https://codenrock.com/user_agreement.pdf" class="white-link footer-link" target="_blank">Пользовательское соглашение</a></li><li> <a href="https://codenrock.com/license_agreement.pdf" class="white-link footer-link" target="_blank">Лицензионное соглашение</a></li><li> <a href="https://codenrock.com/terms_of_use.pdf" class="white-link footer-link" target="_blank">Правила пользования сайтом</a></li> 
+ 
+    </ul></div>
+</div>  
+
+
+</div>
+</footer><!--.site-footer-->
+</div>
+
+
+    <button type="button" class="scrolltop js-scrolltop" data-mob="on"></button>
+
+</div><!-- #page -->
+
+<div id="pum-5521" role="dialog" aria-modal="false"  class="pum pum-overlay pum-theme-5513 pum-theme-lightbox popmake-overlay click_open" data-popmake="{&quot;id&quot;:5521,&quot;slug&quot;:&quot;ostavit-zayavku&quot;,&quot;theme_id&quot;:5513,&quot;cookies&quot;:[],&quot;triggers&quot;:[{&quot;type&quot;:&quot;click_open&quot;,&quot;settings&quot;:{&quot;extra_selectors&quot;:&quot;&quot;,&quot;cookie_name&quot;:null}}],&quot;mobile_disabled&quot;:null,&quot;tablet_disabled&quot;:null,&quot;meta&quot;:{&quot;display&quot;:{&quot;stackable&quot;:false,&quot;overlay_disabled&quot;:false,&quot;scrollable_content&quot;:false,&quot;disable_reposition&quot;:false,&quot;size&quot;:&quot;medium&quot;,&quot;responsive_min_width&quot;:&quot;0%&quot;,&quot;responsive_min_width_unit&quot;:false,&quot;responsive_max_width&quot;:&quot;500px&quot;,&quot;responsive_max_width_unit&quot;:false,&quot;custom_width&quot;:&quot;640px&quot;,&quot;custom_width_unit&quot;:false,&quot;custom_height&quot;:&quot;380px&quot;,&quot;custom_height_unit&quot;:false,&quot;custom_height_auto&quot;:false,&quot;location&quot;:&quot;center top&quot;,&quot;position_from_trigger&quot;:false,&quot;position_top&quot;:&quot;100&quot;,&quot;position_left&quot;:&quot;0&quot;,&quot;position_bottom&quot;:&quot;0&quot;,&quot;position_right&quot;:&quot;0&quot;,&quot;position_fixed&quot;:false,&quot;animation_type&quot;:&quot;fade&quot;,&quot;animation_speed&quot;:&quot;350&quot;,&quot;animation_origin&quot;:&quot;center top&quot;,&quot;overlay_zindex&quot;:false,&quot;zindex&quot;:&quot;1999999999&quot;},&quot;close&quot;:{&quot;text&quot;:&quot;&quot;,&quot;button_delay&quot;:&quot;0&quot;,&quot;overlay_click&quot;:false,&quot;esc_press&quot;:false,&quot;f4_press&quot;:false},&quot;click_open&quot;:[]}}">
+
+	<div id="popmake-5521" class="pum-container popmake theme-5513 pum-responsive pum-responsive-medium responsive size-medium">
+
+				
+				
+		
+				<div class="pum-content popmake-content" tabindex="0">
+			
+<div class="wpcf7 no-js" id="wpcf7-f2087-o1" lang="ru-RU" dir="ltr" data-wpcf7-id="2087">
+<div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
+<form action="/agentnaya-inzheneriya-prakticheskoe-rukovodstvo/#wpcf7-f2087-o1" method="post" class="wpcf7-form init" aria-label="Контактная форма" novalidate="novalidate" data-status="init">
+<div style="display: none;">
+<input type="hidden" name="_wpcf7" value="2087" />
+<input type="hidden" name="_wpcf7_version" value="6.0.1" />
+<input type="hidden" name="_wpcf7_locale" value="ru_RU" />
+<input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f2087-o1" />
+<input type="hidden" name="_wpcf7_container_post" value="0" />
+<input type="hidden" name="_wpcf7_posted_data_hash" value="" />
+<input type="hidden" name="_wpcf7_recaptcha_response" value="" />
+</div>
+<h4><br />
+Оставьте заявку, мы подберем для вас лучшие решения для работы с ИТ-сообществом
+</h4>
+<div>
+	<p><label> Имя<br />
+<span class="wpcf7-form-control-wrap" data-name="surname-name"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" value="" type="text" name="surname-name" /></span> </label>
+	</p>
+</div>
+<div>
+	<p><label> Email<br />
+<span class="wpcf7-form-control-wrap" data-name="email"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" aria-required="true" aria-invalid="false" value="" type="email" name="email" /></span> </label>
+	</p>
+</div>
+<div>
+	<p><label> Телефон<br />
+<span class="wpcf7-form-control-wrap" data-name="phone"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-tel wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" value="" type="tel" name="phone" /></span> </label>
+	</p>
+</div>
+<div>
+	<p><label> Компания<br />
+<span class="wpcf7-form-control-wrap" data-name="company"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" value="" type="text" name="company" /></span> </label>
+	</p>
+</div>
+<input class="wpcf7-form-control wpcf7-hidden" value="" type="hidden" name="url" />
+<!--<style>
+.wpcf7-submit {
+color:#fff;
+border:1px solid #009de6;
+background-color:#009de6;
+border-radius:8px;
+font-size:20px;
+width:170px;
+height:40px;
+padding:0px 15px;
+display:block;
+margin-top:20px;
+}
+</style>-->
+<p><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Отправить" />
+</p>
+
+
+<!--<style>
+.wpcf7-text{
+color:#363636;
+border:1px solid #363636;
+background-color:transparent;
+border-radius:8px;
+-moz-border-radius:8px;
+-webkit-border-radius:8px;
+font-size:18px;
+font-weight:400;
+height:40px;
+}
+</style>-->
+<!-- 
+<style>
+.wpcf7-form {background-color: #363636; color: #fff; padding: 15px; border-radius: 8px; max-width: 600px; margin: 0 auto;margin-bottom: 35px;}
+.wpcf7-form h4 {font-size: 18px; margin-bottom: 15px;}
+.wpcf7-form input[type="text"], .wpcf7-form input[type="email"], .wpcf7-form input[type="tel"] {color: #fff; border: 1px solid #fff; background-color: transparent; border-radius: 8px; font-size: 18px; font-weight: 400; height: 40px; padding: 0 10px; width: 100%; margin-bottom: 15px;}
+.wpcf7-form input[type="text"].wpcf7-form-control:not([aria-required="true"]) {border-color: #555;}
+.wpcf7-form input[type="submit"] {cursor:pointer;color: #fff; border: 1px solid #009de6; background-color: #009de6; border-radius: 8px; font-size: 18px; font-weight: 700; height: 40px; padding: 0 15px; display: block; width: 100%; margin-top: 15px;}
+.wpcf7-spinner {display: inline-block; width: 20px; height: 20px; margin-left: 10px; border: 2px solid #fff; border-top-color: #009de6; border-radius: 50%;}
+.wpcf7-response-output {margin-top: 15px; font-size: 16px; font-weight: 700;}
+@media (max-width: 768px) {.wpcf7-form {padding: 20px;} .wpcf7-form input[type="submit"] {font-size: 16px;}}
+</style>
+-->
+<p><script>
+document.addEventListener('DOMContentLoaded', function() {
+ var url = window.location.href;
+ console.log("url" + url);
+
+ var hiddenInputs = document.querySelectorAll('input.wpcf7-form-control.wpcf7-hidden');
+ hiddenInputs.forEach(function(input) {
+ input.value = url;
+ });
+});
+</script>
+</p><input type='hidden' class='wpcf7-pum' value='{"closepopup":false,"closedelay":0,"openpopup":false,"openpopup_id":0}' /><div class="wpcf7-response-output" aria-hidden="true"></div>
+</form>
+</div>
+
+		</div>
+
+				
+							<button type="button" class="pum-close popmake-close" aria-label="Закрыть">
+			×			</button>
+		
+	</div>
+
+</div>
+<style id='core-block-supports-inline-css' type='text/css'>
+/**
+ * Core styles: block-supports
+ */
+
+</style>
+<script type="text/javascript" id="rocket-browser-checker-js-after">
+/* <![CDATA[ */
+class RocketBrowserCompatibilityChecker {
+
+	constructor( options ) {
+		this.passiveSupported = false;
+
+		this._checkPassiveOption( this );
+		this.options = this.passiveSupported ? options : false;
+	}
+
+	/**
+	 * Initializes browser check for addEventListener passive option.
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
+	 * @private
+	 *
+	 * @param self Instance of this object.
+	 * @returns {boolean}
+	 */
+	_checkPassiveOption( self ) {
+		try {
+			const options = {
+				// This function will be called when the browser attempts to access the passive property.
+				get passive() {
+					self.passiveSupported = true;
+					return false;
+				}
+			};
+
+			window.addEventListener( 'test', null, options );
+			window.removeEventListener( 'test', null, options );
+		} catch ( err ) {
+			self.passiveSupported = false;
+		}
+	}
+
+	/**
+	 * Checks if the browser supports requestIdleCallback and cancelIdleCallback. If no, shims its behavior with a polyfills.
+	 *
+	 * @link @link https://developers.google.com/web/updates/2015/08/using-requestidlecallback
+	 */
+	initRequestIdleCallback() {
+		if ( ! 'requestIdleCallback' in window ) {
+			window.requestIdleCallback = ( cb ) => {
+				const start = Date.now();
+				return setTimeout( () => {
+					cb( {
+						didTimeout: false,
+						timeRemaining: function timeRemaining() {
+							return Math.max( 0, 50 - ( Date.now() - start ) );
+						}
+					} );
+				}, 1 );
+			};
+		}
+
+		if ( ! 'cancelIdleCallback' in window ) {
+			window.cancelIdleCallback = ( id ) => clearTimeout( id );
+		}
+	}
+
+	/**
+	 * Detects if data saver mode is on.
+	 *
+	 * @link https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/save-data/#detecting_the_save-data_setting
+	 *
+	 * @returns {boolean|boolean}
+	 */
+	isDataSaverModeOn() {
+		return (
+			'connection' in navigator
+			&&
+			true === navigator.connection.saveData
+		);
+	}
+
+	/**
+	 * Checks if the browser supports link prefetch.
+	 *
+	 * @returns {boolean|boolean}
+	 */
+	supportsLinkPrefetch() {
+		const elem = document.createElement( 'link' );
+		return (
+			elem.relList
+			&&
+			elem.relList.supports
+			&&
+			elem.relList.supports( 'prefetch' )
+			&&
+			window.IntersectionObserver
+			&&
+			'isIntersecting' in IntersectionObserverEntry.prototype
+		);
+	}
+
+	isSlowConnection() {
+		return (
+			'connection' in navigator
+			&&
+			'effectiveType' in navigator.connection
+			&&
+			(
+				'2g' === navigator.connection.effectiveType
+				||
+				'slow-2g' === navigator.connection.effectiveType
+			)
+		)
+	}
+}
+/* ]]> */
+</script>
+<script type="text/javascript" id="rocket-preload-links-js-extra">
+/* <![CDATA[ */
+var RocketPreloadLinksConfig = {"excludeUris":"\/blog(\/(?:.+\/)?feed(?:\/(?:.+\/?)?)?$|\/(?:.+\/)?embed\/|\/(index.php\/)?(.*)wp-json(\/.*|$))|\/refer\/|\/go\/|\/recommend\/|\/recommends\/","usesTrailingSlash":"1","imageExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|pdf|doc|docx|xls|xlsx|php","fileExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|pdf|doc|docx|xls|xlsx|php|html|htm","siteUrl":"https:\/\/codenrock.com\/blog","onHoverDelay":"100","rateThrottle":"3"};
+/* ]]> */
+</script>
+<script type="text/javascript" id="rocket-preload-links-js-after">
+/* <![CDATA[ */
+class RocketPreloadLinks {
+
+	constructor( browser, config ) {
+		this.browser = browser;
+		this.config  = config;
+		this.options = this.browser.options;
+
+		this.prefetched = new Set;
+		this.eventTime  = null;
+		this.threshold  = 1111;
+		this.numOnHover = 0;
+	}
+
+	/**
+	 * Initializes the handler.
+	 */
+	init() {
+		if (
+			! this.browser.supportsLinkPrefetch()
+			||
+			this.browser.isDataSaverModeOn()
+			||
+			this.browser.isSlowConnection()
+		) {
+			return;
+		}
+
+		this.regex = {
+			excludeUris: RegExp( this.config.excludeUris, 'i' ),
+			images: RegExp( '.(' + this.config.imageExt + ')$', 'i' ),
+			fileExt: RegExp( '.(' + this.config.fileExt + ')$', 'i' )
+		};
+
+		this._initListeners( this );
+	}
+
+	/**
+	 * Initializes the event listeners.
+	 *
+	 * @private
+	 *
+	 * @param self instance of this object, used for binding "this" to the listeners.
+	 */
+	_initListeners( self ) {
+		// Setting onHoverDelay to -1 disables the "on-hover" feature.
+		if ( this.config.onHoverDelay > -1 ) {
+			document.addEventListener( 'mouseover', self.listener.bind( self ), self.listenerOptions );
+		}
+
+		document.addEventListener( 'mousedown', self.listener.bind( self ), self.listenerOptions );
+		document.addEventListener( 'touchstart', self.listener.bind( self ), self.listenerOptions );
+	}
+
+	/**
+	 * Event listener. Processes when near or on a valid <a> hyperlink.
+	 *
+	 * @param Event event Event instance.
+	 */
+	listener( event ) {
+		const linkElem = event.target.closest( 'a' );
+		const url      = this._prepareUrl( linkElem );
+		if ( null === url ) {
+			return;
+		}
+
+		switch ( event.type ) {
+			case 'mousedown':
+			case 'touchstart':
+				this._addPrefetchLink( url );
+				break;
+			case 'mouseover':
+				this._earlyPrefetch( linkElem, url, 'mouseout' );
+		}
+	}
+
+	/**
+	 *
+	 * @private
+	 *
+	 * @param Element|null linkElem
+	 * @param object url
+	 * @param string resetEvent
+	 */
+	_earlyPrefetch( linkElem, url, resetEvent ) {
+		const doPrefetch = () => {
+			falseTrigger = null;
+
+			// Start the rate throttle: 1 sec timeout.
+			if ( 0 === this.numOnHover ) {
+				setTimeout( () => this.numOnHover = 0, 1000 );
+			}
+			// Bail out when exceeding the rate throttle.
+			else if ( this.numOnHover > this.config.rateThrottle ) {
+				return;
+			}
+
+			this.numOnHover++;
+			this._addPrefetchLink( url );
+		};
+
+		// Delay to avoid false triggers for hover/touch/tap.
+		let falseTrigger = setTimeout( doPrefetch, this.config.onHoverDelay );
+
+		// On reset event, reset the false trigger timer.
+		const reset = () => {
+			linkElem.removeEventListener( resetEvent, reset, { passive: true } );
+			if ( null === falseTrigger ) {
+				return;
+			}
+
+			clearTimeout( falseTrigger );
+			falseTrigger = null;
+		};
+		linkElem.addEventListener( resetEvent, reset, { passive: true } );
+	}
+
+	/**
+	 * Adds a <link rel="prefetch" href="<url>"> for the given URL.
+	 *
+	 * @param string url The Given URL to prefetch.
+	 */
+	_addPrefetchLink( url ) {
+		this.prefetched.add( url.href );
+
+		return new Promise( ( resolve, reject ) => {
+			const elem   = document.createElement( 'link' );
+			elem.rel     = 'prefetch';
+			elem.href    = url.href;
+			elem.onload  = resolve;
+			elem.onerror = reject;
+
+			document.head.appendChild( elem );
+		} ).catch(() => {
+			// ignore and continue.
+		});
+	}
+
+	/**
+	 * Prepares the target link's URL.
+	 *
+	 * @private
+	 *
+	 * @param Element|null linkElem Instance of the link element.
+	 * @returns {null|*}
+	 */
+	_prepareUrl( linkElem ) {
+		if (
+			null === linkElem
+			||
+			typeof linkElem !== 'object'
+			||
+			! 'href' in linkElem
+			||
+			// Link prefetching only works on http/https protocol.
+			[ 'http:', 'https:' ].indexOf( linkElem.protocol ) === -1
+		) {
+			return null;
+		}
+
+		const origin   = linkElem.href.substring( 0, this.config.siteUrl.length );
+		const pathname = this._getPathname( linkElem.href, origin );
+		const url      = {
+			original: linkElem.href,
+			protocol: linkElem.protocol,
+			origin: origin,
+			pathname: pathname,
+			href: origin + pathname
+		};
+
+		return this._isLinkOk( url ) ? url : null;
+	}
+
+	/**
+	 * Gets the URL's pathname. Note: ensures the pathname matches the permalink structure.
+	 *
+	 * @private
+	 *
+	 * @param object url Instance of the URL.
+	 * @param string origin The target link href's origin.
+	 * @returns {string}
+	 */
+	_getPathname( url, origin ) {
+		let pathname = origin
+			? url.substring( this.config.siteUrl.length )
+			: url;
+
+		if ( ! pathname.startsWith( '/' ) ) {
+			pathname = '/' + pathname;
+		}
+
+		if ( this._shouldAddTrailingSlash( pathname ) ) {
+			return pathname + '/';
+		}
+
+		return pathname;
+	}
+
+	_shouldAddTrailingSlash( pathname ) {
+		return (
+			this.config.usesTrailingSlash
+			&&
+			! pathname.endsWith( '/' )
+			&&
+			! this.regex.fileExt.test( pathname )
+		);
+	}
+
+	/**
+	 * Checks if the given link element is okay to process.
+	 *
+	 * @private
+	 *
+	 * @param object url URL parts object.
+	 *
+	 * @returns {boolean}
+	 */
+	_isLinkOk( url ) {
+		if ( null === url || typeof url !== 'object' ) {
+			return false;
+		}
+
+		return (
+			! this.prefetched.has( url.href )
+			&&
+			url.origin === this.config.siteUrl // is an internal document.
+			&&
+			url.href.indexOf( '?' ) === -1 // not a query string.
+			&&
+			url.href.indexOf( '#' ) === -1 // not an anchor.
+			&&
+			! this.regex.excludeUris.test( url.href ) // not excluded.
+			&&
+			! this.regex.images.test( url.href ) // not an image.
+		);
+	}
+
+	/**
+	 * Named static constructor to encapsulate how to create the object.
+	 */
+	static run() {
+		// Bail out if the configuration not passed from the server.
+		if ( typeof RocketPreloadLinksConfig === 'undefined' ) {
+			return;
+		}
+
+		const browser  = new RocketBrowserCompatibilityChecker( {
+			capture: true,
+			passive: true
+		} );
+		const instance = new RocketPreloadLinks( browser, RocketPreloadLinksConfig );
+		instance.init();
+	}
+}
+
+RocketPreloadLinks.run();
+/* ]]> */
+</script>
+<script type="text/javascript" id="reboot-scripts-js-extra">
+/* <![CDATA[ */
+var settings_array = {"rating_text_average":"\u0441\u0440\u0435\u0434\u043d\u0435\u0435","rating_text_from":"\u0438\u0437","lightbox_display":"1","sidebar_fixed":"1"};
+var wps_ajax = {"url":"https:\/\/codenrock.com\/blog\/wp-admin\/admin-ajax.php","nonce":"aeb1a2753a"};
+var wpshop_views_counter_params = {"url":"https:\/\/codenrock.com\/blog\/wp-admin\/admin-ajax.php","nonce":"aeb1a2753a","is_postviews_enabled":"","post_id":"7335"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-content/themes/reboot/assets/js/scripts.min.js?ver=1.5.4" id="reboot-scripts-js"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/comment-reply.js?ver=6.7.5" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/dist/hooks.js?ver=5b4ec27a7b82f601224a" id="wp-hooks-js"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/dist/i18n.js?ver=2aff907006e2aa00e26e" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/* <![CDATA[ */
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.0.1" id="swv-js"></script>
+<script type="text/javascript" id="contact-form-7-js-translations">
+/* <![CDATA[ */
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "contact-form-7", {"translation-revision-date":"2024-03-12 08:39:31+0000","generator":"GlotPress\/4.0.1","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);","lang":"ru"},"Error:":["\u041e\u0448\u0438\u0431\u043a\u0430:"]}},"comment":{"reference":"includes\/js\/index.js"}} );
+/* ]]> */
+</script>
+<script type="text/javascript" id="contact-form-7-js-before">
+/* <![CDATA[ */
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/codenrock.com\/blog\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    },
+    "cached": 1
+};
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/codenrock.com\/blog\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    },
+    "cached": 1
+};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.0.1" id="contact-form-7-js"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/jquery/ui/core.js?ver=1.13.3" id="jquery-ui-core-js"></script>
+<script type="text/javascript" id="popup-maker-site-js-extra">
+/* <![CDATA[ */
+var pum_vars = {"version":"1.20.3","pm_dir_url":"https:\/\/codenrock.com\/blog\/wp-content\/plugins\/popup-maker\/","ajaxurl":"https:\/\/codenrock.com\/blog\/wp-admin\/admin-ajax.php","restapi":"https:\/\/codenrock.com\/blog\/wp-json\/pum\/v1","rest_nonce":null,"default_theme":"5512","debug_mode":"","disable_tracking":"","home_url":"\/blog\/","message_position":"top","core_sub_forms_enabled":"1","popups":[],"cookie_domain":"","analytics_route":"analytics","analytics_api":"https:\/\/codenrock.com\/blog\/wp-json\/pum\/v1"};
+var pum_sub_vars = {"ajaxurl":"https:\/\/codenrock.com\/blog\/wp-admin\/admin-ajax.php","message_position":"top"};
+var pum_popups = {"pum-5521":{"triggers":[],"cookies":[],"disable_on_mobile":false,"disable_on_tablet":false,"atc_promotion":null,"explain":null,"type_section":null,"theme_id":"5513","size":"medium","responsive_min_width":"0%","responsive_max_width":"500px","custom_width":"640px","custom_height_auto":false,"custom_height":"380px","scrollable_content":false,"animation_type":"fade","animation_speed":"350","animation_origin":"center top","open_sound":"none","custom_sound":"","location":"center top","position_top":"100","position_bottom":"0","position_left":"0","position_right":"0","position_from_trigger":false,"position_fixed":false,"overlay_disabled":false,"stackable":false,"disable_reposition":false,"zindex":"1999999999","close_button_delay":"0","fi_promotion":null,"close_on_form_submission":false,"close_on_form_submission_delay":"0","close_on_overlay_click":false,"close_on_esc_press":false,"close_on_f4_press":false,"disable_form_reopen":false,"disable_accessibility":false,"theme_slug":"lightbox","id":5521,"slug":"ostavit-zayavku"}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-content/plugins/popup-maker/assets/js/site.js?defer&amp;ver=1.20.3" id="popup-maker-site-js"></script>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=6LfvCIgqAAAAALu5Pgxx6la4w15aqdbYvf0B7j9h&amp;ver=3.0" id="google-recaptcha-js"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-includes/js/dist/vendor/wp-polyfill.js?ver=3.15.0" id="wp-polyfill-js"></script>
+<script type="text/javascript" id="wpcf7-recaptcha-js-before">
+/* <![CDATA[ */
+var wpcf7_recaptcha = {
+    "sitekey": "6LfvCIgqAAAAALu5Pgxx6la4w15aqdbYvf0B7j9h",
+    "actions": {
+        "homepage": "homepage",
+        "contactform": "contactform"
+    }
+};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-content/plugins/contact-form-7/modules/recaptcha/index.js?ver=6.0.1" id="wpcf7-recaptcha-js"></script>
+<script type="text/javascript" src="https://cdn.codenrock.com/wp-content/plugins/wp-smushit/app/assets/js/smush-lazy-load.min.js?ver=3.16.6" id="smush-lazy-load-js"></script>
+
+    <script>
+      (function(d,t) {
+        var BASE_URL="https://chatwoot.codenrock.com";
+        var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=BASE_URL+"/packs/js/sdk.js";
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g,s);
+        g.onload=function(){
+          window.chatwootSDK.run({
+            websiteToken: 'nbofiMLPMMKzi6nRzj8WXx8x',
+            baseUrl: BASE_URL
+          })
+        }
+      })(document,"script");
+    </script>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8B9F9R"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    
+
+
+</body>
+</html>
