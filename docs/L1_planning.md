@@ -235,6 +235,11 @@ graph LR
 | **MVP/Прототипы** | Чистый вайбкодинг | 3-5x | Валидация идеи, демо |
 | **Промышленный софт** | Агентная инженерия<br/>(Plan Mode → Act Mode) | 2-3x | Production-ready приложения |
 
+**Практическая команда L1 (Старт)**:
+- **Инструмент**: Gemini CLI
+- **Команда**: `npx @google/gemini-cli`
+- **Промпт**: *"Explain the architecture of this codebase"*
+
 **Plan Mode → Act Mode workflow**:
 1. **Plan Mode**: Обсуждение архитектуры, декомпозиция задач
 2. **Act Mode**: Реализация с автоматическими проверками

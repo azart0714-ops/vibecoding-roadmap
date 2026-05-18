@@ -225,6 +225,9 @@ Connection pooling, backups и миграции.
 
 ### Раздел 6: Security в Production
 
+**Критическая статистика 2026**:
+- **45%** сгенерированного ИИ кода содержит уязвимости (согласно отчету "Феноменология вайбкодинга").
+
 **Environment Variables**:
 - Разные ключи для dev/staging/production
 - NEXT_PUBLIC_ только для публичных данных
@@ -363,13 +366,16 @@ Connection pooling, backups и миграции.
 
 **Pre-launch Checklist**:
 
-**Безопасность**:
-- [ ] Environment variables настроены для production
-- [ ] .env файлы в .gitignore
-- [ ] Security headers настроены
-- [ ] Rate limiting включен на API routes
-- [ ] CORS правильно настроен
-- [ ] Input validation на всех endpoints
+**Безопасность (Vibe-Coding Security)**:
+- [ ] **AI-Audit**: Весь сгенерированный код прошел через "Агент валидации" или ручное ревью (помним про 45% уязвимостей).
+- [ ] Environment variables настроены для production.
+- [ ] .env файлы в .gitignore.
+- [ ] Security headers настроены (A+ на securityheaders.com).
+- [ ] Rate limiting включен на API routes (защита от abuse).
+- [ ] CORS правильно настроен (whitelist origins).
+- [ ] Input validation на всех endpoints (Zod/Joi).
+- [ ] **Secrets Scan**: Репозиторий проверен на утечку ключей (TruffleHog/Gitleaks).
+- [ ] **Dependencies Audit**: Запущен `npm audit` на наличие high/critical уязвимостей.
 
 **Performance**:
 - [ ] Images оптимизированы (WebP/AVIF)
