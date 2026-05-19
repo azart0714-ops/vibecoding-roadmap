@@ -5066,9 +5066,13 @@ const nodes = [
       {
         text: "Хранение векторных эмбеддингов ИИ с pgvector.",
         details: "Задействуйте расширение pgvector в Supabase или Neon для поиска по сходству и построения RAG-систем."
+      },
+      {
+        text: "Neon Database Branching для ИИ-сессий.",
+        details: "ИИ-агенты перед проведением тяжелых тестов или выполнением сложных миграций должны автоматически создавать временную ветку БД через API, подключать ее к локальному env и после тестов безопасно сбрасывать."
       }
     ],
-    tools: ["Neon DB", "Supabase Suite", "pgvector", "Database Branching"]
+    tools: ["Neon DB", "Supabase Suite", "pgvector", "Database Branching", "AI Branching"]
   },
   {
     id: "l5_9_prisma_safety",
@@ -5083,42 +5087,42 @@ const nodes = [
       },
       {
         text: "Запрет автоматического 'migrate reset'.",
-        details: `Жесткая блокировка сброса базы данных в средах разработки без явного интерактивного подтверждения со стороны человека. Попробуйте ИИ-ограничитель в терминале ниже:
-      <div class="showcase-widget p-4 bg-slate-900/60 rounded-xl border border-slate-800 text-slate-300 font-mono text-sm max-w-lg mx-auto" style="margin-top: 10px;">
-        <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-          <span class="text-xs text-rose-400 flex items-center gap-1 font-sans">
-            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-            PRISMA SAFETY TERMINAL
-          </span>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-slate-400 font-sans">ИИ-Ограничитель:</span>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="prisma-guard-toggle" class="sr-only peer" checked onchange="window.togglePrismaSafetyGuard(this.checked)">
-              <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600 peer-checked:after:bg-white"></div>
-            </label>
+        details: `Автоматический запуск деструктивных команд вроде <code class="text-rose-400 font-mono bg-black/40 px-1 py-0.5 rounded">prisma migrate reset</code> силами ИИ-агентов категорически запрещен из-за риска полной потери локальных данных. 
+        
+        <div class="showcase-widget p-5 bg-slate-900/80 rounded-xl border border-slate-800 text-slate-300 font-sans max-w-lg mx-auto" style="margin-top: 15px;">
+          <div class="flex items-center gap-2.5 mb-3 border-b border-slate-800 pb-3">
+            <span class="p-1.5 bg-rose-500/10 rounded-lg text-rose-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </span>
+            <div>
+              <h4 class="text-sm font-bold text-slate-200 leading-tight">Опасность автоматического сброса БД</h4>
+              <p class="text-[10px] text-slate-400">Почему ИИ-агентам запрещено стирать окружение</p>
+            </div>
           </div>
-        </div>
-
-        <div id="prisma-terminal-screen" class="bg-black/80 p-3 rounded-lg min-h-[160px] flex flex-col justify-between mb-3 border border-slate-950">
-          <div id="prisma-terminal-log" class="text-xs space-y-1 overflow-y-auto max-h-[140px] text-emerald-400">
-            <div>$ npx prisma db push --force-reset</div>
-            <div class="text-slate-400">// Готов к симуляции команды ИИ...</div>
+          
+          <div class="space-y-3 text-xs leading-relaxed">
+            <p>
+              Команда <strong class="text-rose-400 font-semibold">prisma migrate reset</strong> полностью удаляет все таблицы, пересоздает схему с нуля и заново запускает сид-скрипты. Если ИИ-агент попадет в бесконечный цикл отладки ошибок и начнет сбрасывать БД на каждой итерации, это уничтожит локальные тестовые данные и заблокирует работу разработчика.
+            </p>
+            
+            <div class="p-3 bg-indigo-950/40 border border-indigo-900/60 rounded-lg space-y-2">
+              <div class="flex items-center gap-1.5 text-indigo-300 font-semibold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                В чём суть паттерна "Migrate Retest"?
+              </div>
+              <p class="text-slate-400">
+                Безопасная альтернатива строится на концепции <strong>Database Branching</strong> (ветвления баз данных) через Neon API:
+              </p>
+              <ul class="list-decimal pl-4 space-y-1 text-slate-400">
+                <li><strong class="text-slate-300">Изолированное ветвление:</strong> ИИ-агент перед тестом миграции отправляет API-запрос к Neon для создания мгновенной (за 1 сек) копии базы данных с помощью Copy-on-Write.</li>
+                <li><strong class="text-slate-300">Локальная подмена:</strong> Переменная окружения <code class="text-rose-300 bg-slate-950 px-1 py-0.5 rounded font-mono text-[10px]">DATABASE_URL</code> временно перенаправляется на созданную изолированную ветку.</li>
+                <li><strong class="text-slate-300">Сброс и применение (Reset & Run):</strong> На этой временной ветке агент безопасно выполняет сброс схемы с нуля для верификации чистоты миграций.</li>
+                <li><strong class="text-slate-300">Запуск автотестов (Retest):</strong> Выполняются интеграционные и E2E тесты для подтверждения работоспособности API с новой схемой.</li>
+                <li><strong class="text-slate-300">Удаление ветки:</strong> После тестов временная ветка удаляется без следа через CLI или API. Рабочая БД и локальные данные разработчика остаются абсолютно нетронутыми!</li>
+              </ul>
+            </div>
           </div>
-          <div id="prisma-human-approval-ui" class="hidden mt-2 p-2 bg-amber-950/40 border border-amber-900/60 rounded flex items-center justify-between">
-            <span class="text-xs text-amber-300 font-sans">⚠️ Подтвердить деструктивную миграцию?</span>
-            <button id="prisma-approve-btn" onclick="window.approvePrismaSafetyCommand()" class="px-2 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded text-xs font-sans transition animate-bounce">Разрешить ✅</button>
-          </div>
-        </div>
-
-        <div class="flex gap-2">
-          <button id="prisma-simulate-btn" onclick="window.simulatePrismaSafety()" class="flex-1 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-sans text-xs font-semibold transition">
-            Симулировать команду ИИ
-          </button>
-          <button onclick="window.resetPrismaSafetyDemo()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-sans text-xs transition">
-            Сбросить
-          </button>
-        </div>
-      </div>`
+        </div>`
       },
       {
         text: "Верификация недеструктивности 'db push'.",
@@ -5144,57 +5148,58 @@ const nodes = [
       },
       {
         text: "Декларативное описание политик RLS.",
-        details: `Защищенное описание Row-Level Security (RLS) прямо в схеме данных в виде декларативных TypeScript хелперов. Сравните Prisma и Drizzle в песочнице Edge ниже:
-      <div class="showcase-widget p-4 bg-slate-900/60 rounded-xl border border-slate-800 text-slate-300 font-mono text-sm max-w-lg mx-auto" style="margin-top: 10px;">
-        <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-          <span class="text-xs text-cyan-400 flex items-center gap-1 font-sans">
-            <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
-            DRIZZLE VS PRISMA EDGE
-          </span>
-          <div class="flex bg-slate-950 p-0.5 rounded border border-slate-800 font-sans">
-            <button id="drizzle-toggle-prisma" onclick="window.toggleDrizzleEdgeMode('prisma')" class="px-2 py-0.5 text-[10px] rounded transition bg-slate-800 text-white">Prisma</button>
-            <button id="drizzle-toggle-drizzle" onclick="window.toggleDrizzleEdgeMode('drizzle')" class="px-2 py-0.5 text-[10px] rounded transition text-slate-400">Drizzle</button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 mb-3">
-          <div class="bg-black/75 p-2 rounded border border-slate-900 flex flex-col justify-between min-h-[140px]">
-            <div class="text-[10px] text-slate-500 border-b border-slate-900 pb-1 mb-1 font-sans font-semibold">SCHEMA</div>
-            <pre id="drizzle-schema-code" class="text-[10px] text-indigo-300 leading-tight overflow-x-auto">model User {
-  id    Int    @id
-  name  String
-}</pre>
-            <button id="drizzle-add-col-btn" onclick="window.addDrizzleColumn()" class="mt-2 w-full py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-sans rounded transition">Добавить поле ИИ</button>
-          </div>
-
-          <div class="bg-black/75 p-2 rounded border border-slate-900 flex flex-col justify-between min-h-[140px]">
-            <div class="text-[10px] text-slate-500 border-b border-slate-900 pb-1 mb-1 font-sans font-semibold">TS COMPILER & BUNDLE</div>
-            <div class="space-y-2">
-              <div>
-                <div class="text-[9px] text-slate-400 font-sans">Bundle Size:</div>
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 bg-slate-950 h-1.5 rounded overflow-hidden">
-                    <div id="drizzle-bundle-bar" class="bg-rose-500 h-full w-[100%] transition-all duration-300"></div>
-                  </div>
-                  <span id="drizzle-bundle-val" class="text-[10px] font-bold text-rose-400">12.4 MB</span>
-                </div>
-              </div>
-              <div>
-                <div class="text-[9px] text-slate-400 font-sans">Status:</div>
-                <div id="drizzle-compiler-log" class="text-[10px] text-emerald-400 leading-tight">🟢 Ready.</div>
-              </div>
-            </div>
-            <button id="drizzle-compile-btn" onclick="window.runPrismaGenerate()" class="w-full py-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-sans rounded transition mt-1">prisma generate</button>
-          </div>
-        </div>
-
-        <button onclick="window.resetDrizzleEdgeDemo()" class="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-sans text-xs transition">
-          Сбросить песочницу
-        </button>
-      </div>`
+        details: "Drizzle позволяет описывать политики Row-Level Security (RLS) непосредственно внутри TypeScript-кода схем (например, с использованием хелперов pgPolicy). Это обеспечивает чистоту архитектуры, при которой правила безопасности хранятся и версионируются вместе со структурой таблиц, исключая ручные SQL-запросы в консоли базы данных."
       }
     ],
     tools: ["Drizzle ORM", "TypeScript Schema", "Edge Runtime", "RLS policies"]
+  },
+  {
+    id: "l5_11_semantic_api",
+    level: "L5",
+    track: "engineering",
+    title: "Семантический API (Ресторан)",
+    shortDesc: "Проектирование API по ресторанной аналогии (Заказ -> Официант -> Повар -> Доставка).",
+    steps: [
+      {
+        text: "Заказ как Клиентский DTO.",
+        details: "Клиент формирует строго описанный и валидируемый Zod-схемой объект DTO (Data Transfer Object) с точными входными параметрами."
+      },
+      {
+        text: "Официант как Контроллер.",
+        details: "Контроллер (Waiter) принимает запрос, проверяет права доступа (Auth) и валидирует DTO, возвращая 400 Bad Request при малейших нестыковках."
+      },
+      {
+        text: "Повар как Сервис бизнес-логики.",
+        details: "Сервисный слой (Chef) выполняет транзакции, работает с базой данных и оркестрирует бизнес-логику в полной изоляции от HTTP-протокола."
+      },
+      {
+        text: "Доставка как Стерильный Response.",
+        details: "Ответ контроллера строго типизируется с помощью Output DTO, защищая от утечек внутренних полей таблиц базы данных наружу."
+      }
+    ],
+    tools: ["DTO Schemas", "Controllers", "Service Layer", "Zod Validation"]
+  },
+  {
+    id: "l5_12_anti_nullable",
+    level: "L5",
+    track: "stack",
+    title: "TypeScript Anti-Nullable",
+    shortDesc: "Строгая типизация схем данных без nullable-полей для полного исключения рантайм падений.",
+    steps: [
+      {
+        text: "Исключение nullable-полей.",
+        details: "Категорический запрет на использование null в полях базы данных без жесткой необходимости. ИИ-генераторы избегают скрытых сюрпризов."
+      },
+      {
+        text: "TypeScript strictNullChecks.",
+        details: "Включение строгого режима компилятора TS для принудительной обработки потенциально отсутствующих или неопределенных значений."
+      },
+      {
+        text: "Zod-валидация и оборонительное кодирование.",
+        details: "Каждый входящий и выходящий рубеж приложения покрывается строгими Zod-схемами, превращая логические ошибки в явные ошибки компиляции."
+      }
+    ],
+    tools: ["TypeScript Strict", "Zod strict()", "Defensive Coding", "Runtime Safety"]
   },
 
   // ================= LEVEL L6 =================
@@ -5358,27 +5363,75 @@ const nodes = [
     id: "l6_7_analytics_monitoring",
     level: "L6",
     track: "engineering",
-    title: "Аналитика и мониторинг (PostHog/Sentry)",
-    shortDesc: "Продуктовая аналитика, трекинг ошибок и мониторинг производительности.",
+    title: "Аналитика PostHog & Sentry",
+    shortDesc: "Продвинутая продуктовая аналитика, feature flags, запись сессий и мониторинг ошибок.",
     steps: [
       {
-        text: "Подключение PostHog для продуктовой аналитики.",
-        details: "Установите `npm install posthog-js`. Инициализируйте в `_app.tsx`: `posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {api_host: 'https://eu.posthog.com'})`. Трекайте ключевые события: signup, purchase, feature_used. Смотрите воронки и пути пользователей."
+        text: "Продуктовая аналитика с PostHog.",
+        details: "Установите `npm install posthog-js`. PostHog предоставляет бесплатный лимит в 1 000 000 событий в месяц, покрывая запись сессий (Session Replay), воронки (Funnels), когорты удержания (Retention) и A/B тестирование."
       },
       {
-        text: "Настройка Sentry для мониторинга ошибок.",
-        details: "Установите `npm install @sentry/nextjs` и запустите `npx @sentry/wizard`. Добавьте `SENTRY_DSN` в `.env`. Sentry автоматически поймает необработанные ошибки, добавит стек-трейс и уведомит вас в Slack/Telegram."
+        text: "Настройка Sentry для трекинга ошибок.",
+        details: "Установите `@sentry/nextjs` с помощью `npx @sentry/wizard`. Sentry автоматически фиксирует рантайм ошибки, отображает детальный stack trace в реальном времени и присылает алерты в Slack/Telegram."
       },
       {
-        text: "Feature Flags для безопасного выкатывания фич.",
-        details: "PostHog Feature Flags позволяют включать новый функционал для 5% пользователей, проводить A/B тесты и мгновенно откатывать изменения без деплоя. Оберните новую логику: `if (posthog.isFeatureEnabled('new-checkout')) {...}`."
+        text: "Feature Flags и безопасные релизы.",
+        details: "Используйте встроенные флаги фич PostHog для раскатки изменений на 5% пользователей и мгновенного отката в случае багов без деплоя: `if (posthog.isFeatureEnabled('new-checkout')) {...}`."
       },
       {
-        text: "Настройка алертов на аномалии и критические ошибки.",
-        details: "В Sentry создайте правила алертов: при появлении новой ошибки или превышении порога в 100 ошибок/час — немедленное уведомление в Telegram. Настройте uptime-мониторинг через Sentry Crons для проверки периодических задач."
+        text: "Анализ сессий через Session Replay.",
+        details: "Запись сессий позволяет наглядно увидеть, в каких местах интерфейса спотыкаются пользователи и почему они уходят, обеспечивая ценную обратную связь для ИИ-разработчика."
       }
     ],
-    tools: ["PostHog", "Airtable", "Customer Interviews"]
+    tools: ["PostHog Suite", "Sentry", "Session Replay", "A/B Testing"]
+  },
+  {
+    id: "l6_8_vercel_analytics",
+    level: "L6",
+    track: "engineering",
+    title: "Vercel Analytics (RUM)",
+    shortDesc: "Real User Monitoring из коробки без сложной конфигурации для сайтов на Vercel.",
+    steps: [
+      {
+        text: "Подключение Web Analytics.",
+        details: "В один клик активируйте аналитику в панели Vercel. Добавьте пакет `@vercel/analytics` и вставьте компонент `<Analytics />` в корневой лейаут."
+      },
+      {
+        text: "Core Web Vitals мониторинг.",
+        details: "Отслеживайте показатели LCP, FID и CLS в реальном времени, выявляя проблемы с производительностью страниц у реальных пользователей."
+      },
+      {
+        text: "Лимиты бесплатного тарифа.",
+        details: "Hobby-план предоставляет 2,500 событий в месяц бесплатно, чего вполне достаточно для валидации MVP и первых запусков."
+      }
+    ],
+    tools: ["Vercel Console", "@vercel/analytics", "Core Web Vitals", "RUM Analytics"]
+  },
+  {
+    id: "l6_9_clerk_auth",
+    level: "L6",
+    track: "stack",
+    title: "Премиум Auth (Clerk)",
+    shortDesc: "Полнофункциональное и безопасное коробочное решение для аутентификации пользователей.",
+    steps: [
+      {
+        text: "Готовые UI-компоненты Clerk.",
+        details: "Используйте встроенные, стилизованные формы `<SignIn />`, `<SignUp />` и кнопку `<UserButton />` без необходимости верстки логики входа вручную."
+      },
+      {
+        text: "Мультифакторная защита (MFA).",
+        details: "Включите вход по SMS, email-кодам или через Google/GitHub OAuth в один клик в дашборде Clerk."
+      },
+      {
+        text: "API-first управление сессиями.",
+        details: "Защита API-роутов и страниц с помощью middleware Clerk исключает ошибки ИИ-кода при хэшировании паролей или ручной валидации JWT-токенов."
+      },
+      {
+        text: "Лимиты Clerk Free Tier.",
+        details: "Бесплатный тариф покрывает до 10 000 MAU (Monthly Active Users), что позволяет развивать SaaS без лишних первоначальных затрат."
+      }
+    ],
+    tools: ["Clerk SDK", "JWT Session Security", "MFA", "OAuth Integrations"]
   },
 
   // ================= LEVEL L7 =================

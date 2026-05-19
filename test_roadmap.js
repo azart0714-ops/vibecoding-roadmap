@@ -670,72 +670,32 @@ const path = require('path');
   }
   console.log("✅ Task 58 (Screen Readers) протестирован успешно!");
   
-  // J. Prisma CLI AI-Safety Guardrails
-  console.log("Тестирование Task 59 (Prisma CLI AI-Safety Guardrails)...");
+  // J. Prisma CLI AI-Safety Guardrails & Migrate Retest
+  console.log("Тестирование Task 59 (Prisma CLI AI-Safety Guardrails - Migrate Retest)...");
   await page.evaluate(() => {
     const node = document.querySelector('.canvas-node[data-id="l5_9_prisma_safety"]');
     if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
   });
   await page.waitForTimeout(500);
 
-  // Expand the step card containing the prisma safety widget
+  // Expand the step card containing the reset/retest safety details
   await page.evaluate(() => {
     const cards = Array.from(document.querySelectorAll('#drawer-steps .step-card'));
-    const prismaCard = cards.find(card => card.querySelector('#prisma-simulate-btn'));
-    if (prismaCard) {
-      prismaCard.classList.add('expanded');
-      const details = prismaCard.querySelector('.step-details');
+    const safetyCard = cards.find(card => card.innerText.includes('Запрет автоматического'));
+    if (safetyCard) {
+      safetyCard.classList.add('expanded');
+      const details = safetyCard.querySelector('.step-details');
       if (details) details.style.maxHeight = '1000px';
     }
   });
   await page.waitForTimeout(400);
 
-  // 1. Verify guardrail active block
-  console.log("Симулируем команду ИИ при ВКЛЮЧЕННОМ ограничителе...");
-  await page.click('#prisma-simulate-btn', { force: true });
-  
-  // Wait deterministically for the human approval UI to appear
-  await page.waitForSelector('#prisma-human-approval-ui:not(.hidden)', { timeout: 5000 });
-  
-  let terminalText = await page.locator('#prisma-terminal-log').innerHTML();
-  console.log(`Текст терминала: ${terminalText}`);
-  if (!terminalText.includes('BLOCKED') || !terminalText.includes('Human-in-the-loop')) {
-    throw new Error("Ошибка: Ограничитель должен заблокировать команду ИИ и потребовать подтверждения человека!");
+  // Assert that the Migrate Retest details are visible and contain required terms
+  let prismaDetails = await page.locator('#drawer-steps').innerHTML();
+  if (!prismaDetails.includes('Опасность автоматического сброса БД') || !prismaDetails.includes('Migrate Retest') || !prismaDetails.includes('Database Branching')) {
+    throw new Error("Ошибка: В описании Prisma CLI Safety не найдена развернутая концепция Migrate Retest и Database Branching!");
   }
-
-  // 2. Click approve
-  console.log("Разрешаем миграцию вручную (Human approval)...");
-  
-  // Diagnostic log of approve action
-  await page.evaluate(() => {
-    console.log("[DIAGNOSTIC] window.approvePrismaSafetyCommand type: " + typeof window.approvePrismaSafetyCommand);
-    const btn = document.getElementById('prisma-approve-btn');
-    console.log("[DIAGNOSTIC] prisma-approve-btn exists: " + !!btn);
-    if (btn) console.log("[DIAGNOSTIC] prisma-approve-btn tag: " + btn.tagName + ", onclick: " + btn.getAttribute('onclick'));
-  });
-
-  await page.click('#prisma-approve-btn', { force: true });
-  
-  // Wait deterministically for the success message to be appended
-  await page.waitForFunction(() => {
-    const text = document.getElementById('prisma-terminal-log').innerHTML;
-    return text.includes('Разрешено человеком') && text.includes('Схема синхронизирована');
-  }, undefined, { timeout: 5000 });
-
-  console.log("Подтверждение человека сработало успешно!");
-
-  // 3. Verify guardrail off destruction
-  console.log("Отключаем ограничитель и симулируем команду ИИ...");
-  await page.click('#prisma-guard-toggle', { force: true }); // Toggle checkbox off
-  await page.waitForTimeout(300);
-  await page.click('#prisma-simulate-btn', { force: true });
-  
-  // Wait deterministically for the base reset destruction message
-  await page.waitForFunction(() => {
-    return document.getElementById('prisma-terminal-log').innerHTML.includes('БАЗА ДАННЫХ СТЕРТА');
-  }, undefined, { timeout: 5000 });
-
-  console.log("✅ Task 59 (Prisma CLI AI-Safety) протестирован успешно!");
+  console.log("✅ Task 59 (Prisma CLI AI-Safety & Migrate Retest) протестирован успешно!");
 
   // K. Drizzle ORM Edge TypeScript schemas
   console.log("Тестирование Task 60 (Drizzle ORM Edge TypeScript schemas)...");
@@ -745,10 +705,10 @@ const path = require('path');
   });
   await page.waitForTimeout(500);
 
-  // Expand the step card containing the drizzle widget
+  // Expand the step card containing Drizzle RLS details
   await page.evaluate(() => {
     const cards = Array.from(document.querySelectorAll('#drawer-steps .step-card'));
-    const drizzleCard = cards.find(card => card.querySelector('#drizzle-add-col-btn'));
+    const drizzleCard = cards.find(card => card.innerText.includes('Декларативное описание политик'));
     if (drizzleCard) {
       drizzleCard.classList.add('expanded');
       const details = drizzleCard.querySelector('.step-details');
@@ -757,54 +717,81 @@ const path = require('path');
   });
   await page.waitForTimeout(400);
 
-  // 1. Check default Prisma Edge Bundle is 12MB
-  let bundleSize = await page.locator('#drizzle-bundle-val').textContent();
-  console.log(`Начальный размер бандла Prisma: ${bundleSize}`);
-  if (bundleSize !== '12.4 MB') {
-    throw new Error(`Ошибка: Начальный размер бандла Prisma должен быть 12.4 MB, получено: ${bundleSize}`);
+  // Assert that RLS details are present and contain relevant concepts
+  let drizzleDetails = await page.locator('#drawer-steps').innerHTML();
+  if (!drizzleDetails.includes('Row-Level Security (RLS)') || !drizzleDetails.includes('pgPolicy')) {
+    throw new Error("Ошибка: В описании Drizzle ORM не найдено декларативное описание RLS политик с pgPolicy!");
+  }
+  console.log("✅ Task 60 (Drizzle ORM Edge RLS) протестирован успешно!");
+
+  // L. Verification of New Tasks 61-66 nodes
+  console.log("Тестирование новых узлов (Tasks 61-66)...");
+
+  // 1. Neon Database Branching for AI sessions (l5_8_db_providers / l5_9_prisma_safety connection checking)
+  console.log("Проверяем узел l5_8_db_providers...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l5_8_db_providers"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(400);
+  let l5_8_content = await page.locator('#drawer-steps').innerHTML();
+  if (!l5_8_content.includes('Neon Database Branching')) {
+    throw new Error("Ошибка: Узел l5_8_db_providers не содержит упоминания Neon Database Branching!");
   }
 
-  // 2. Add col in Prisma mode -> gets TypeScript error
-  console.log("Добавляем поле ИИ в режиме Prisma...");
-  await page.click('#drizzle-add-col-btn', { force: true });
-  await page.waitForTimeout(200);
-  let compLog = await page.locator('#drizzle-compiler-log').textContent();
-  console.log(`Лог компилятора: ${compLog}`);
-  if (!compLog.includes('TS Error') || !compLog.includes('prisma generate')) {
-    throw new Error("Ошибка: Добавление поля в Prisma без компиляции должно вызывать ошибку типов!");
+  // 2. Semantic API Restaurant Analogy (l5_11_semantic_api)
+  console.log("Проверяем узел l5_11_semantic_api...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l5_11_semantic_api"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(400);
+  let l5_11_title = await page.locator('#drawer-title').textContent();
+  let l5_11_steps = await page.locator('#drawer-steps').innerHTML();
+  if (!l5_11_title.includes('Семантический API (Ресторан)') || !l5_11_steps.includes('Клиентский DTO')) {
+    throw new Error("Ошибка: Узел l5_11_semantic_api не отображает правильную ресторанную аналогию!");
   }
 
-  // 3. Compile Prisma -> resolves error
-  console.log("Запускаем prisma generate...");
-  await page.click('#drizzle-compile-btn', { force: true });
-  await page.waitForTimeout(1000);
-  compLog = await page.locator('#drizzle-compiler-log').textContent();
-  console.log(`Лог компилятора после генерации: ${compLog}`);
-  if (!compLog.includes('Сгенерирован Prisma Client') || !compLog.includes('устранены')) {
-    throw new Error("Ошибка: Компиляция Prisma не устранила ошибку типов!");
+  // 3. Anti-Nullable TypeScript schemas (l5_12_anti_nullable)
+  console.log("Проверяем узел l5_12_anti_nullable...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l5_12_anti_nullable"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(400);
+  let l5_12_title = await page.locator('#drawer-title').textContent();
+  let l5_12_steps = await page.locator('#drawer-steps').innerHTML();
+  if (!l5_12_title.includes('TypeScript Anti-Nullable') || !l5_12_steps.includes('strictNullChecks')) {
+    throw new Error("Ошибка: Узел l5_12_anti_nullable не отображает правила Anti-Nullable схем!");
   }
 
-  // 4. Switch to Drizzle
-  console.log("Переключаемся в режим Drizzle ORM...");
-  await page.click('#drizzle-toggle-drizzle', { force: true });
-  await page.waitForTimeout(200);
-
-  bundleSize = await page.locator('#drizzle-bundle-val').textContent();
-  console.log(`Размер бандла Drizzle: ${bundleSize}`);
-  if (bundleSize !== '146 KB') {
-    throw new Error(`Ошибка: Размер бандла Drizzle должен быть 146 KB, получено: ${bundleSize}`);
+  // 4. Vercel Analytics (l6_8_vercel_analytics)
+  console.log("Проверяем узел l6_8_vercel_analytics...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l6_8_vercel_analytics"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(400);
+  let l6_8_title = await page.locator('#drawer-title').textContent();
+  let l6_8_steps = await page.locator('#drawer-steps').innerHTML();
+  if (!l6_8_title.includes('Vercel Analytics') || !l6_8_steps.includes('Core Web Vitals')) {
+    throw new Error("Ошибка: Узел l6_8_vercel_analytics не отображает метрики Vercel Analytics!");
   }
 
-  // 5. Add col in Drizzle mode -> compiles instantly
-  console.log("Добавляем поле ИИ в режиме Drizzle...");
-  await page.click('#drizzle-add-col-btn', { force: true });
-  await page.waitForTimeout(200);
-  compLog = await page.locator('#drizzle-compiler-log').textContent();
-  console.log(`Лог компилятора Drizzle: ${compLog}`);
-  if (!compLog.includes('обновлены мгновенно') || !compLog.includes('Ошибок компиляции нет')) {
-    throw new Error("Ошибка: Добавление поля в Drizzle должно обновляться мгновенно без ошибок!");
+  // 5. Clerk Auth (l6_9_clerk_auth)
+  console.log("Проверяем узел l6_9_clerk_auth...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l6_9_clerk_auth"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(400);
+  let l6_9_title = await page.locator('#drawer-title').textContent();
+  let l6_9_steps = await page.locator('#drawer-steps').innerHTML();
+  if (!l6_9_title.includes('Премиум Auth (Clerk)') || !l6_9_steps.includes('MFA')) {
+    throw new Error("Ошибка: Узел l6_9_clerk_auth не отображает премиум-аутентификацию Clerk!");
   }
-  console.log("✅ Task 60 (Drizzle ORM Edge) протестирован успешно!");
+
+  console.log("✅ Успешно проверены все концептуальные узлы Tasks 61-66!");
 
   console.log("=========================================================================\n");
 

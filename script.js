@@ -215,6 +215,12 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l4_9_stack_selection", to: "l4_10_reusable_blocks" },
     { from: "l7_9_security_headers", to: "l7_10_testing_principles" },
     { from: "l8_9_skills_cookbook", to: "l8_10_agent_customization" },
+    { from: "l5_8_db_providers", to: "l5_11_semantic_api" },
+    { from: "l5_11_semantic_api", to: "l5_12_anti_nullable" },
+    { from: "l5_12_anti_nullable", to: "l7_3_postgres_neon" },
+    { from: "l6_7_analytics_monitoring", to: "l6_8_vercel_analytics" },
+    { from: "l6_8_vercel_analytics", to: "l6_9_clerk_auth" },
+    { from: "l6_9_clerk_auth", to: "l7_1_porting_vsc" },
 
     // Milestone 6 Connections
     { from: "l2_9_database_safety", to: "l2_10_ai_lies" },
@@ -375,6 +381,10 @@ document.addEventListener("DOMContentLoaded", () => {
     l5_9_prisma_safety: "weight-medium",
     l5_10_drizzle_edge: "weight-medium",
     l5_8_db_providers: "weight-medium",
+    l5_11_semantic_api: "weight-medium",
+    l5_12_anti_nullable: "weight-medium",
+    l6_8_vercel_analytics: "weight-medium",
+    l6_9_clerk_auth: "weight-medium",
     l7_11_vercel_gold: "weight-medium",
 
     // C1/C2 Bento Weights
@@ -2709,216 +2719,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
   
-  // Simulators for Prisma Safety Guardrails
-  window.prismaSafetyGuardActive = true;
-  
-  window.togglePrismaSafetyGuard = function(active) {
-    window.prismaSafetyGuardActive = active;
-    const label = document.querySelector(".text-rose-400");
-    if (active) {
-      if (label) {
-        label.style.color = "#fb7185";
-        label.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span> PRISMA SAFETY TERMINAL`;
-      }
-    } else {
-      if (label) {
-        label.style.color = "#94a3b8";
-        label.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> PRISMA TERMINAL`;
-      }
-    }
-  };
-
-  window.simulatePrismaSafety = function() {
-    const log = document.getElementById("prisma-terminal-log");
-    const approvalUI = document.getElementById("prisma-human-approval-ui");
-    const simulateBtn = document.getElementById("prisma-simulate-btn");
-
-    if (!log) return;
-
-    // Reset log content to start sequence
-    log.innerHTML = `<div>$ npx prisma db push --force-reset</div>`;
-    
-    setTimeout(() => {
-      log.innerHTML += `<div class="text-slate-400">Environment: DEVELOPMENT</div>`;
-      log.innerHTML += `<div class="text-slate-400">Checking prisma/schema.prisma ...</div>`;
-      
-      setTimeout(() => {
-        if (window.prismaSafetyGuardActive) {
-          log.innerHTML += `<div class="text-rose-400 font-bold">🚨 [AI-SAFETY] BLOCKED!</div>`;
-          log.innerHTML += `<div class="text-amber-400 font-sans">Причина: Обнаружен авто-запуск деструктивной команды ИИ.</div>`;
-          log.innerHTML += `<div class="text-amber-400 font-sans">Требуется подтверждение человека (Human-in-the-loop).</div>`;
-          if (approvalUI) approvalUI.classList.remove("hidden");
-          if (simulateBtn) simulateBtn.disabled = true;
-        } else {
-          log.innerHTML += `<div class="text-slate-400">Applying changes...</div>`;
-          setTimeout(() => {
-            log.innerHTML += `<div class="text-rose-500 font-bold">❌ БАЗА ДАННЫХ СТЕРТА!</div>`;
-            log.innerHTML += `<div class="text-rose-400 font-sans">Удалено таблиц: 3 (Users, Orders, Payments)</div>`;
-            log.innerHTML += `<div class="text-rose-400 font-sans">Утеряно записей: 14,204</div>`;
-            
-            const screen = document.getElementById("prisma-terminal-screen");
-            if (screen) {
-              screen.style.borderColor = "rgba(239, 68, 68, 0.6)";
-              screen.style.boxShadow = "0 0 10px rgba(239, 68, 68, 0.3)";
-            }
-          }, 600);
-        }
-      }, 600);
-    }, 400);
-  };
-
-  window.approvePrismaSafetyCommand = function() {
-    const log = document.getElementById("prisma-terminal-log");
-    const approvalUI = document.getElementById("prisma-human-approval-ui");
-    const simulateBtn = document.getElementById("prisma-simulate-btn");
-
-    if (!log) return;
-    if (approvalUI) approvalUI.classList.add("hidden");
-    if (simulateBtn) simulateBtn.disabled = false;
-
-    log.innerHTML += `<div class="text-emerald-400 font-bold font-sans">✅ Разрешено человеком. Запуск миграции...</div>`;
-    setTimeout(() => {
-      log.innerHTML += `<div class="text-emerald-400 font-sans">🟢 Схема синхронизирована! База данных сохранена.</div>`;
-    }, 600);
-  };
-
-  window.resetPrismaSafetyDemo = function() {
-    const log = document.getElementById("prisma-terminal-log");
-    const approvalUI = document.getElementById("prisma-human-approval-ui");
-    const simulateBtn = document.getElementById("prisma-simulate-btn");
-    const screen = document.getElementById("prisma-terminal-screen");
-    const guardToggle = document.getElementById("prisma-guard-toggle");
-
-    if (guardToggle) guardToggle.checked = true;
-    window.prismaSafetyGuardActive = true;
-
-    if (log) {
-      log.innerHTML = `<div>$ npx prisma db push --force-reset</div>
-      <div class="text-slate-400">// Готов к симуляции команды ИИ...</div>`;
-    }
-    if (approvalUI) approvalUI.classList.add("hidden");
-    if (simulateBtn) simulateBtn.disabled = false;
-    if (screen) {
-      screen.style.borderColor = "rgba(255,255,255,0.06)";
-      screen.style.boxShadow = "none";
-    }
-    window.togglePrismaSafetyGuard(true);
-  };
-
-  // Simulators for Drizzle Edge
-  window.drizzleEdgeMode = 'prisma';
-  window.drizzleFieldAdded = false;
-
-  window.toggleDrizzleEdgeMode = function(mode) {
-    window.drizzleEdgeMode = mode;
-    const prismaBtn = document.getElementById("drizzle-toggle-prisma");
-    const drizzleBtn = document.getElementById("drizzle-toggle-drizzle");
-    const schemaCode = document.getElementById("drizzle-schema-code");
-    const bundleBar = document.getElementById("drizzle-bundle-bar");
-    const bundleVal = document.getElementById("drizzle-bundle-val");
-    const compileBtn = document.getElementById("drizzle-compile-btn");
-    const compLog = document.getElementById("drizzle-compiler-log");
-
-    if (!prismaBtn || !drizzleBtn || !schemaCode || !bundleBar || !bundleVal || !compLog) return;
-
-    window.drizzleFieldAdded = false;
-
-    if (mode === 'prisma') {
-      prismaBtn.className = "px-2 py-0.5 text-[10px] rounded transition bg-slate-800 text-white";
-      drizzleBtn.className = "px-2 py-0.5 text-[10px] rounded transition text-slate-400";
-      
-      schemaCode.innerText = `model User {
-  id    Int    @id
-  name  String
-}`;
-      
-      bundleBar.className = "bg-rose-500 h-full w-[100%] transition-all duration-300";
-      bundleVal.innerText = "12.4 MB";
-      bundleVal.className = "text-[10px] font-bold text-rose-400 font-sans";
-      
-      compLog.innerText = "🟢 Ready.";
-      compLog.className = "text-[10px] text-emerald-400 leading-tight";
-
-      if (compileBtn) compileBtn.classList.remove("hidden");
-    } else {
-      prismaBtn.className = "px-2 py-0.5 text-[10px] rounded transition text-slate-400";
-      drizzleBtn.className = "px-2 py-0.5 text-[10px] rounded transition bg-slate-800 text-white";
-      
-      schemaCode.innerText = `export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull()
-});`;
-      
-      bundleBar.className = "bg-emerald-500 h-full w-[1.2%] transition-all duration-300";
-      bundleVal.innerText = "146 KB";
-      bundleVal.className = "text-[10px] font-bold text-emerald-400 font-sans";
-      
-      compLog.innerText = "🟢 Ready (TypeScript-native).";
-      compLog.className = "text-[10px] text-emerald-400 leading-tight";
-
-      if (compileBtn) compileBtn.classList.add("hidden");
-    }
-  };
-
-  window.addDrizzleColumn = function() {
-    const schemaCode = document.getElementById("drizzle-schema-code");
-    const compLog = document.getElementById("drizzle-compiler-log");
-    const compileBtn = document.getElementById("drizzle-compile-btn");
-
-    if (!schemaCode || !compLog) return;
-
-    window.drizzleFieldAdded = true;
-
-    if (window.drizzleEdgeMode === 'prisma') {
-      schemaCode.innerText = `model User {
-  id    Int    @id
-  name  String
-  email String   // ИИ добавил поле!
-}`;
-      compLog.innerText = "❌ TS Error: Property 'email' does not exist on type 'User'. (Не запущен prisma generate!)";
-      compLog.className = "text-[10px] text-rose-400 leading-tight font-sans";
-      if (compileBtn) {
-        compileBtn.style.border = "1.5px dashed #6366f1";
-        compileBtn.style.animation = "pulse 1.5s infinite";
-      }
-    } else {
-      schemaCode.innerText = `export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email') // ИИ добавил поле!
-});`;
-      compLog.innerText = "🟢 Типы обновлены мгновенно (1ms)! Ошибок компиляции нет.";
-      compLog.className = "text-[10px] text-emerald-400 leading-tight font-sans";
-    }
-  };
-
-  window.runPrismaGenerate = function() {
-    const compLog = document.getElementById("drizzle-compiler-log");
-    const compileBtn = document.getElementById("drizzle-compile-btn");
-
-    if (!compLog || window.drizzleEdgeMode !== 'prisma') return;
-
-    compLog.innerText = "⏳ Running prisma generate...";
-    compLog.className = "text-[10px] text-indigo-400 leading-tight font-sans";
-
-    if (compileBtn) {
-      compileBtn.style.animation = "none";
-      compileBtn.style.border = "none";
-      compileBtn.disabled = true;
-    }
-
-    setTimeout(() => {
-      if (compLog) {
-        compLog.innerText = "🟢 Сгенерирован Prisma Client. Ошибки типов устранены (820ms).";
-        compLog.className = "text-[10px] text-emerald-400 leading-tight font-sans";
-      }
-      if (compileBtn) compileBtn.disabled = false;
-    }, 820);
-  };
-
-  window.resetDrizzleEdgeDemo = function() {
-    window.toggleDrizzleEdgeMode('prisma');
-  };
+  // Simulators for Prisma Safety Guardrails (Deprecated - replaced with static rich details explaining reset/retest safety)
 
   // Helper to dynamically adjust expanded step card heights
   function adjustStepDetailsHeight() {
@@ -3000,11 +2801,7 @@ document.addEventListener("DOMContentLoaded", () => {
       srNarratorText.innerText = "📢 Нажмите кнопку выше для озвучки...";
       srNarratorText.style.color = "#a1a1aa";
     }
-    const prismaSimBtn = document.getElementById("prisma-simulate-btn");
-    if (prismaSimBtn && !prismaSimBtn.dataset.initialized) {
-      prismaSimBtn.dataset.initialized = "true";
-      window.resetPrismaSafetyDemo();
-    }
+
     const drizzleColBtn = document.getElementById("drizzle-add-col-btn");
     if (drizzleColBtn && !drizzleColBtn.dataset.initialized) {
       drizzleColBtn.dataset.initialized = "true";

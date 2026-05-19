@@ -540,10 +540,12 @@ function validateFile(file: File) {
 
 ---
 
-## 📊 Раздел 10: PostHog — Продуктовая аналитика
+## 📊 Раздел 10: Мониторинг и аналитика — PostHog, Vercel Analytics (RUM) & Sentry
 
-### 10.1. Настройка и базовые события
+### 10.1. Product Analytics с PostHog — Решение «Всё-в-одном»
+PostHog является мощнейшей open-source альтернативой Mixpanel и Hotjar. **Уникальная ценность**: 1 000 000 событий в месяц абсолютно бесплатно (включая запись сессий).
 
+#### Настройка и автотрекинг
 ```typescript
 // lib/analytics.ts
 import posthog from 'posthog-js';
@@ -551,15 +553,16 @@ import posthog from 'posthog-js';
 export function initAnalytics() {
   if (typeof window !== 'undefined') {
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: 'https://eu.posthog.com',
-      capture_pageview: true,    // Автотрекинг страниц
-      autocapture: true,         // Автотрекинг кликов
-      disable_session_recording: false,
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.posthog.com',
+      capture_pageview: true,      // Автотрекинг переходов по страницам
+      autocapture: true,           // Автотрекинг кликов по кнопкам и ссылкам
+      disable_session_recording: false, // Включает Session Replay (Запись экранов)
+      persistence: 'localStorage',
     });
   }
 }
 
-// Типизированные события (рекомендуется)
+// Типизированные кастомные события для ИИ
 export const analytics = {
   signUp: (method: string) =>
     posthog.capture('user_signed_up', { method }),
@@ -570,7 +573,56 @@ export const analytics = {
 };
 ```
 
-### 10.2. Sentry — Error Tracking Production
+#### Feature Flags (Флаги функций) для безопасных ИИ-релизов:
+Вы можете переключать функционал на лету в консоли PostHog без необходимости деплоить код:
+```typescript
+import posthog from 'posthog-js';
+
+if (posthog.isFeatureEnabled('new-billing-flow')) {
+  // Показываем новый интерфейс оплаты
+  renderNewFlow();
+} else {
+  renderOldFlow();
+}
+```
+
+---
+
+### 10.2. Vercel Analytics — Real User Monitoring (RUM) из коробки
+Для сайтов, развернутых на Vercel, Vercel Analytics обеспечивает мгновенный мониторинг производительности и трафика с нулевой начальной настройкой.
+* **Главное отличие**: Фокус на Core Web Vitals (LCP, FID, CLS) — скорость загрузки у реальных пользователей, критически важная для SEO.
+* **Hobby Tier**: 2,500 бесплатных событий в месяц.
+
+#### Подключение к Next.js:
+1. Активируйте вкладку **Analytics** в дашборде проекта Vercel.
+2. Установите пакет: `npm install @vercel/analytics`
+3. Вставьте компонент `<Analytics />` в корневой макет приложения:
+
+```typescript
+// app/layout.tsx
+import { Analytics } from '@vercel/analytics/react';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ru">
+      <body>
+        {children}
+        {/* Компонент Vercel Analytics автоматически собирает метрики */}
+        <Analytics />
+      </body>
+    </html>
+  );
+}
+```
+
+---
+
+### 10.3. Sentry — Error Tracking Production
+Sentry автоматически улавливает все рантайм ошибки бэкенда и фронтенда, сопоставляя их с исходными картами кода (Source Maps).
 
 ```typescript
 // sentry.client.config.ts
@@ -579,10 +631,13 @@ import * as Sentry from '@sentry/nextjs';
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  tracesSampleRate: 0.1,  // 10% транзакций — экономим квоту
-  replaysSessionSampleRate: 0.01,  // 1% сессий записываем
+  tracesSampleRate: 0.1,  // Сбор 10% транзакций для экономии квот
+  replaysSessionSampleRate: 0.01,  // Запись 1% сессий
+  replaysOnErrorSampleRate: 1.0,   // 100% запись сессий с ошибками
   integrations: [
-    Sentry.replayIntegration(),  // Воспроизведение сессий с ошибками
+    Sentry.replayIntegration({
+      maskAllText: true, // Защита персональных данных
+    }),
   ],
 });
 ```
@@ -601,9 +656,9 @@ try {
 ```
 
 📖 **Ресурсы**:
-- [PostHog Documentation](https://posthog.com/docs)
-- [Sentry Next.js Guide](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
-- [Sentry Performance Monitoring](https://docs.sentry.io/product/performance/)
+- [PostHog Docs: Web SDK](https://posthog.com/docs/libraries/js)
+- [Vercel Web Analytics Guide](https://vercel.com/docs/analytics)
+- [Sentry Next.js Integration](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
 
 ---
 
@@ -948,9 +1003,93 @@ LIMIT 5;
 
 ---
 
+## 🔐 Раздел 12: Премиум-аутентификация с Clerk
+
+Clerk — это золотой стандарт аутентификации для современных SaaS. Он снимает с разработчика и ИИ всю головную боль по безопасной работе с паролями, сессиями, сессионными cookies, MFA и OAuth-провайдерами.
+**Free Tier**: До 10,000 MAU бесплатно (включая социальные входы).
+
+### 12.1. Инициализация в Next.js:
+1. Зарегистрируйтесь в Clerk и получите ключи API.
+2. Установите SDK: `npm install @clerk/nextjs`
+3. Оберните приложение в `<ClerkProvider />`:
+
+```typescript
+// app/layout.tsx
+import { ClerkProvider } from '@clerk/nextjs';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ClerkProvider>
+      <html lang="ru">
+        <body>{children}</body>
+      </html>
+    </ClerkProvider>
+  );
+}
+```
+
+### 12.2. Защита роутов с помощью Middleware:
+Создайте файл `middleware.ts` в корне проекта. Clerk автоматически перенаправляет неавторизованных пользователей на страницу входа при попытке зайти на защищенный роут:
+
+```typescript
+// middleware.ts
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+
+// Указываем публичные роуты, которые доступны без входа (например, лендинг и прайсинг)
+const isPublicRoute = createRouteMatcher(['/', '/pricing', '/api/webhooks(.*)']);
+
+export default clerkMiddleware((auth, request) => {
+  if (!isPublicRoute(request)) {
+    auth().protect(); // Защищает все остальные роуты
+  }
+});
+
+export const config = {
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
+```
+
+### 12.3. Готовые компоненты и сессии в UI:
+Clerk предоставляет готовые элементы интерфейса, которые можно легко использовать в заголовке сайта или личном кабинете:
+
+```typescript
+// components/Header.tsx
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+
+export default function Header() {
+  return (
+    <header className="flex justify-between items-center p-4 bg-slate-900 text-white">
+      <h1>My SaaS</h1>
+      <div>
+        {/* Отображается, если пользователь НЕ вошел */}
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="bg-blue-600 px-4 py-2 rounded">Войти</button>
+          </SignInButton>
+        </SignedOut>
+        
+        {/* Отображается, если пользователь ВОШЕЛ */}
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+      </div>
+    </header>
+  );
+}
+```
+
+*AI DX Эффект*: Снижает риск дыр в безопасности авторизации до нуля. ИИ больше не нужно писать логику хэширования паролей или разбираться со сложными настройками JWT — Clerk управляет всем автоматически через Middleware и JWT API.
+
+---
+
 ## 📖 Ресурсы для изучения
 
 ### Официальная документация
+- [Clerk Next.js Quickstart](https://clerk.com/docs/quickstarts/nextjs)
 - [Stripe API Reference](https://stripe.com/docs/api)
 - [OpenAI Cookbook](https://cookbook.openai.com/)
 - [Vercel AI SDK Examples](https://sdk.vercel.ai/examples)
