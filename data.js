@@ -184,7 +184,9 @@ const levels = {
       "Коммиты как точки сохранения (Save points)",
       "Защита от слияний (Pull Requests и Code Review)",
       "Использование .gitignore для секретов",
-      "Использование модульных переиспользуемых UI-блоков и интеграция Webflow с Figma для бесшовной верстки"
+      "Использование модульных переиспользуемых UI-блоков и интеграция Webflow с Figma для бесшовной верстки",
+      "Выбор оптимальной стратегии деплоя (Vercel, Neon, Railway) в зависимости от типа проекта",
+      "Преимущества copy-paste подхода Shadcn/ui для ИИ-разработки по сравнению с традиционными UI-библиотеками"
     ],
     checklist: [
       "Создать приватный репозиторий на GitHub",
@@ -192,7 +194,9 @@ const levels = {
       "Инициализировать git в проекте и сделать первый push",
       "Создать фича-ветку feature/auth и объединить ее через PR",
       "Освоить разрешение конфликтов слияния (Merge Conflicts)",
-      "Создать библиотеку переиспользуемых модулей и экспортировать макет Figma в Webflow"
+      "Создать библиотеку переиспользуемых модулей и экспортировать макет Figma в Webflow",
+      "Настроить автодеплой и превью-окружения на Vercel и подключить Neon Postgres",
+      "Интегрировать Shadcn/ui в проект и сгенерировать первый компонент через v0.dev"
     ],
     tips: [
       "Никогда не делайте коммиты прямо в ветку main. Всегда разрабатывайте в фича-ветках, а потом делайте слияние."
@@ -1294,7 +1298,7 @@ const nodes = [
       },
       {
         text: "Альтернативы хостинга Railway.",
-        details: "Сравнение ключевых платформ для развертывания веб-приложений:\n\n| Провайдер | Тариф | Лимиты БД / ОЗУ | Регионы | Идеально для |\n| :--- | :--- | :--- | :--- | :--- |\n| **Vercel** | Free / $20 | 50MB (Postgres) / Serverless | US, EU | SPA/Next.js фронтенд |\n| **Render** | Free / $7+ | 500MB DB / 512MB RAM | US, EU, SG | Простые Node/Python API |\n| **Fly.io** | Free / $5+ | 3GB Disk / 256MB RAM | Глобально | Высокопроизв. докеры |\n| **Heroku** | $5 - $25 | 10M rows / 512MB RAM | US, EU | Классический PaaS |"
+        details: "Сравнение ключевых платформ для развертывания веб-приложений:\n\n| Провайдер | Тариф | Лимиты БД / ОЗУ | Регионы | Идеально для |\n| :--- | :--- | :--- | :--- | :--- |\n| **Vercel** | Free / $20 | 50MB (Postgres) / Serverless | US, EU | SPA/Next.js фронтенд |\n| **Render** | Free / $7+ | 500MB DB / 512MB RAM | US, EU, SG | Простые Node/Python API |\n| **Fly.io** | Free / $5+ | 3GB Disk / 256MB RAM | Глобально | Высокопроизв. докеры |\n| **Netlify** | Free / $19 | AWS Lambda Serverless | Global CDN | Статические JAMstack сайты |\n| **Supabase**| Free / $25 | 500MB DB / Shared RAM | Global DB | Backend-as-a-Service, Postgres |"
       }
     ],
     tools: ["AI Budgets", "Railway Billing", "Claude API Plans", "Hosting Alternatives"]
@@ -1372,6 +1376,135 @@ const nodes = [
       }
     ],
     tools: ["VibeOps", "TTM Metric"]
+  },
+  {
+    id: "l0_11_context_engineering",
+    level: "L0",
+    track: "fundamentals",
+    title: "Инженерия Контекста (Context Engineering)",
+    duration: "2 часа",
+    difficulty: "Базовый",
+    icon: "🧠",
+    description: "Методология проектирования, очистки и управления контекстом для ИИ-ассистентов с целью исключения галлюцинаций и ошибок компиляции.",
+    checklist: [
+      "Изучить концепцию Context Hygiene (Гигиена Контекста)",
+      "Освоить создание файлов .cursorrules / .clauderules",
+      "Применить Context Resets (Сброс Контекста)",
+      "Создать Session Bootstrap / Снимок контекста проекта",
+      "Внедрить Feature-based файловую архитектуру"
+    ],
+    steps: [
+      {
+        text: "Концепция Context Hygiene.",
+        details: "Исключение из контекста ИИ лишних файлов, тяжелых бинарников, логов сборки и временных папок. Экономия лимитов токенов и улучшение релевантности ответов."
+      },
+      {
+        text: "Создание конфигураций .cursorrules.",
+        details: "Автоматическая передача ИИ правил оформления кода, запрещенных паттернов и библиотек в каждом конкретном проекте."
+      },
+      {
+        text: "Регулярный сброс контекста (Context Reset).",
+        details: "Метод предотвращения 'Reward Hacking' и накопления ошибок ИИ через регулярное открытие нового чистого чата каждые 10-15 итераций с передачей актуального состояния."
+      },
+      {
+        text: "Session Bootstrap файлы.",
+        details: "Создание легких текстовых снимков состояния кодовой базы (`ARCHITECTURE.md`, `SNAPSHOT.md`) для мгновенного введения новой сессии ИИ в контекст задачи."
+      }
+    ],
+    tools: ["Context Hygiene", ".cursorrules", "Context Resets", "Session Bootstrap"]
+  },
+  {
+    id: "l0_12_reward_hacking",
+    level: "L0",
+    track: "fundamentals",
+    title: "Борьба со срезанием углов (Reward Hacking)",
+    duration: "1 час",
+    difficulty: "Средний",
+    icon: "🛡️",
+    description: "Методология предотвращения феномена 'Reward Hacking' и лени ИИ через жесткие речевые триггеры и инструкции полного написания кода.",
+    checklist: [
+      "Изучить природу феномена Reward Hacking в ИИ",
+      "Освоить речевые триггеры для вывода ИИ из лени",
+      "Применить русскоязычные промпты без пропусков и TODO",
+      "Запретить ИИ использовать любые многоточия и заглушки"
+    ],
+    steps: [
+      {
+        text: "Суть феномена Reward Hacking.",
+        details: "Понимание причин, почему ИИ срезает углы: экономия контекста, ложное прохождение простых тестов через заглушки, и оставление комментариев вместо полной логики."
+      },
+      {
+        text: "Речевые триггеры против лени.",
+        details: "Использование четких речевых формулировок, заставляющих модель генерировать полную, не усеченную и готовую к запуску реализацию."
+      },
+      {
+        text: "Готовые промпты-инструкции.",
+        details: "Применение строгих русскоязычных промптов: 'Напиши полную реализацию без пропусков и TODO', 'Реализуй эту логику до конца, не сокращая код'."
+      }
+    ],
+    tools: ["Reward Hacking Prevention", "AI Prompts", "Strict Instructions"]
+  },
+  {
+    id: "l0_13_a11y_audit",
+    level: "L0",
+    track: "fundamentals",
+    title: "Аудит доступности (a11y Audit)",
+    duration: "1.5 часа",
+    difficulty: "Базовый",
+    icon: "♿",
+    description: "Внедрение жесткого чек-листа WCAG 2.1 AA доступности в процесс генерации UI с помощью ИИ для навигации с клавиатуры и чтения скринридерами.",
+    checklist: [
+      "Использовать семантические теги button/a вместо div",
+      "Проверять наличие содержательных alt для картинок",
+      "Добавлять aria-label для иконок и кнопок без текста",
+      "Соблюдать контрастность текста (4.5:1 для обычного)"
+    ],
+    steps: [
+      {
+        text: "Семантическая разметка UI.",
+        details: "Запрет на генерацию ИИ бесконечных кликабельных div-элементов. Использование тегов <button> и <a> для корректного фокуса клавиатуры."
+      },
+      {
+        text: "Атрибуты a11y (alt & aria-label).",
+        details: "Обязательное описание сути изображений через alt и маркировка кнопок-иконок уникальными описаниями в aria-label."
+      },
+      {
+        text: "Контрастность по стандартам WCAG AA.",
+        details: "Контроль коэффициентов контрастности: не менее 4.5:1 для обычного текста и не менее 3:1 для крупных заголовков."
+      }
+    ],
+    tools: ["a11y Auditing", "WCAG 2.1 AA", "ARIA Attributes", "Keyboard Navigation"]
+  },
+  {
+    id: "l0_14_svg_migration",
+    level: "L0",
+    track: "fundamentals",
+    title: "Правила переноса SVG из v0.dev",
+    duration: "1 час",
+    difficulty: "Средний",
+    icon: "🎨",
+    description: "Регламент безопасного импорта разметки из генераторов кода v0.dev с заменой inline XML-кода легковесными иконками и изоляцией ассетов.",
+    checklist: [
+      "Заменять inline-SVG XML-код на Lucide иконки",
+      "Изолировать тяжелые SVG в отдельные компоненты",
+      "Очищать SVG от метаданных с помощью SVGO",
+      "Контролировать размеры и цвета SVG через CSS"
+    ],
+    steps: [
+      {
+        text: "Замена XML-кода на Lucide.",
+        details: "Предотвращение раздувания bundle-размера и загрязнения контекстного окна ИИ сотнями строк путей path. Быстрый импорт стандартных иконок."
+      },
+      {
+        text: "Изоляция и кастомизация SVG.",
+        details: "Вынесение тяжелых геометрических путей в отдельные файлы ассетов или выделенные легкие компоненты."
+      },
+      {
+        text: "Оптимизация с SVGO.",
+        details: "Очистка XML-тегов от лишних метаданных графических редакторов, абсолютной ширины и высоты, сохраняя масштабируемый viewBox."
+      }
+    ],
+    tools: ["v0.dev Migrations", "Lucide Icons", "SVG Optimization", "Bundle Size Care"]
   },
 
   // ================= LEVEL L1 =================
@@ -1571,7 +1704,327 @@ const nodes = [
     ],
     tools: ["Claude Code CLI", "Aider", "Gemini CLI", "Ollama"]
   },
-
+  {
+    id: "l1_9_ai_books",
+    level: "L1",
+    track: "planning",
+    title: "Книги для AI - методология",
+    shortDesc: "Использование AI для глубокого анализа профессиональной литературы и перенос инсайтов в файлы правил проекта.",
+    steps: [
+      {
+        text: "Методология сканирования книг.",
+        details: "Загрузка ключевых глав или подробных саммари книг (*Clean Architecture*, *Effective TypeScript*, *Programming TypeScript*) в ИИ-ассистента для извлечения паттернов."
+      },
+      {
+        text: "Автоматический перенос инсайтов.",
+        details: "Перевод архитектурных инсайтов в строгие правила `.cursorrules` / `CLAUDE.md`. Например, строгое типизирование discriminated unions для TypeScript."
+      },
+      {
+        text: "Интерактивный Insight Generator.",
+        details: `Попробуйте наш интерактивный генератор инсайтов. Выберите книгу, чтобы сгенерировать правило для вашего проекта:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-cyan);">Выберите книгу:</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button onclick="event.stopPropagation(); generateBookInsight('clean')" style="background: rgba(124, 58, 237, 0.2); border: 1px solid #7c3aed; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Clean Architecture</button>
+              <button onclick="event.stopPropagation(); generateBookInsight('effts')" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Effective TypeScript</button>
+              <button onclick="event.stopPropagation(); generateBookInsight('progts')" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Programming TypeScript</button>
+            </div>
+            <div id="insight-output" style="font-family: monospace; font-size: 11px; color: #10b981; min-height: 40px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap;">Нажмите кнопку выше для генерации правила...</div>
+            <script>
+              window.generateBookInsight = function(book) {
+                const out = document.getElementById('insight-output');
+                if (book === 'clean') {
+                  out.innerText = '## Clean Architecture Rule\\n- Keep components independent. Interface adapters must not depend on database or frameworks.\\n- Entities contain core business logic, not UI state.';
+                } else if (book === 'effts') {
+                  out.innerText = '## Effective TypeScript Rule\\n- Prefer discriminated unions over broad, ambiguous interfaces.\\n- Never use "any" type; use "unknown" if type is dynamic.';
+                } else if (book === 'progts') {
+                  out.innerText = '## Programming TypeScript Rule\\n- Avoid using mutable states. Make interfaces readonly by default.\\n- Ensure error paths are explicitly typed (either/option types).';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Clean Architecture", "Effective TypeScript", "Programming TypeScript", "Context Ingestion"]
+  },
+  {
+    id: "l1_10_figma_workflow",
+    level: "L1",
+    track: "planning",
+    title: "Figma для прототипирования",
+    shortDesc: "Интеграция Figma в рабочий процесс вибкодинга: экспорт фреймов, дизайн-токены и Figma-to-Code плагины.",
+    steps: [
+      {
+        text: "Дизайн-токены и переменные.",
+        details: "Экспорт цветов, шрифтов и скруглений из Figma в JSON-формат для автоматической генерации CSS-стилей и тем."
+      },
+      {
+        text: "Передача визуального контекста.",
+        details: "Экспорт скриншотов фреймов с аннотациями размеров и отступов для передачи мультимодальным ИИ-моделям."
+      },
+      {
+        text: "Figma-to-Code Симулятор.",
+        details: `Попробуйте наш интерактивный Figma-to-Code симулятор. Выберите токен, чтобы сгенерировать CSS-код:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-orange);">Выберите стиль кнопки:</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button onclick="event.stopPropagation(); selectFigmaToken('glass')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Glassmorphism</button>
+              <button onclick="event.stopPropagation(); selectFigmaToken('neon')" style="background: rgba(168, 85, 247, 0.1); border: 1px solid #a855f7; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Neon Purple</button>
+              <button onclick="event.stopPropagation(); selectFigmaToken('minimal')" style="background: rgba(255,255,255,0.1); border: 1px solid transparent; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Minimal Dark</button>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+              <div id="figma-btn-preview" style="padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; text-align: center; width: 100px; transition: all 0.2s;">Preview</div>
+              <div id="figma-css-output" style="font-family: monospace; font-size: 10px; color: #a855f7; flex-grow: 1; white-space: pre; text-align: left;">/* Выберите токен */</div>
+            </div>
+            <script>
+              window.selectFigmaToken = function(token) {
+                const preview = document.getElementById('figma-btn-preview');
+                const cssOut = document.getElementById('figma-css-output');
+                preview.style.color = 'white';
+                if (token === 'glass') {
+                  preview.style.background = 'rgba(255, 255, 255, 0.05)';
+                  preview.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+                  preview.style.borderRadius = '12px';
+                  preview.style.boxShadow = '0 8px 32px rgba(0,0,0,0.2)';
+                  preview.style.textShadow = 'none';
+                  cssOut.innerText = 'background: rgba(255, 255, 255, 0.05);\\nborder: 1px solid rgba(255, 255, 255, 0.2);\\nborder-radius: 12px;\\nbackdrop-filter: blur(8px);';
+                } else if (token === 'neon') {
+                  preview.style.background = 'rgba(168, 85, 247, 0.2)';
+                  preview.style.border = '1px solid #a855f7';
+                  preview.style.borderRadius = '8px';
+                  preview.style.boxShadow = '0 0 15px rgba(168, 85, 247, 0.4)';
+                  preview.style.textShadow = '0 0 4px #a855f7';
+                  cssOut.innerText = 'background: rgba(168, 85, 247, 0.2);\\nborder: 1px solid #a855f7;\\nborder-radius: 8px;\\nbox-shadow: 0 0 15px rgba(168,85,247,0.4);';
+                } else if (token === 'minimal') {
+                  preview.style.background = '#ffffff';
+                  preview.style.border = '1px solid transparent';
+                  preview.style.borderRadius = '4px';
+                  preview.style.boxShadow = 'none';
+                  preview.style.color = '#000000';
+                  preview.style.textShadow = 'none';
+                  cssOut.innerText = 'background: #ffffff;\\ncolor: #000000;\\nborder-radius: 4px;';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Figma Design", "Design Tokens", "Figma-to-Code Plugins", "Builder.io"]
+  },
+  {
+    id: "l1_11_v0_generation",
+    level: "L1",
+    track: "planning",
+    title: "v0.dev - AI генерация UI",
+    shortDesc: "Генерация современного UI на базе Shadcn/ui и Tailwind CSS с помощью Vercel v0 и интеграция в проект.",
+    steps: [
+      {
+        text: "Написание промптов для v0.",
+        details: "Освоение структуры идеального промпта для v0.dev с указанием функциональности, состояний и a11y."
+      },
+      {
+        text: "Копирование и адаптация стилей.",
+        details: "Интеграция сгенерированного React-кода и перенос скомпилированных Tailwind-классов в ванильный CSS-проект."
+      },
+      {
+        text: "Улучшатель Промптов для v0.dev.",
+        details: `Превратите простую идею в профессиональный промпт для v0.dev:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-emerald); text-align: left;">Введите простую идею:</div>
+            <input id="v0-input-idea" type="text" placeholder="например, форма входа" style="width: 100%; padding: 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: white; font-size: 11px; margin-bottom: 8px; box-sizing: border-box;" onclick="event.stopPropagation();">
+            <button onclick="event.stopPropagation(); enhanceV0Prompt()" style="background: var(--accent-emerald); border: none; color: black; font-weight: 600; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; display: block; width: 100%; text-align: center;">Улучшить Промпт ✨</button>
+            <div id="v0-prompt-result" style="font-family: monospace; font-size: 10.5px; color: #10b981; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); margin-top: 10px; min-height: 40px; white-space: pre-wrap; text-align: left;">Профессиональный промпт появится здесь...</div>
+            <script>
+              window.enhanceV0Prompt = function() {
+                const idea = document.getElementById('v0-input-idea').value || 'форма входа';
+                const result = document.getElementById('v0-prompt-result');
+                result.innerText = 'Act as an expert frontend engineer using Tailwind CSS, Radix UI primitives and Lucide Icons.\\nGenerate a beautiful, premium, highly functional ' + idea + '.\\n- Ensure the visual design is state-of-the-art dark mode (glassmorphic, subtle gradients, rich borders).\\n- Make sure all interactive components have full states (:hover, :focus-visible, :disabled, :active).\\n- Integrate full WCAG 2.1 AA accessibility (proper contrast 4.5:1, semantic markup, full keyboard navigation, screen reader tags, aria-labels).';
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Vercel v0.dev", "Shadcn/ui", "Tailwind CSS", "Lucide React"]
+  },
+  {
+    id: "l1_12_storybook_docs",
+    level: "L1",
+    track: "planning",
+    title: "Storybook - документация компонентов",
+    shortDesc: "Изолированная разработка UI-компонентов, интерактивное документирование вариантов и визуальное регрессионное тестирование.",
+    steps: [
+      {
+        text: "Изолированная среда компонентов.",
+        details: "Преимущества изолированной песочницы для разработки UI без зависимости от API сервера или состояния роутера."
+      },
+      {
+        text: "Описание вариантов (.stories).",
+        details: "Фиксация различных состояний компонента (Default, Hover, Disabled, Loading) для предотвращения регрессий верстки."
+      },
+      {
+        text: "Storybook Canvas Sandbox.",
+        details: `Попробуйте интерактивный просмотр Storybook:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-weight: 600; color: var(--accent-orange); font-size: 11px;">Компонент: Button</span>
+              <span id="storybook-state-badge" style="font-size: 9px; font-family: monospace; background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 10px; color: #ffedd5;">State: Default</span>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; min-height: 60px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px;">
+              <button id="storybook-btn-preview" style="padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 12px; border: 1px solid rgba(249, 115, 22, 0.4); background: rgba(249, 115, 22, 0.15); color: white; cursor: pointer; transition: all 0.2s;">Action Button</button>
+            </div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              <button onclick="event.stopPropagation(); switchStoryState('default')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 4px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">Default</button>
+              <button onclick="event.stopPropagation(); switchStoryState('hover')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 4px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">Hover Effect</button>
+              <button onclick="event.stopPropagation(); switchStoryState('loading')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 4px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">Loading</button>
+              <button onclick="event.stopPropagation(); switchStoryState('disabled')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 4px 6px; border-radius: 4px; font-size: 10px; cursor: pointer;">Disabled</button>
+            </div>
+            <script>
+              window.switchStoryState = function(state) {
+                const btn = document.getElementById('storybook-btn-preview');
+                const badge = document.getElementById('storybook-state-badge');
+                badge.innerText = 'State: ' + state.toUpperCase();
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+                btn.innerText = 'Action Button';
+                btn.style.color = 'white';
+                if (state === 'default') {
+                  btn.style.background = 'rgba(249, 115, 22, 0.15)';
+                  btn.style.borderColor = 'rgba(249, 115, 22, 0.4)';
+                  btn.style.boxShadow = 'none';
+                } else if (state === 'hover') {
+                  btn.style.background = 'rgba(249, 115, 22, 0.3)';
+                  btn.style.borderColor = '#f97316';
+                  btn.style.boxShadow = '0 0 10px rgba(249,115,22,0.3)';
+                } else if (state === 'loading') {
+                  btn.style.background = 'rgba(255,255,255,0.05)';
+                  btn.style.borderColor = 'rgba(255,255,255,0.2)';
+                  btn.innerText = 'Loading... ⏳';
+                } else if (state === 'disabled') {
+                  btn.style.background = 'rgba(255,255,255,0.02)';
+                  btn.style.borderColor = 'rgba(255,255,255,0.05)';
+                  btn.style.opacity = '0.4';
+                  btn.style.cursor = 'not-allowed';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Storybook JS", "Component Sandboxes", "Visual Regression", "A11y Tests"]
+  },
+  {
+    id: "l1_13_quality_gates",
+    level: "L1",
+    track: "planning",
+    title: "Тройные врата качества (Quality Gates)",
+    shortDesc: "Интегрированные этапы проверки кода: Plan Mode, автоматическая самопроверка ИИ и финальный аудит человеком.",
+    steps: [
+      {
+        text: "Gate 1: Согласование спецификации.",
+        details: "Запрет на написание кода до явного утверждения человеком плана `plan.md` в Planning Mode."
+      },
+      {
+        text: "Gate 2: Автономная самопроверка.",
+        details: "ИИ-агент запускает тесты, сборку и линтер на каждом этапе разработки до коммита кода."
+      },
+      {
+        text: "Gate 3: Финальный аудит диффов.",
+        details: "Проверка разработчиком `git diff` перед мержем на предмет a11y, WCAG, отсутствия TODO и лишнего мусора."
+      },
+      {
+        text: "Quality Gates Валидатор.",
+        details: `Пройдите симуляцию врат качества для релиза:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-purple); font-size: 11px; text-align: left;">Интегрированные проверки качества:</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; text-align: left;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 11px; color: white;" onclick="event.stopPropagation();">
+                <input id="gate-check-1" type="checkbox" onchange="event.stopPropagation(); updateGatesProgress()" style="cursor: pointer;">
+                Gate 1: Plan Approved (plan.md)
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 11px; color: white;" onclick="event.stopPropagation();">
+                <input id="gate-check-2" type="checkbox" onchange="event.stopPropagation(); updateGatesProgress()" style="cursor: pointer;">
+                Gate 2: Self-Verification (Tests Green)
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 11px; color: white;" onclick="event.stopPropagation();">
+                <input id="gate-check-3" type="checkbox" onchange="event.stopPropagation(); updateGatesProgress()" style="cursor: pointer;">
+                Gate 3: Human Diff Review Complete
+              </label>
+            </div>
+            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-bottom: 8px;">
+              <div id="gate-progress-bar" style="width: 0%; height: 100%; background: #a855f7; transition: width 0.3s;"></div>
+            </div>
+            <div id="gate-status-text" style="font-size: 10px; font-weight: bold; color: var(--text-secondary); text-align: center;">Статус: Блокировка релиза (0/3)</div>
+            <script>
+              window.updateGatesProgress = function() {
+                const c1 = document.getElementById('gate-check-1').checked;
+                const c2 = document.getElementById('gate-check-2').checked;
+                const c3 = document.getElementById('gate-check-3').checked;
+                const progress = document.getElementById('gate-progress-bar');
+                const status = document.getElementById('gate-status-text');
+                
+                let count = 0;
+                if (c1) count++;
+                if (c2) count++;
+                if (c3) count++;
+                
+                const percent = Math.round((count / 3) * 100);
+                progress.style.width = percent + '%';
+                
+                if (count === 3) {
+                  progress.style.background = '#10b981';
+                  status.style.color = '#10b981';
+                  status.innerText = 'РЕЛИЗ ГОТОВ! 🚀 ВСЕ ВРАТА ПРОЙДЕНЫ!';
+                } else {
+                  progress.style.background = '#a855f7';
+                  status.style.color = 'var(--text-secondary)';
+                  status.innerText = 'Статус: Блокировка релиза (' + count + '/3)';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Vibecoding Gates", "plan.md workflow", "Automated Linting", "Human Review"]
+  },
+  {
+    id: "l1_14_handoff_standard",
+    level: "L1",
+    track: "planning",
+    title: "Стандартизация Handoff-артефактов",
+    shortDesc: "Регламентирование структуры передачи контекста между сессиями для предотвращения context degradation.",
+    steps: [
+      {
+        text: "Архитектура Context Payload.",
+        details: "Строгий формат описания текущего состояния кодовой базы, задействованных файлов и переменных среды."
+      },
+      {
+        text: "Синхронизация бэклога.",
+        details: "Обязательное обновление статусов в `IMPROVEMENTS_BACKLOG.md` и перераспределение очереди в `RESUME.md`."
+      },
+      {
+        text: "Handoff MD Генератор.",
+        details: `Сгенерируйте markdown-шаблон для следующей ИИ сессии:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-orange); font-size: 11px; text-align: left;">Настроить шаблон:</div>
+            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+              <input id="handoff-in-cycle" type="text" placeholder="Цикл (напр. 4)" style="width: 50%; padding: 4px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: white; font-size: 10px;" onclick="event.stopPropagation();">
+              <input id="handoff-in-tasks" type="text" placeholder="Задачи (напр. 10-15)" style="width: 50%; padding: 4px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); color: white; font-size: 10px;" onclick="event.stopPropagation();">
+            </div>
+            <button onclick="event.stopPropagation(); generateHandoffMD()" style="background: var(--accent-orange); border: none; color: black; font-weight: 600; padding: 6px; border-radius: 6px; font-size: 11px; cursor: pointer; display: block; width: 100%; text-align: center;">Сгенерировать Handoff 📄</button>
+            <textarea id="handoff-result-md" style="width: 100%; height: 70px; font-family: monospace; font-size: 9.5px; color: #f97316; background: rgba(0,0,0,0.5); padding: 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); margin-top: 8px; resize: none; box-sizing: border-box;" readonly onclick="event.stopPropagation(); select()"></textarea>
+            <script>
+              window.generateHandoffMD = function() {
+                const cycle = document.getElementById('handoff-in-cycle').value || '4';
+                const tasks = document.getElementById('handoff-in-tasks').value || '10-15';
+                const area = document.getElementById('handoff-result-md');
+                area.value = '# Handoff: Cycle ' + cycle + '\\n## Context Payload\\n- Active Tasks: ' + tasks + '\\n- Status: DONE\\n## Next Steps\\n- [ ] Start Cycle ' + (parseInt(cycle)+1) + '\\n- Verify with Playwright';
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Context Payload", "hand_off.md", "project_handoff.md", "Definition of Done"]
+  },
   // ================= LEVEL L2 =================
   {
     id: "l2_1_human_ai_roles",
@@ -1951,6 +2404,30 @@ const nodes = [
       {
         text: "Поиск известных уязвимостей.",
         details: "Используйте встроенные сканеры безопасности для регулярной проверки сторонних зависимостей на наличие критических угроз (CVE)."
+      },
+      {
+        text: "Симулятор Pre-Commit Security Hook.",
+        details: `Протестируйте работу автоматического хука безопасности:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-purple);">Режим сканирования коммитов:</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button onclick="event.stopPropagation(); runSecurityHookSim(true)" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Коммит с секретами (Stripe key)</button>
+              <button onclick="event.stopPropagation(); runSecurityHookSim(false)" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Чистый безопасный коммит</button>
+            </div>
+            <div id="security-hook-output" style="font-family: monospace; font-size: 11px; color: #a7f3d0; min-height: 50px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap;">Нажмите кнопку выше для запуска симуляции Git Hook...</div>
+            <script>
+              window.runSecurityHookSim = function(hasSecrets) {
+                const out = document.getElementById('security-hook-output');
+                if (hasSecrets) {
+                  out.style.color = '#f87171';
+                  out.innerText = '🚦 Запуск Anthropic Security Hook...\\n🔍 Сканирование файлов...\\n❌ ОШИБКА БЕЗОПАСНОСТИ: В файле src/payments.js найден секрет: sk_live_51Oz...\\nℹ️ Скрипт прервал git commit. Удалите секреты!';
+                } else {
+                  out.style.color = '#34d399';
+                  out.innerText = '🚦 Запуск Anthropic Security Hook...\\n🔍 Сканирование файлов...\\n🔎 Секреты не найдены.\\n📦 Запуск npm audit... Уязвимостей нет.\\n✅ Security Hook пройден! Коммит успешно выполнен.';
+                }
+              }
+            </script>
+          </div>`
       }
     ],
     tools: ["Git Hooks", "Secret Scanning", "Security Auditing Tools"]
@@ -2078,6 +2555,224 @@ const nodes = [
       }
     ],
     tools: ["Review Gate Protocol", "Defensive Prompting"]
+  },
+  {
+    id: "l2_22_claude_projects",
+    level: "L2",
+    track: "fundamentals",
+    title: "Claude Projects",
+    shortDesc: "Изоляция контекста и управление базой знаний проекта.",
+    steps: [
+      {
+        text: "Изоляция контекста.",
+        details: "Создавайте выделенные Claude Projects для каждого отдельного репозитория, чтобы история общения и база знаний были ограничены только задачами данного проекта."
+      },
+      {
+        text: "Project Knowledge (База знаний).",
+        details: "Загружайте в проект ключевые файлы конфигурации и спецификации: `.claude/custom_instructions.md`, `CLAUDE.md`, схемы базы данных и правила стайлинга."
+      },
+      {
+        text: "Калькулятор лимитов контекста проекта.",
+        details: `Узнайте, как объем загруженных файлов влияет на контекстное окно Claude:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-cyan);">Задайте размер кодовой базы:</div>
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+              <select id="project-size-select" onchange="event.stopPropagation(); calcProjectContext()" style="background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.15); padding: 4px; border-radius: 4px; font-size: 11px;">
+                <option value="50">50 KB (Небольшой лендинг)</option>
+                <option value="250" selected>250 KB (Medium-размер Web App)</option>
+                <option value="1000">1000 KB (Крупная кодовая база)</option>
+              </select>
+              <button onclick="event.stopPropagation(); compressClaudeContext()" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer;">Сжать контекст</button>
+            </div>
+            <div id="context-calc-output" style="font-family: monospace; font-size: 11px; color: #a7f3d0; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap;">Выберите размер кодовой базы или нажмите 'Сжать контекст'...</div>
+            <script>
+              window.calcProjectContext = function() {
+                const select = document.getElementById('project-size-select');
+                const out = document.getElementById('context-calc-output');
+                const val = parseInt(select.value);
+                const tokens = val * 300; 
+                const pct = ((tokens / 200000) * 100).toFixed(1);
+                out.style.color = '#38bdf8';
+                out.innerText = '📊 Объем файлов: ' + val + ' KB (~' + tokens.toLocaleString() + ' токенов)\\n📈 Заполнение контекстного окна: ' + pct + '% от 200,000 токенов.\\n💡 Совет: Оптимально держать базу знаний до 15%!';
+              }
+              window.compressClaudeContext = function() {
+                const out = document.getElementById('context-calc-output');
+                out.style.color = '#34d399';
+                out.innerText = '🧹 Применена оптимизация: Исключены тяжелые папки через .claudeignore!\\n📉 Объем снизился на 75%!\\n🚀 Контекст чист, ИИ работает в 3 раза быстрее без потери памяти.';
+              }
+              // Initialize
+              setTimeout(() => {
+                if(document.getElementById('project-size-select')) calcProjectContext();
+              }, 100);
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Claude Projects", "Context Optimization", "Project Ingestion"]
+  },
+  {
+    id: "l2_23_agent_roles",
+    level: "L2",
+    track: "fundamentals",
+    title: "Роли агентов в роях",
+    shortDesc: "Разделение ответственности между сессиями ИИ-агентов.",
+    steps: [
+      {
+        text: "Понятие роевого программирования.",
+        details: "Вместо одного 'всемогущего' чата, распределяйте задачи между разными сессиями с четко заданными ролями, чтобы максимизировать точность работы каждой модели."
+      },
+      {
+        text: "Основные роли: Разработчик, Ревьюер, UI Designer, Ментор.",
+        details: "Задавайте правила стайлинга дизайнеру, строгие паттерны обработки ошибок ревьюеру, системные ограничения инженеру."
+      },
+      {
+        text: "Генератор промптов ролей.",
+        details: `Выберите роль, чтобы мгновенно сгенерировать премиальный системный промпт:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-purple);">Выберите роль агента:</div>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button onclick="event.stopPropagation(); generateAgentRolePrompt('ios')" style="background: rgba(124, 58, 237, 0.2); border: 1px solid #7c3aed; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">iOS Engineer</button>
+              <button onclick="event.stopPropagation(); generateAgentRolePrompt('reviewer')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">Code Reviewer</button>
+              <button onclick="event.stopPropagation(); generateAgentRolePrompt('designer')" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">UI/UX Artist</button>
+            </div>
+            <div id="role-prompt-output" style="font-family: monospace; font-size: 10px; color: #c084fc; min-height: 60px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap; overflow-x: auto;">Нажмите кнопку для создания промпта...</div>
+            <script>
+              window.generateAgentRolePrompt = function(role) {
+                const out = document.getElementById('role-prompt-output');
+                if (role === 'ios') {
+                  out.innerText = 'Роль: Senior iOS Engineer\\nСтек: Swift, SwiftUI, Combine/Concurrecy\\nПравила: Писать декларативный, строго типизированный код. Избегать UIKit.';
+                } else if (role === 'reviewer') {
+                  out.innerText = 'Роль: Lead Code Reviewer & Quality Gate\\nЗадача: Искать дублирование и slop-код. Проверять nullable типы. Файлы < 200 строк.';
+                } else if (role === 'designer') {
+                  out.innerText = 'Роль: CSS Architect & Artist\\nСтек: HTML5, CSS Custom Properties, Glassmorphism\\nПравила: Микро-анимации при hover, градиенты, адаптивность.';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Agent Swarms", "System Persona", "Context Engineering"]
+  },
+  {
+    id: "l2_24_context_reset",
+    level: "L2",
+    track: "fundamentals",
+    title: "Паттерн Context Reset",
+    shortDesc: "Регулярная гигиена сессий для предотвращения галлюцинаций ИИ.",
+    steps: [
+      {
+        text: "Деградация контекста.",
+        details: "По мере роста чата ИИ накапливает скрытые ошибки, начинает игнорировать правила и снижает скорость генерации. Необходим сброс."
+      },
+      {
+        text: "Алгоритм сброса (Bootstrap).",
+        details: "Запишите текущее состояние в todo.md / handoff.md, закройте чат, откройте новый и скормите ему текущее состояние первым же сообщением."
+      },
+      {
+        text: "Генератор Handoff Payload.",
+        details: `Создайте стартовое сообщение для нового чата:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 6px; color: var(--accent-cyan);">Текущая задача:</div>
+            <input id="reset-task-input" value="Интеграция Stripe Webhooks" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-bottom: 10px;" />
+            <button onclick="event.stopPropagation(); generateResetPayload()" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; margin-bottom: 10px;">Сгенерировать Payload</button>
+            <div id="reset-payload-output" style="font-family: monospace; font-size: 10px; color: #34d399; min-height: 50px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap; max-height: 120px; overflow-y: auto;">Нажмите кнопку выше для компиляции стартового промпта...</div>
+            <script>
+              window.generateResetPayload = function() {
+                const task = document.getElementById('reset-task-input').value;
+                const out = document.getElementById('reset-payload-output');
+                out.innerText = '## CONTEXT RESET BOOTSTRAP\\nПривет! Мы начинаем чистую сессию.\\nТекущая цель: ' + task + '\\n\\nПожалуйста, изучи файлы CLAUDE.md и todo.md. Ответь кратким планом действий.';
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Session Hygiene", "Bootstrap Payload", "Handoff Protocol"]
+  },
+  {
+    id: "l2_25_thinking_budget",
+    level: "L2",
+    track: "fundamentals",
+    title: "Режимы глубокого мышления",
+    shortDesc: "Управление бюджетом рассуждения для решения сложных задач.",
+    steps: [
+      {
+        text: "Thinking Budget (Бюджет рассуждений).",
+        details: "Модели рассуждения (Claude 3.7 / Gemini 2.0 / o1) умеют глубоко мыслить перед генерацией. Регулируйте размер мыслительного лога в зависимости от сложности."
+      },
+      {
+        text: "Текстовые триггеры логики.",
+        details: "Явно требуйте в промптах расписывать edge cases, проверять типы и искать проблемы конкурентности перед выводом любого кода."
+      },
+      {
+        text: "Интерактивный селектор бюджета мышления.",
+        details: `Посмотрите, как меняются рекомендации по рассуждению:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-purple);">Выберите тип задачи:</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button onclick="event.stopPropagation(); selectThinkingBudget('simple')" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">Верстка / Кнопка</button>
+              <button onclick="event.stopPropagation(); selectThinkingBudget('algo')" style="background: rgba(124, 58, 237, 0.2); border: 1px solid #7c3aed; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">Сложная синхронизация БД</button>
+              <button onclick="event.stopPropagation(); selectThinkingBudget('bug')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">Скрытый Race Condition</button>
+            </div>
+            <div id="thinking-budget-output" style="font-family: monospace; font-size: 10px; color: #a7f3d0; min-height: 50px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap;">Выберите задачу для оценки оптимального бюджета...</div>
+            <script>
+              window.selectThinkingBudget = function(type) {
+                const out = document.getElementById('thinking-budget-output');
+                if (type === 'simple') {
+                  out.innerText = '⚙️ Оптимальный бюджет: НИЗКИЙ (или отключен)\\n🚀 Токенов: ~500\\n💡 Рекомендация: Отключите рассуждения для ускорения ответа и снижения стоимости.';
+                } else if (type === 'algo') {
+                  out.innerText = '🧠 Оптимальный бюджет: СРЕДНИЙ\\n🚀 Токенов: ~4,000\\n💡 Инструкция: Заставьте модель расписать транзакционность и проверить внешние ключи БД.';
+                } else if (type === 'bug') {
+                  out.innerText = '🔥 Оптимальный бюджет: МАКСИМАЛЬНЫЙ\\n🚀 Токенов: ~16,000+\\n💡 Инструкция: Требуйте пошагового анализа логов и промежуточных состояний системы перед кодом.';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Reasoning Models", "Thinking Budget", "Chain of Thought"]
+  },
+  {
+    id: "l2_26_claude_prompt_templates",
+    level: "L2",
+    track: "fundamentals",
+    title: "Шаблоны промптов Claude",
+    shortDesc: "Стандартизированные шаблоны запросов (Meta, Task, System).",
+    steps: [
+      {
+        text: "Мета-промпт, Задачный и Системный.",
+        details: "Используйте Системный промпт для настройки роли, Мета-промпт для планирования архитектуры, и Задачный промпт для написания конкретного кода."
+      },
+      {
+        text: "Повышение воспроизводимости генерации.",
+        details: "Точные, структурированные шаблоны гарантируют, что ИИ не забудет требования к оформлению и не отойдет от кодинг-стандартов."
+      },
+      {
+        text: "Селектор готовых шаблонов.",
+        details: `Выберите тип промпта для копирования:
+          <div class="showcase-widget" style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="font-weight: 600; margin-bottom: 8px; color: var(--accent-cyan);">Категория шаблона:</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+              <button onclick="event.stopPropagation(); selectPromptTemplate('system')" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">System Prompt</button>
+              <button onclick="event.stopPropagation(); selectPromptTemplate('meta')" style="background: rgba(124, 58, 237, 0.2); border: 1px solid #7c3aed; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">Meta-Prompt (Plan)</button>
+              <button onclick="event.stopPropagation(); selectPromptTemplate('task')" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: white; padding: 4px 6px; border-radius: 6px; font-size: 10px; cursor: pointer;">Task-Prompt (Act)</button>
+            </div>
+            <div id="prompt-template-output" style="font-family: monospace; font-size: 10px; color: #a5f3fc; min-height: 60px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); white-space: pre-wrap; max-height: 120px; overflow-y: auto;">Выберите шаблон...</div>
+            <script>
+              window.selectPromptTemplate = function(type) {
+                const out = document.getElementById('prompt-template-output');
+                if (type === 'system') {
+                  out.innerText = 'Ты — ИИ-ассистент. Стек: HTML/CSS/JS. Правила: Никакого slop-кода, модульность, премиум темная тема, микро-анимации.';
+                } else if (type === 'meta') {
+                  out.innerText = 'Сначала составь технический план: архитектурные изменения, логика, обработка ошибок, план тестирования. Не пиши код без одобрения.';
+                } else if (type === 'task') {
+                  out.innerText = 'Реализуй шаг X: напиши чистый код, предусмотри логирование ошибок, обнови todo.md. Верни результат в виде diff-блока.';
+                }
+              }
+            </script>
+          </div>`
+      }
+    ],
+    tools: ["Prompt Engineering", "Structured Prompts", "Claude Coding Standard"]
   },
 
   // ================= LEVEL L3 =================
@@ -2289,8 +2984,8 @@ const nodes = [
     id: "l3_9_railway",
     level: "L3",
     track: "planning",
-    title: "Staging и хостинг на Railway.app",
-    shortDesc: "Автоматический деплой бэкенда и баз данных для стейджинга.",
+    title: "Railway — лучшие $5 на инфраструктуру",
+    shortDesc: "Автоматический деплой бэкенда, баз данных и микросервисов на холсте Railway.",
     steps: [
       {
         text: "Railway CLI: управление деплоем из консоли.",
@@ -2303,6 +2998,10 @@ const nodes = [
       {
         text: "Автоматическое Staging окружение для Pull Requests.",
         details: "Подключите ваш GitHub-репозиторий в панели управления Railway. Для каждого нового Pull Request система будет автоматически поднимать изолированный staging-сервер для тестирования."
+      },
+      {
+        text: "Railway Canvas UI Simulator.",
+        details: "Попробуйте визуальный интерактивный пульт управления Railway ниже. Кликайте по нодам для просмотра логов и метрик, а также запускайте деплой: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(10, 5, 20, 0.6); padding: 16px; border-radius: 12px; border: 1px solid rgba(192, 132, 252, 0.2); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); overflow: hidden; position: relative; text-align: left;\"><div style=\"display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 10px;\"><div style=\"display: flex; align-items: center; gap: 8px;\"><div style=\"width: 10px; height: 10px; border-radius: 50%; background: #a855f7; box-shadow: 0 0 8px #a855f7;\"></div><span style=\"font-weight: 700; color: #fff; font-size: 13px; letter-spacing: 0.5px;\">Railway Canvas Console</span></div><span style=\"font-size: 10px; color: #a78bfa; background: rgba(167, 139, 250, 0.1); padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(167, 139, 250, 0.2);\">Environment: Staging</span></div><div style=\"display: flex; gap: 12px; justify-content: space-around; margin-bottom: 16px; position: relative; min-height: 80px; padding: 10px 0;\"><div class=\"railway-node\" id=\"rwy-node-web\" onclick=\"event.stopPropagation(); window.selectRailwayNode('web')\" style=\"width: 100px; background: rgba(255,255,255,0.06); border: 1px solid rgba(167, 139, 250, 0.6); padding: 8px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; z-index: 2; box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);\"><div style=\"font-size: 8px; color: #a78bfa; font-weight: 700; text-transform: uppercase;\">web-service</div><div style=\"font-size: 10px; font-weight: 600; color: #fff; margin: 4px 0 6px 0;\">Next.js App</div><div style=\"display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 8px;\"><span style=\"width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;\" id=\"rwy-status-web\"></span><span style=\"color: #94a3b8;\" id=\"rwy-text-web\">Active (0.24$)</span></div></div><div class=\"railway-node\" id=\"rwy-node-db\" onclick=\"event.stopPropagation(); window.selectRailwayNode('db')\" style=\"width: 100px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; z-index: 2;\"><div style=\"font-size: 8px; color: #a1a1aa; font-weight: 700; text-transform: uppercase;\">database</div><div style=\"font-size: 10px; font-weight: 600; color: #fff; margin: 4px 0 6px 0;\">PostgreSQL 16</div><div style=\"display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 8px;\"><span style=\"width: 6px; height: 6px; border-radius: 50%; background: #22c55e;\" id=\"rwy-status-db\"></span><span style=\"color: #94a3b8;\" id=\"rwy-text-db\">Connected (0.12$)</span></div></div><div class=\"railway-node\" id=\"rwy-node-redis\" onclick=\"event.stopPropagation(); window.selectRailwayNode('redis')\" style=\"width: 100px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; z-index: 2;\"><div style=\"font-size: 8px; color: #a1a1aa; font-weight: 700; text-transform: uppercase;\">cache-db</div><div style=\"font-size: 10px; font-weight: 600; color: #fff; margin: 4px 0 6px 0;\">Redis Cache</div><div style=\"display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 8px;\"><span style=\"width: 6px; height: 6px; border-radius: 50%; background: #22c55e;\" id=\"rwy-status-redis\"></span><span style=\"color: #94a3b8;\" id=\"rwy-text-redis\">Active (0.05$)</span></div></div></div><div style=\"background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 10px; font-size: 11px; color: #e2e8f0; margin-bottom: 12px;\"><div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;\"><span style=\"font-weight: 600; color: #c084fc; font-size: 11px;\" id=\"rwy-selected-title\">Next.js Web Service</span><button onclick=\"event.stopPropagation(); window.redeployRailwayNode()\" style=\"background: #a855f7; border: none; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 9px; cursor: pointer; font-weight: 600; transition: all 0.2s;\">Redeploy</button></div><div style=\"display: flex; gap: 15px; font-size: 10px; color: #94a3b8; margin-top: 4px;\"><div>CPU: <strong style=\"color: #34d399; font-size: 10px;\" id=\"rwy-cpu\">12%</strong></div><div>RAM: <strong style=\"color: #38bdf8; font-size: 10px;\" id=\"rwy-ram\">112 MB / 256 MB</strong></div><div>Cost: <strong style=\"color: #fca5a5; font-size: 10px;\" id=\"rwy-cost\">0.24$/month</strong></div></div></div><div style=\"border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08);\"><div onclick=\"event.stopPropagation(); window.toggleRailwayLogs()\" style=\"background: rgba(255,255,255,0.05); padding: 6px 10px; font-size: 9px; font-weight: 700; color: #a78bfa; display: flex; justify-content: space-between; align-items: center; cursor: pointer;\"><span>🟢 LIVE BUILD & RUNTIME LOGS</span><span id=\"rwy-log-toggle-icon\">▲</span></div><pre id=\"rwy-log-console\" style=\"background: #09060f; padding: 8px; font-family: monospace; font-size: 8px; color: #c084fc; height: 50px; overflow-y: auto; margin: 0; line-height: 1.3; white-space: pre-wrap; word-break: break-all;\">[system] Deploying next-app from branch main...\n[build] ✓ Next.js compiled successfully\n[runtime] Server listening on port 3000\n[runtime] GET /api/health - 200 OK (8ms)</pre></div></div>"
       }
     ],
     tools: ["Railway CLI", "GitHub Actions", "PostgreSQL Cloud"]
@@ -2368,6 +3067,182 @@ const nodes = [
       }
     ],
     tools: ["Git Worktrees", "Git CLI"]
+  },
+  {
+    id: "l3_13_claude_code_guide",
+    level: "L3",
+    track: "stack",
+    title: "Claude Code CLI - Полное руководство",
+    shortDesc: "Конфигурирование, запуск и повседневная работа с официальной консольной утилитой от Anthropic.",
+    steps: [
+      {
+        text: "Инициализация и запуск CLI.",
+        details: "Запустите `npx @anthropic-ai/claude-code` в терминале вашего проекта. Авторизуйтесь через браузер для связи с Anthropic Console. После этого вам станет доступна интерактивная REPL-среда."
+      },
+      {
+        text: "Интерактивный сессионный цикл.",
+        details: "Используйте встроенные команды для управления ходом работы: `/recap` для просмотра истории изменений сессии, `/clear` для очистки экрана, и `/mcp` для просмотра подключенных Model Context Protocol серверов."
+      },
+      {
+        text: "Запуск интерактивного терминала.",
+        details: "Поиграйте с симулятором консоли ниже, чтобы увидеть живой пример ответов Claude CLI на различные типы команд: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: #0f0f16; padding: 14px; border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.4);\"><div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px;\"><div style=\"display: flex; gap: 6px;\"><span style=\"width: 10px; height: 10px; background: #ef4444; border-radius: 50%; display: inline-block;\"></span><span style=\"width: 10px; height: 10px; background: #fbbf24; border-radius: 50%; display: inline-block;\"></span><span style=\"width: 10px; height: 10px; background: #10b981; border-radius: 50%; display: inline-block;\"></span></div><div style=\"font-size: 10px; color: #6b7280; font-family: monospace;\">claude-code-cli ~ zsh</div></div><div style=\"font-family: monospace; font-size: 11px; line-height: 1.5; min-height: 120px; color: #e2e8f0; background: #0b0b10; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); overflow-y: auto; max-height: 200px;\" id=\"claude-terminal-screen\"><span style=\"color: #6b7280;\"># Нажмите на кнопку ниже, чтобы отправить команду в Claude CLI...</span></div><div style=\"display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;\"><button onclick=\"event.stopPropagation(); window.runClaudeTerminalCommand('claude')\" style=\"background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; color: #c084fc; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-family: monospace; transition: all 0.2s;\">claude</button><button onclick=\"event.stopPropagation(); window.runClaudeTerminalCommand('claude --plan')\" style=\"background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; color: #c084fc; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-family: monospace; transition: all 0.2s;\">claude --plan</button><button onclick=\"event.stopPropagation(); window.runClaudeTerminalCommand('/recap')\" style=\"background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-family: monospace; transition: all 0.2s;\">/recap</button><button onclick=\"event.stopPropagation(); window.runClaudeTerminalCommand('/mcp')\" style=\"background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #22d3ee; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-family: monospace; transition: all 0.2s;\">/mcp list</button><button onclick=\"event.stopPropagation(); window.runClaudeTerminalCommand('clear')\" style=\"background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-family: monospace; transition: all 0.2s;\">Clear</button></div></div><script>setTimeout(function() { if(window.runClaudeTerminalCommand) window.runClaudeTerminalCommand('claude'); }, 100);</script>"
+      }
+    ],
+    tools: ["Claude Code CLI", "Terminal Interface", "Interactive REPL"]
+  },
+  {
+    id: "l3_14_claude_code_modes",
+    level: "L3",
+    track: "workflow",
+    title: "Режимы работы Claude Code",
+    shortDesc: "Детальный обзор интерактивного, неинтерактивного режимов и режима предварительного планирования.",
+    steps: [
+      {
+        text: "Интерактивный REPL режим.",
+        details: "Запускается простым вызовом `claude`. Удерживает активную сессию общения, запоминает историю шагов, самостоятельно запускает тесты и запрашивает одобрение при внесении изменений в код."
+      },
+      {
+        text: "Неинтерактивный режим выполнения (Non-Interactive).",
+        details: "Запускается как `claude \"task description\"`. Удобен для быстрых разовых команд или интеграции в конвейеры сборки и CI/CD коммиты."
+      },
+      {
+        text: "Режим предварительного планирования (Plan Mode).",
+        details: "Запускается флагом `claude --plan`. Модель анализирует файлы проекта, строит ментальную карту связей и генерирует Markdown-план изменений, но ничего не меняет до вашего подтверждения. Интерактивная схема режимов: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);\"><div style=\"display: flex; gap: 4px; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 2px; border-radius: 6px;\"><button onclick=\"event.stopPropagation(); window.selectClaudeModeTab('repl')\" id=\"mode-tab-repl\" style=\"flex: 1; background: #8b5cf6; border: none; color: white; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: 500; transition: all 0.2s;\">REPL</button><button onclick=\"event.stopPropagation(); window.selectClaudeModeTab('nonint')\" id=\"mode-tab-nonint\" style=\"flex: 1; background: transparent; border: none; color: #a1a1aa; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: 500; transition: all 0.2s;\">Non-Int</button><button onclick=\"event.stopPropagation(); window.selectClaudeModeTab('plan')\" id=\"mode-tab-plan\" style=\"flex: 1; background: transparent; border: none; color: #a1a1aa; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: 500; transition: all 0.2s;\">Plan</button></div><div id=\"mode-pipeline-diagram\" style=\"display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; font-family: monospace; font-size: 9px; color: #e2e8f0; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px;\"><span style=\"padding: 4px 6px; background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; border-radius: 4px; color: #c084fc;\">Ввод</span><span style=\"color: #8b5cf6;\">➔</span><span style=\"padding: 4px 6px; background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; border-radius: 4px; color: #22d3ee; border-style: solid;\" id=\"pipeline-core\">REPL Loop</span><span style=\"color: #8b5cf6;\">➔</span><span style=\"padding: 4px 6px; background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; border-radius: 4px; color: #34d399; border-style: solid;\" id=\"pipeline-guard\">Промпты</span></div><div id=\"mode-mode-description\" style=\"font-size: 11px; color: #a1a1aa; line-height: 1.4; min-height: 50px;\"><strong>Interactive REPL:</strong> Постоянная сессия в реальном времени. Claude помнит историю общения, может читать и создавать файлы, запускать тесты и запрашивать подтверждения.</div></div><script>setTimeout(function() { if(window.selectClaudeModeTab) window.selectClaudeModeTab('repl'); }, 100);</script>"
+      }
+    ],
+    tools: ["REPL Environment", "CLI Arguments", "Plan Mode"]
+  },
+  {
+    id: "l3_15_model_selection",
+    level: "L3",
+    track: "planning",
+    title: "Выбор модели и Thinking Budget",
+    shortDesc: "Сравнение возможностей Claude 3.7 Sonnet, 3.5 Sonnet, Haiku и Opus в контексте оптимизации скорости и цены.",
+    steps: [
+      {
+        text: "Выбор оптимальной модели.",
+        details: "Используйте Sonnet 3.7 по умолчанию для 90% сложных программистских задач. Для легких скриптов, быстрых правок в один файл или рутинного рефакторинга переключайтесь на Haiku 3.5 ради экономии бюджета."
+      },
+      {
+        text: "Управление бюджетом мышления (Thinking Budget).",
+        details: "Настройте параметр `CLAUDE_EFFORT` или используйте слайдер в сессии, чтобы отрегулировать глубину размышлений модели в зависимости от сложности решаемой проблемы."
+      },
+      {
+        text: "Калькулятор производительности и стоимости.",
+        details: "Воспользуйтесь интерактивной формой ниже для сравнения моделей и подбора бюджета под ваши задачи: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);\"><div style=\"font-weight: 600; margin-bottom: 8px; color: var(--accent-emerald); font-size: 11px;\">Модель & Thinking Budget:</div><div style=\"display: flex; gap: 8px; align-items: center; margin-bottom: 12px;\"><select id=\"model-select-el\" onchange=\"event.stopPropagation(); window.updateModelSelectionStats()\" style=\"flex: 1; background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.15); padding: 5px; border-radius: 4px; font-size: 11px;\"><option value=\"sonnet37\" selected>Claude 3.7 Sonnet (Hybrid/Thinking)</option><option value=\"sonnet35\">Claude 3.5 Sonnet (Fast coding)</option><option value=\"haiku35\">Claude 3.5 Haiku (Speed & Scripting)</option><option value=\"opus3\">Claude 3 Opus (Legacy logic)</option></select></div><div id=\"thinking-budget-row\" style=\"margin-bottom: 12px;\"><div style=\"display: flex; justify-content: space-between; font-size: 10px; color: #a1a1aa; margin-bottom: 4px;\"><span>Уровень размышлений (Thinking):</span><span id=\"thinking-budget-label\" style=\"color: #34d399; font-weight: 600;\">Medium (4096 tokens)</span></div><input type=\"range\" id=\"thinking-budget-slider\" min=\"1\" max=\"3\" value=\"2\" oninput=\"event.stopPropagation(); window.updateModelSelectionStats()\" style=\"width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; -webkit-appearance: none; cursor: pointer;\"></div><div style=\"font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); line-height: 1.4; color: #38bdf8;\" id=\"model-selection-stats\">Загрузка статистики...</div></div><script>setTimeout(function() { if(window.updateModelSelectionStats) window.updateModelSelectionStats(); }, 100);</script>"
+      }
+    ],
+    tools: ["Claude 3.7 Sonnet", "Thinking Budget", "Effort Parameters"]
+  },
+  {
+    id: "l3_16_new_features_v2",
+    level: "L3",
+    track: "stack",
+    title: "Новые возможности v2.1.105+",
+    shortDesc: "Обзор Push-уведомлений, Read-Only Bash и защиты от зависания Stall Timeout.",
+    steps: [
+      {
+        text: "Контроль выполнения и защита.",
+        details: "Используйте режим `--read-only-bash` для запуска в защищенных или демонстрационных средах, предотвращая выполнение деструктивных локальных команд и стирание файлов."
+      },
+      {
+        text: "Умное прерывание зависаний (Stall Timeout).",
+        details: "Новый сторожевой таймер отслеживает выполнение фоновых задач и автоматически убивает зависшие сабагенты или бесконечные циклы тестов через 60 секунд, предотвращая перерасход токенов."
+      },
+      {
+        text: "Песочница новых возможностей.",
+        details: "Исследуйте симуляцию ключевых нововведений v2.1.105+ ниже: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);\"><div style=\"font-weight: 600; margin-bottom: 8px; color: var(--accent-orange); font-size: 11px;\">Кликните на функцию v2.1.105+:</div><div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px;\"><button onclick=\"event.stopPropagation(); window.triggerV2Feature('recap')\" style=\"background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: all 0.2s;\">Session Recap</button><button onclick=\"event.stopPropagation(); window.triggerV2Feature('readonly')\" style=\"background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: all 0.2s;\">Read-Only Bash</button><button onclick=\"event.stopPropagation(); window.triggerV2Feature('push')\" style=\"background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: all 0.2s;\">Push Notification</button><button onclick=\"event.stopPropagation(); window.triggerV2Feature('stall')\" style=\"background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 6px 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: all 0.2s;\">Stall Timeout</button></div><div id=\"v2-feature-simulation-box\" style=\"font-family: monospace; font-size: 11px; color: #a7f3d0; background: #0c0c12; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); min-height: 70px; line-height: 1.4;\">Выберите функцию для симуляции...</div></div><script>setTimeout(function() { if(window.triggerV2Feature) window.triggerV2Feature('recap'); }, 100);</script>"
+      }
+    ],
+    tools: ["Push Notifications", "Read-Only Bash", "Stall Timeout Protection"]
+  },
+  {
+    id: "l3_17_config_hierarchy",
+    level: "L3",
+    track: "stack",
+    title: "Иерархия конфигурации Claude Code",
+    shortDesc: "Приоритеты между глобальными файлами, настройками проекта и флагами запуска.",
+    steps: [
+      {
+        text: "Иерархия конфигурации.",
+        details: "Запомните порядок приоритетов: CLI-флаг переопределяет переменные окружения, те переопределяют файл настроек проекта `.claude/settings.json`, а локальный файл проекта переопределяет глобальный `~/.claude/settings.json`."
+      },
+      {
+        text: "Конфигурация проекта.",
+        details: "Создайте файл `.claude/settings.json` в корне вашего репозитория для закрепления стандартов модели и MCP-серверов для всей команды разработчиков."
+      },
+      {
+        text: "Каскадный симулятор приоритетов.",
+        details: "Поэкспериментируйте с переключателями ниже, чтобы увидеть, какая модель побеждает в иерархии каскада: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);\"><div style=\"font-weight: 600; margin-bottom: 8px; color: var(--accent-cyan); font-size: 11px;\">Симулятор Приоритетов (Каскад):</div><div style=\"display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; font-size: 10px;\"><div style=\"display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px;\"><span style=\"color: #94a3b8;\">1. Глобальный (~/.claude/settings.json)</span><select id=\"cfg-global-model\" onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 9px; padding: 2px;\"><option value=\"claude-3-7-sonnet\">Sonnet 3.7</option><option value=\"claude-3-5-haiku\">Haiku 3.5</option></select></div><div style=\"display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px;\"><label style=\"display: flex; align-items: center; gap: 4px; cursor: pointer; color: #e2e8f0;\"><input type=\"checkbox\" id=\"cfg-project-enable\" checked onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"cursor: pointer;\"><span>2. Проект (.claude/settings.json)</span></label><select id=\"cfg-project-model\" onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 9px; padding: 2px;\"><option value=\"claude-3-7-sonnet\" selected>Sonnet 3.7 (Team)</option><option value=\"claude-3-5-haiku\">Haiku 3.5</option></select></div><div style=\"display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px;\"><label style=\"display: flex; align-items: center; gap: 4px; cursor: pointer; color: #e2e8f0;\"><input type=\"checkbox\" id=\"cfg-env-enable\" onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"cursor: pointer;\"><span>3. Окружение (CLAUDE_MODEL)</span></label><select id=\"cfg-env-model\" onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 9px; padding: 2px;\"><option value=\"claude-3-5-haiku\">Haiku 3.5 (Env forced)</option><option value=\"claude-3-7-sonnet\">Sonnet 3.7</option></select></div><div style=\"display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px;\"><label style=\"display: flex; align-items: center; gap: 4px; cursor: pointer; color: #e2e8f0;\"><input type=\"checkbox\" id=\"cfg-cli-enable\" onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"cursor: pointer;\"><span>4. Флаг CLI (--model)</span></label><select id=\"cfg-cli-model\" onchange=\"event.stopPropagation(); window.resolveConfigCascade()\" style=\"background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 9px; padding: 2px;\"><option value=\"claude-3-opus\">Opus 3 (CLI Over)</option><option value=\"claude-3-7-sonnet\">Sonnet 3.7</option></select></div></div><div style=\"font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); text-align: center; color: #38bdf8;\" id=\"cfg-cascade-resolved-box\">Определенная модель: <strong>claude-3-7-sonnet</strong></div></div><script>setTimeout(function() { if(window.resolveConfigCascade) window.resolveConfigCascade(); }, 100);</script>"
+      }
+    ],
+    tools: ["Project JSON Config", "Global Config", "CLI Overrides"]
+  },
+  {
+    id: "l3_18_env_vars",
+    level: "L3",
+    track: "stack",
+    title: "Environment Variables - полный список",
+    shortDesc: "Системные переменные для управления API ключами, поведением сабагентов, тайм-аутами и коммитами.",
+    steps: [
+      {
+        text: "Базовые системные переменные.",
+        details: "Экспортируйте `ANTHROPIC_API_KEY` в вашем `.zshrc` или `.bashrc` для автоматической авторизации консоли без постоянного ввода токенов вручную."
+      },
+      {
+        text: "Управление скоростью и поведением ИИ.",
+        details: "Настройте `CLAUDE_MODEL`, `CLAUDE_EFFORT` и `CLAUDE_AUTO_COMMIT` для автоматизации коммитов и снижения времени ожидания размышлений."
+      },
+      {
+        text: "Генератор скриптов инициализации.",
+        details: "Соберите собственный готовый скрипт экспорта для shell с помощью генератора ниже: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);\"><div style=\"font-weight: 600; margin-bottom: 8px; color: var(--accent-emerald); font-size: 11px;\">Конфигуратор .zshrc:</div><div style=\"display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; font-size: 10px; color: #e2e8f0;\"><div style=\"display: flex; align-items: center; gap: 8px;\"><span style=\"width: 50px; color: #a1a1aa;\">Model:</span><select id=\"env-cfg-model\" onchange=\"event.stopPropagation(); window.updateEnvCodeSnippet()\" style=\"flex: 1; background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 9px; padding: 2px;\"><option value=\"claude-3-7-sonnet-latest\">Sonnet 3.7</option><option value=\"claude-3-5-haiku-20241022\">Haiku 3.5</option></select></div><div style=\"display: flex; align-items: center; gap: 8px;\"><span style=\"width: 50px; color: #a1a1aa;\">Effort:</span><select id=\"env-cfg-effort\" onchange=\"event.stopPropagation(); window.updateEnvCodeSnippet()\" style=\"flex: 1; background: #1e1e2e; color: white; border: 1px solid rgba(255,255,255,0.1); font-size: 9px; padding: 2px;\"><option value=\"high\">High (Reasoning)</option><option value=\"medium\" selected>Medium</option><option value=\"low\">Low</option></select></div><div style=\"display: flex; gap: 12px;\"><label style=\"display: flex; align-items: center; gap: 4px; cursor: pointer;\"><input type=\"checkbox\" id=\"env-cfg-autocommit\" onchange=\"event.stopPropagation(); window.updateEnvCodeSnippet()\" style=\"cursor: pointer;\"><span>Auto-commit</span></label><label style=\"display: flex; align-items: center; gap: 4px; cursor: pointer;\"><input type=\"checkbox\" id=\"env-cfg-noupdate\" checked onchange=\"event.stopPropagation(); window.updateEnvCodeSnippet()\" style=\"cursor: pointer;\"><span>No Update</span></label></div></div><div style=\"position: relative;\"><pre id=\"env-vars-code-output\" style=\"font-family: monospace; font-size: 10px; color: #34d399; background: #0c0c12; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); overflow-x: auto; white-space: pre; margin: 0; line-height: 1.3;\">export ANTHROPIC_API_KEY=\"sk-ant-...\"</pre><button onclick=\"event.stopPropagation(); window.copyEnvSnippet()\" style=\"position: absolute; right: 4px; top: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 8px; cursor: pointer; transition: all 0.2s;\">Copy</button></div></div><script>setTimeout(function() { if(window.updateEnvCodeSnippet) window.updateEnvCodeSnippet(); }, 100);</script>"
+      }
+    ],
+    tools: ["Env Variables", "Terminal Config", "Shell Automation"]
+  },
+  {
+    id: "l3_19_rules_files",
+    level: "L3",
+    track: "workflow",
+    title: "Файлы правил для AI-ассистентов (.cursorrules, .mdc, CLAUDE.md)",
+    shortDesc: "Системное промптирование для жесткого закрепления архитектурных рамок и стандартов кодирования.",
+    steps: [
+      {
+        text: "Интеграция CLAUDE.md для Claude Code CLI.",
+        details: "Создайте в корне проекта файл `CLAUDE.md` с описанием команд сборки, тестирования, линтинга и соглашений о форматировании кода."
+      },
+      {
+        text: "Глобальные и контекстные правила Cursor.",
+        details: "Используйте `.cursorrules` для общих системных промптов и контекстные правила `.mdc` для точечной настройки поведения при редактировании конкретных директорий."
+      },
+      {
+        text: "Rules Template Sandbox.",
+        details: "Выберите платформу и технологический стек ниже, чтобы сгенерировать готовый качественный шаблон правил: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(10, 5, 20, 0.6); padding: 14px; border-radius: 10px; border: 1px solid rgba(167, 139, 250, 0.25); font-family: system-ui, -apple-system; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: left;\"><div style=\"font-weight: 700; color: #c084fc; margin-bottom: 10px; font-size: 12px; display: flex; align-items: center; gap: 6px;\"><span style=\"display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #c084fc; box-shadow: 0 0 6px #c084fc;\"></span>Rules Generator Playground</div><div style=\"margin-bottom: 8px;\"><div style=\"font-size: 9px; color: #a1a1aa; margin-bottom: 4px;\">ПЛАТФОРМА:</div><div style=\"display: flex; gap: 6px;\"><button id=\"rules-btn-platform-cursor\" onclick=\"event.stopPropagation(); window.selectRulesPlatform('cursor')\" style=\"flex: 1; background: var(--accent-purple); border: 1px solid var(--accent-purple); color: #fff; font-size: 9px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;\">Cursor (.cursorrules)</button><button id=\"rules-btn-platform-mdc\" onclick=\"event.stopPropagation(); window.selectRulesPlatform('mdc')\" style=\"flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; font-size: 9px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;\">Cursor Context (.mdc)</button><button id=\"rules-btn-platform-claude\" onclick=\"event.stopPropagation(); window.selectRulesPlatform('claude')\" style=\"flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; font-size: 9px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;\">Claude Code (CLAUDE.md)</button></div></div><div style=\"margin-bottom: 12px;\"><div style=\"font-size: 9px; color: #a1a1aa; margin-bottom: 4px;\">ТЕХНОЛОГИЧЕСКИЙ СТЭК:</div><div style=\"display: flex; gap: 6px;\"><button id=\"rules-btn-stack-react\" onclick=\"event.stopPropagation(); window.selectRulesStack('react')\" style=\"flex: 1; background: var(--accent-purple); border: 1px solid var(--accent-purple); color: #fff; font-size: 9px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;\">React / Next.js</button><button id=\"rules-btn-stack-node\" onclick=\"event.stopPropagation(); window.selectRulesStack('node')\" style=\"flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; font-size: 9px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;\">Node.js (TS)</button><button id=\"rules-btn-stack-python\" onclick=\"event.stopPropagation(); window.selectRulesStack('python')\" style=\"flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; font-size: 9px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;\">Python (FastAPI)</button></div></div><div style=\"position: relative;\"><pre id=\"rules-template-output\" style=\"font-family: monospace; font-size: 9px; color: #e9d5ff; background: #0c0c12; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); overflow-x: auto; white-space: pre-wrap; margin: 0; line-height: 1.3; min-height: 60px;\">You are an expert React/Next.js developer.\nAlways use TypeScript. Prefer Server Components by default.\nStyle with CSS Modules or tailwind per custom instructions.\nEnsure clear prop interfaces and modular features under /src/features.</pre><button onclick=\"event.stopPropagation(); window.copyRulesTemplate()\" style=\"position: absolute; right: 4px; top: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 8px; cursor: pointer;\">Copy</button></div></div>"
+      }
+    ],
+    tools: ["CLAUDE.md", ".cursorrules", "Cursor .mdc rules"]
+  },
+  {
+    id: "l3_20_reusable_skills",
+    level: "L3",
+    track: "planning",
+    title: "Повторно используемые навыки (Awesome Claude Skills)",
+    shortDesc: "Автоматизация сложных пайплайнов разработки с помощью регистров кастомных навыков Claude CLI.",
+    steps: [
+      {
+        text: "Спецификация SKILL.md.",
+        details: "Задайте структуру навыка с указанием аргументов, системных инструкций и точных шагов валидации для Claude CLI."
+      },
+      {
+        text: "Запуск навыков через командную строку.",
+        details: "Используйте команду `claude-code skills run <skill-id>` для запуска предопределенных последовательностей шагов."
+      },
+      {
+        text: "Claude CLI Skill Builder.",
+        details: "Сформируйте конфигурацию навыка и посмотрите на симуляцию выполнения: <div class=\"showcase-widget\" style=\"margin-top: 12px; background: rgba(10, 20, 15, 0.6); padding: 14px; border-radius: 10px; border: 1px solid rgba(52, 211, 153, 0.25); font-family: system-ui, -apple-system; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: left;\"><div style=\"font-weight: 700; color: #34d399; margin-bottom: 10px; font-size: 12px; display: flex; align-items: center; gap: 6px;\"><span style=\"display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px #34d399;\"></span>Claude CLI Skill Builder</div><div style=\"display: flex; gap: 6px; margin-bottom: 10px;\"><button id=\"skill-btn-deploy\" onclick=\"event.stopPropagation(); window.selectSkillBlueprint('deploy')\" style=\"flex: 1; background: var(--accent-emerald); border: 1px solid var(--accent-emerald); color: #fff; font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;\">Deploy Validation</button><button id=\"skill-btn-audit\" onclick=\"event.stopPropagation(); window.selectSkillBlueprint('audit')\" style=\"flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;\">PR Auditor</button><button id=\"skill-btn-migrator\" onclick=\"event.stopPropagation(); window.selectSkillBlueprint('migrator')\" style=\"flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa; font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;\">DB Migrator</button></div><div style=\"background: rgba(0,0,0,0.3); border-radius: 6px; padding: 8px; font-size: 10px; color: #e2e8f0; margin-bottom: 10px;\"><div id=\"skill-bp-title\" style=\"font-weight: 700; color: #34d399;\">Deploy Project (deploy-rwy)</div><div id=\"skill-bp-desc\" style=\"font-size: 9px; color: #94a3b8; margin-top: 2px;\">Навык автоматического запуска линтера, тестов и отправки сборки в Railway при успешной валидации.</div></div><div style=\"display: flex; gap: 10px; height: 90px;\"><div style=\"flex: 1; position: relative;\"><pre id=\"skill-json-output\" style=\"font-family: monospace; font-size: 8px; color: #a7f3d0; background: #060907; padding: 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); height: 100%; overflow-y: auto; margin: 0;\">{\n  \"name\": \"deploy-rwy\",\n  \"description\": \"Auto validate and deploy code to Railway\",\n  \"commands\": [\n    \"npm run lint\",\n    \"npm run test\",\n    \"railway up\"\n  ],\n  \"fail_on_warning\": false\n}</pre><button onclick=\"event.stopPropagation(); window.copySkillJson()\" style=\"position: absolute; right: 4px; top: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 1px 4px; border-radius: 3px; font-size: 7px; cursor: pointer;\">Copy</button></div><div style=\"flex: 1; display: flex; flex-direction: column; gap: 6px;\"><button onclick=\"event.stopPropagation(); window.simulateSkillRun()\" style=\"background: #10b981; border: none; color: #fff; font-size: 9px; font-weight: 700; padding: 4px; border-radius: 4px; cursor: pointer; text-align: center; text-transform: uppercase;\">Run Simulation</button><pre id=\"skill-sim-logs\" style=\"flex: 1; font-family: monospace; font-size: 8px; color: #67e8f9; background: #060907; padding: 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); overflow-y: auto; margin: 0; line-height: 1.2; white-space: pre-wrap;\">Нажмите \"Run Simulation\", чтобы увидеть лог исполнения навыка...</pre></div></div></div>"
+      }
+    ],
+    tools: ["SKILL.md", "Skills CLI", "Automation Runner"]
   },
 
   // ================= LEVEL L4 =================
@@ -2570,6 +3445,58 @@ const nodes = [
       }
     ],
     tools: ["Design System", "Showcases", "HTML sandbox", "Reusability"]
+  },
+  {
+    id: "l4_11_deploy_strategy",
+    level: "L4",
+    track: "stack",
+    title: "Стратегии деплоя и инфраструктура",
+    shortDesc: "Прогрессивное масштабирование от Vercel до Railway под требования ИИ-проектов.",
+    steps: [
+      {
+        text: "Simple SaaS сценарий деплоя.",
+        details: "Frontend + API на Vercel (Next.js) + Neon (Serverless Postgres). Идеальный стек быстрого старта с авто-масштабированием и нулевой стоимостью на старте."
+      },
+      {
+        text: "Complex Backend сценарий деплоя.",
+        details: "Разделение инфраструктуры: фронтенд на Vercel для мгновенного CDN, тяжелый бэкенд и базы данных (PostgreSQL, Redis) на Railway для свободы Docker-контейнеров."
+      },
+      {
+        text: "Monorepo (Turborepo) на Vercel.",
+        details: "Использование Turborepo с удаленным кэшированием сборки на Vercel. Позволяет ИИ видеть весь контекст проекта, при этом собирая только измененные части."
+      },
+      {
+        text: "Прогрессивный путь масштабирования.",
+        details: "Рекомендация начинать любой проект с Vercel (максимальная скорость итераций через Preview Deployments) и плавно переносить бэкенд-ресурсы на Railway."
+      }
+    ],
+    tools: ["Vercel", "Railway", "Neon Postgres", "Cloudflare Pages"]
+  },
+  {
+    id: "l4_12_shadcn_revolution",
+    level: "L4",
+    track: "stack",
+    title: "Shadcn/ui — Революция в UI для ИИ",
+    shortDesc: "Почему подход copy-paste и отсутствие node_modules сделали Shadcn золотым стандартом для ИИ.",
+    steps: [
+      {
+        text: "Подход Copy-Paste против node_modules.",
+        details: "Копирование исходного кода прямо в репозиторий проекта. ИИ получает 100% видимость и полный контроль для кастомизации любого UI элемента."
+      },
+      {
+        text: "Доступность из коробки (Radix UI).",
+        details: "Использование headless-примитивов Radix UI гарантирует соответствие стандартам WCAG, управление с клавиатуры и правильные ARIA атрибуты без костылей."
+      },
+      {
+        text: "Стилизация через Tailwind CSS.",
+        details: "Быстрая инлайновая кастомизация с помощью Tailwind. ИИ прекрасно ориентируется в Tailwind-классах прямо в разметке и не плодит лишних файлов стилей."
+      },
+      {
+        text: "Синергия с ИИ-генераторами.",
+        details: "Полная интеграция с v0.dev, Bolt.new и Lovable. Сгенерированные компоненты бесшовно переносятся в проект благодаря единым правилам стилизации Shadcn/ui."
+      }
+    ],
+    tools: ["Shadcn/ui", "Radix UI", "Tailwind CSS", "v0.dev"]
   },
 
   // ================= LEVEL L5 =================
@@ -3634,6 +4561,524 @@ const nodes = [
     tools: ["Swarm Orchestration", "Multi-agent patterns"]
   }
 ];
+
+// Global Showcase Widgets Event Handlers
+window.runClaudeTerminalCommand = function(cmd) {
+  const screen = document.getElementById('claude-terminal-screen');
+  if (!screen) return;
+  
+  let output = '';
+  if (cmd === 'clear') {
+    screen.innerHTML = '<span style="color: #6b7280;"># Очищено. Выберите команду выше...</span>';
+    return;
+  }
+  
+  output += `<span style="color: #34d399;">rickalvarez@macbook-pro %</span> <span style="color: #f3f4f6;">${cmd}</span>\n`;
+  
+  if (cmd === 'claude') {
+    output += `<span style="color: #a78bfa;">🤖 Starting Claude Code (v2.1.105)...</span>\n`;
+    output += `<span style="color: #6b7280;">✓ Verified sk-ant-api03...</span>\n`;
+    output += `<span style="color: #a78bfa;">Claude Code is now active. Type your request or /help to list commands.</span>\n`;
+    output += `<span style="color: #818cf8;">claude-code ></span> `;
+  } else if (cmd === 'claude --plan') {
+    output += `<span style="color: #fbbf24;">🔍 [PLAN MODE] Analyzing workspace files...</span>\n`;
+    output += `  - Found 4 matches in src/controllers/order.ts\n`;
+    output += `  - Build dependencies check passed.\n`;
+    output += `<span style="color: #34d399;">💡 Planned edits:</span>\n`;
+    output += `  <span style="color: #f87171;">[MODIFY]</span> src/schema.prisma\n`;
+    output += `  <span style="color: #60a5fa;">[NEW]</span> src/controllers/order.ts\n`;
+    output += `<span style="color: #a78bfa;">Do you want to apply these changes? (y/N)</span> `;
+  } else if (cmd === '/recap') {
+    output += `<span style="color: #34d399;">📋 [SESSION RECAP] Overview of modifications in this session:</span>\n`;
+    output += `  1. Added Order entity with standard relations in Prisma schema.\n`;
+    output += `  2. Created order validation middleware in src/middleware/validate.ts.\n`;
+    output += `  3. All 12 integration tests executed successfully in 1.4s.\n`;
+    output += `<span style="color: #a78bfa;">claude-code ></span> `;
+  } else if (cmd === '/mcp') {
+    output += `<span style="color: #22d3ee;">🔌 Connected MCP Servers:</span>\n`;
+    output += `  - <span style="color: #34d399;">@modelcontextprotocol/server-postgres</span> (status: running)\n`;
+    output += `  - <span style="color: #34d399;">@modelcontextprotocol/server-github</span> (status: running)\n`;
+    output += `  - <span style="color: #fbbf24;">local-filesystem-exploring</span> (status: ready)\n`;
+    output += `<span style="color: #a78bfa;">claude-code ></span> `;
+  }
+  
+  screen.innerHTML = output.replace(/\n/g, '<br>');
+  screen.scrollTop = screen.scrollHeight;
+};
+
+window.selectClaudeModeTab = function(mode) {
+  const tabRepl = document.getElementById('mode-tab-repl');
+  const tabNonint = document.getElementById('mode-tab-nonint');
+  const tabPlan = document.getElementById('mode-tab-plan');
+  const pipelineCore = document.getElementById('pipeline-core');
+  const pipelineGuard = document.getElementById('pipeline-guard');
+  const desc = document.getElementById('mode-mode-description');
+  
+  if (!tabRepl || !tabNonint || !tabPlan || !pipelineCore || !pipelineGuard || !desc) return;
+  
+  [tabRepl, tabNonint, tabPlan].forEach(btn => {
+    btn.style.background = 'transparent';
+    btn.style.color = '#a1a1aa';
+  });
+  
+  if (mode === 'repl') {
+    tabRepl.style.background = '#8b5cf6';
+    tabRepl.style.color = 'white';
+    pipelineCore.innerText = 'REPL Loop';
+    pipelineCore.style.borderColor = '#06b6d4';
+    pipelineCore.style.color = '#22d3ee';
+    pipelineGuard.innerText = 'Промпты';
+    pipelineGuard.style.borderColor = '#10b981';
+    pipelineGuard.style.color = '#34d399';
+    desc.innerHTML = '<strong>Interactive REPL:</strong> Постоянная сессия в реальном времени. Claude помнит историю общения, может читать и создавать файлы, запускать тесты и запрашивать подтверждения.';
+  } else if (mode === 'nonint') {
+    tabNonint.style.background = '#8b5cf6';
+    tabNonint.style.color = 'white';
+    pipelineCore.innerText = 'One-off Cmd';
+    pipelineCore.style.borderColor = '#fbbf24';
+    pipelineCore.style.color = '#fbbf24';
+    pipelineGuard.innerText = 'Git Commit';
+    pipelineGuard.style.borderColor = '#38bdf8';
+    pipelineGuard.style.color = '#38bdf8';
+    desc.innerHTML = '<strong>Non-Interactive Mode:</strong> Разовый запуск (`claude "task"`). Claude быстро выполняет переданную задачу, вносит изменения в файлы, коммитит изменения и сразу возвращает управление.';
+  } else if (mode === 'plan') {
+    tabPlan.style.background = '#8b5cf6';
+    tabPlan.style.color = 'white';
+    pipelineCore.innerText = 'Dry-Run Plan';
+    pipelineCore.style.borderColor = '#f87171';
+    pipelineCore.style.color = '#f87171';
+    pipelineGuard.innerText = 'Approve Gate';
+    pipelineGuard.style.borderColor = '#a78bfa';
+    pipelineGuard.style.color = '#c084fc';
+    desc.innerHTML = '<strong>Plan Mode:</strong> Безопасный запуск (`claude --plan`). Модель сканирует структуру проекта, выявляет связи, готовит план, но не вносит никаких изменений до вашего подтверждения.';
+  }
+};
+
+window.updateModelSelectionStats = function() {
+  const modelSelect = document.getElementById('model-select-el');
+  const slider = document.getElementById('thinking-budget-slider');
+  const sliderRow = document.getElementById('thinking-budget-row');
+  const label = document.getElementById('thinking-budget-label');
+  const out = document.getElementById('model-selection-stats');
+  
+  if (!modelSelect || !slider || !sliderRow || !label || !out) return;
+  
+  const model = modelSelect.value;
+  let statsText = '';
+  
+  if (model === 'sonnet37') {
+    sliderRow.style.opacity = '1';
+    slider.disabled = false;
+    const val = parseInt(slider.value);
+    
+    if (val === 1) {
+      label.innerText = 'Low (1024 tokens)';
+      label.style.color = '#38bdf8';
+      statsText = '🟢 <strong>Claude 3.7 Sonnet [Low Effort]</strong>\n💰 Стоимость: $3 / $15 за 1M токенов\n⚡ Скорость: Очень быстрая\n🧠 Бюджет размышлений: Минимальный (1K токенов)\n🎯 Идеально для: Простых правок и стилей.';
+    } else if (val === 2) {
+      label.innerText = 'Medium (4096 tokens)';
+      label.style.color = '#34d399';
+      statsText = '🔵 <strong>Claude 3.7 Sonnet [Medium Effort]</strong>\n💰 Стоимость: $3 / $15 за 1M токенов\n⚡ Скорость: Сбалансированная (3-5с)\n🧠 Бюджет размышлений: Средний (4K токенов)\n🎯 Идеально для: 90% повседневных задач разработки.';
+    } else {
+      label.innerText = 'High (8192 tokens)';
+      label.style.color = '#a78bfa';
+      statsText = '🔥 <strong>Claude 3.7 Sonnet [High Effort]</strong>\n💰 Стоимость: $3 / $15 за 1M токенов\n⚡ Скорость: Умеренная (глубокий анализ)\n🧠 Бюджет размышлений: Максимальный (8K токенов)\n🎯 Идеально для: Поиска утечек памяти, рефакторинга.';
+    }
+  } else {
+    sliderRow.style.opacity = '0.3';
+    slider.disabled = true;
+    label.innerText = 'Не применимо';
+    label.style.color = '#6b7280';
+    
+    if (model === 'sonnet35') {
+      statsText = '⚡ <strong>Claude 3.5 Sonnet</strong>\n💰 Стоимость: $3 / $15 за 1M токенов\n⚡ Скорость: Высокая\n🧠 Размышления: Выключены (Fast)\n🎯 Идеально для: Рутинного написания кода, верстки.';
+    } else if (model === 'haiku35') {
+      statsText = '🚀 <strong>Claude 3.5 Haiku</strong>\n💰 Стоимость: $1 / $5 за 1M токенов (Ультрадешево!)\n⚡ Скорость: Мгновенная\n🧠 Размышления: Выключены\n🎯 Идеально для: Однострочных правок, Bash-скриптов.';
+    } else if (model === 'opus3') {
+      statsText = '📚 <strong>Claude 3 Opus</strong>\n💰 Стоимость: $15 / $75 за 1M токенов\n⚡ Скорость: Медленная\n🧠 Размышления: Выключены\n🎯 Идеально для: Глубокого логического ревью легаси-кода.';
+    }
+  }
+  
+  out.innerHTML = statsText.replace(/\n/g, '<br>');
+};
+
+window.triggerV2Feature = function(feature) {
+  const box = document.getElementById('v2-feature-simulation-box');
+  if (!box) return;
+  
+  let out = '';
+  if (feature === 'recap') {
+    box.style.color = '#67e8f9';
+    out = '🤖 <strong>Симуляция /recap:</strong>\n<span style="color: #6b7280;">Generating session summary...</span>\n✓ Изменено: 3 файла в src/core\n✓ Добавлены типы для UserDTO\n✓ Запущены тесты: 4/4 успешно.\n💡 <em>Идеально для составления Pull Request!</em>';
+  } else if (feature === 'readonly') {
+    box.style.color = '#f87171';
+    out = '🔒 <strong>Симуляция Read-Only Bash:</strong>\n<span style="color: #fbbf24;">claude-code --read-only-bash</span>\nrickalvarez% rm -rf node_modules\n<span style="color: #f87171;">⚠️ [ACCESS DENIED] Запуск деструктивных команд запрещен в режиме просмотра!</span>';
+  } else if (feature === 'push') {
+    box.style.color = '#34d399';
+    out = '🔔 <strong>Симуляция Push-уведомлений:</strong>\n<span style="color: #6b7280;">Running task "refactor auth flow"...</span>\n📨 <strong>Системный пуш:</strong> "Claude Code: Задача успешно завершена, все 18 тестов прошли!"';
+  } else if (feature === 'stall') {
+    box.style.color = '#fbbf24';
+    out = '⏱️ <strong>Симуляция Stall Timeout:</strong>\n<span style="color: #6b7280;">Subagent run tool "npm run build"...</span>\n🛑 <span style="color: #ef4444;">[STALL GUARD] Зависание обнаружено! Автоматическое прерывание сессии для экономии баланса.</span>';
+  }
+  
+  box.innerHTML = out.replace(/\n/g, '<br>');
+};
+
+window.resolveConfigCascade = function() {
+  const globalModel = document.getElementById('cfg-global-model').value;
+  const projectEnable = document.getElementById('cfg-project-enable').checked;
+  const projectModel = document.getElementById('cfg-project-model').value;
+  const envEnable = document.getElementById('cfg-env-enable').checked;
+  const envModel = document.getElementById('cfg-env-model').value;
+  const cliEnable = document.getElementById('cfg-cli-enable').checked;
+  const cliModel = document.getElementById('cfg-cli-model').value;
+  
+  const box = document.getElementById('cfg-cascade-resolved-box');
+  if (!box) return;
+  
+  let resolved = globalModel;
+  let source = 'Глобальные настройки (~/.claude/settings.json)';
+  
+  if (projectEnable) {
+    resolved = projectModel;
+    source = 'Настройки проекта (.claude/settings.json)';
+  }
+  if (envEnable) {
+    resolved = envModel;
+    source = 'Переменные окружения (CLAUDE_MODEL)';
+  }
+  if (cliEnable) {
+    resolved = cliModel;
+    source = 'Аргументы командной строки (--model)';
+  }
+  
+  box.innerHTML = `Результирующая модель: <strong style="color:#10b981;">${resolved}</strong><br><span style="font-size:9px; color:#94a3b8;">Источник: ${source}</span>`;
+};
+
+window.updateEnvCodeSnippet = function() {
+  const model = document.getElementById('env-cfg-model').value;
+  const effort = document.getElementById('env-cfg-effort').value;
+  const commit = document.getElementById('env-cfg-autocommit').checked ? 'true' : 'false';
+  const noupdate = document.getElementById('env-cfg-noupdate').checked ? 'true' : 'false';
+  
+  const pre = document.getElementById('env-vars-code-output');
+  if (!pre) return;
+  
+  let code = `# Claude Code CLI Configurations\n`;
+  code += `export ANTHROPIC_API_KEY="sk-ant-api03-..."\n`;
+  code += `export CLAUDE_MODEL="${model}"\n`;
+  code += `export CLAUDE_EFFORT="${effort}"\n`;
+  code += `export CLAUDE_AUTO_COMMIT="${commit}"\n`;
+  code += `export DISABLE_AUTOUPDATER="${noupdate}"`;
+  
+  pre.innerText = code;
+};
+
+window.copyEnvSnippet = function() {
+  const pre = document.getElementById('env-vars-code-output');
+  if (!pre) return;
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    alert('Конфигурация скопирована в буфер обмена!');
+  });
+};
+
+// ==========================================
+// Level 3 Interactive Widgets Helper Functions
+// ==========================================
+
+// 1. Rules Template Sandbox
+window.rulesPlatform = 'cursor';
+window.rulesStack = 'react';
+
+const rulesTemplates = {
+  cursor: {
+    react: "You are an expert React/Next.js developer.\nAlways use TypeScript. Prefer Server Components by default.\nStyle with CSS Modules or tailwind per custom instructions.\nEnsure clear prop interfaces and modular features under /src/features.",
+    node: "You are an expert Backend developer specializing in Node.js and TypeScript.\nFollow clean architecture principles (entities, use cases, controllers).\nWrite robust unit tests using Jest/Vitest.\nAlways use strict TypeScript types; no 'any' allowed.",
+    python: "You are a professional Python FastAPI expert.\nFollow PEP-8 styling. Use type hints everywhere.\nOrganize code with routers, services, and schemas (Pydantic v2).\nUse async/await for database operations and external API requests."
+  },
+  mdc: {
+    react: "---\ndescription: Apply this rule when editing React components under /src/components or /src/features\nglobs: src/components/**/*.{ts,tsx}, src/features/**/*.{ts,tsx}\n---\nEnsure all interactive components have proper accessibility (aria) labels.\nKeep components small, reusable, and pure.",
+    node: "---\ndescription: Apply this rule to all service and controller files in Node.js backend\nglobs: src/services/**/*.ts, src/controllers/**/*.ts\n---\nHandle all exceptions cleanly inside middlewares. Avoid try-catch repetition.\nUse clean dependency injection patterns.",
+    python: "---\ndescription: Apply this rule to FastAPI routers and controller handlers\nglobs: app/routers/**/*.py, app/api/**/*.py\n---\nDocument all endpoints with proper Pydantic schemas and HTTP response codes.\nValidate query and path parameters thoroughly."
+  },
+  claude: {
+    react: "# CLAUDE.md for React/Next.js project\n\n## Build & Test\n- Build: npm run build\n- Test: npm run test\n- Lint: npm run lint\n\n## Code Style & Conventions\n- Use functional components & hooks\n- Absolute imports from `@/*`\n- Keep layouts clean and fully responsive",
+    node: "# CLAUDE.md for Node.js Backend\n\n## Build & Test\n- Build: npm run build\n- Test: npm run test\n- Lint: npm run lint\n\n## Code Style & Conventions\n- Async/await everywhere\n- Custom Error wrapper class usage\n- Use winston or pino for logging",
+    python: "# CLAUDE.md for Python Project\n\n## Build & Test\n- Build: poetry build\n- Test: pytest\n- Lint: ruff check\n\n## Code Style & Conventions\n- Use snake_case for functions and variables\n- Use PascalCase for classes\n- Strict typing with mypy"
+  }
+};
+
+window.selectRulesPlatform = function(platform) {
+  window.rulesPlatform = platform;
+  const platforms = ['cursor', 'mdc', 'claude'];
+  platforms.forEach(p => {
+    const btn = document.getElementById('rules-btn-platform-' + p);
+    if (!btn) return;
+    if (p === platform) {
+      btn.style.background = 'var(--accent-purple)';
+      btn.style.borderColor = 'var(--accent-purple)';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'rgba(255,255,255,0.05)';
+      btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      btn.style.color = '#a1a1aa';
+    }
+  });
+  window.updateRulesTemplateBox();
+};
+
+window.selectRulesStack = function(stack) {
+  window.rulesStack = stack;
+  const stacks = ['react', 'node', 'python'];
+  stacks.forEach(s => {
+    const btn = document.getElementById('rules-btn-stack-' + s);
+    if (!btn) return;
+    if (s === stack) {
+      btn.style.background = 'var(--accent-purple)';
+      btn.style.borderColor = 'var(--accent-purple)';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'rgba(255,255,255,0.05)';
+      btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      btn.style.color = '#a1a1aa';
+    }
+  });
+  window.updateRulesTemplateBox();
+};
+
+window.updateRulesTemplateBox = function() {
+  const output = document.getElementById('rules-template-output');
+  if (!output) return;
+  const template = rulesTemplates[window.rulesPlatform][window.rulesStack];
+  output.innerText = template;
+};
+
+window.copyRulesTemplate = function() {
+  const output = document.getElementById('rules-template-output');
+  if (!output) return;
+  navigator.clipboard.writeText(output.innerText).then(() => {
+    alert('Шаблон правил успешно скопирован!');
+  });
+};
+
+// 2. Claude CLI Skill Builder
+window.skillBlueprint = 'deploy';
+window.skillSimInterval = null;
+
+const skillBlueprints = {
+  deploy: {
+    title: "Deploy Project (deploy-rwy)",
+    desc: "Навык автоматического запуска линтера, тестов и отправки сборки в Railway при успешной валидации.",
+    json: "{\n  \"name\": \"deploy-rwy\",\n  \"description\": \"Auto validate and deploy code to Railway\",\n  \"commands\": [\n    \"npm run lint\",\n    \"npm run test\",\n    \"railway up\"\n  ],\n  \"fail_on_warning\": false\n}",
+    logs: [
+      "[1/3] Running 'npm run lint'...\n✓ No lint errors found.",
+      "[2/3] Running 'npm run test'...\n✓ 14/14 unit tests passed successfully.",
+      "[3/3] Running 'railway up'...\n✓ Deploying next-app to Railway...\n✓ Service successfully deployed!",
+      "🎉 Skill Run Completed Successfully!"
+    ]
+  },
+  audit: {
+    title: "PR Auditor (pr-audit)",
+    desc: "Проводит полный статический анализ безопасности, форматирования и проверяет соответствие соглашениям в PR.",
+    json: "{\n  \"name\": \"pr-audit\",\n  \"description\": \"Static security audit and code formatting check\",\n  \"commands\": [\n    \"npm run format:check\",\n    \"npm run audit-deps\"\n  ],\n  \"fail_on_warning\": true\n}",
+    logs: [
+      "[1/2] Running 'npm run format:check'...\n✓ Code matches prettier guidelines.",
+      "[2/2] Running 'npm run audit-deps'...\n⚠️ Found 2 low-severity vulnerable packages (non-breaking).\n🎉 PR Audit Passed with warnings!"
+    ]
+  },
+  migrator: {
+    title: "DB Migrator (db-migrator)",
+    desc: "Создает безопасную схему миграции БД, запускает бэкап и накатывает изменения на базу PostgreSQL.",
+    json: "{\n  \"name\": \"db-migrator\",\n  \"description\": \"Generate and run schema migrations in production\",\n  \"commands\": [\n    \"npx prisma migrate dev --name init\",\n    \"npm run db:backup\"\n  ],\n  \"fail_on_warning\": true\n}",
+    logs: [
+      "[1/2] Running 'npx prisma migrate dev --name init'...\n✓ Prisma client updated successfully.",
+      "[2/2] Running 'npm run db:backup'...\n✓ Production database snapshot saved to AWS S3.\n🎉 Migrations deployed successfully!"
+    ]
+  }
+};
+
+window.selectSkillBlueprint = function(bp) {
+  window.skillBlueprint = bp;
+  const bps = ['deploy', 'audit', 'migrator'];
+  bps.forEach(b => {
+    const btn = document.getElementById('skill-btn-' + b);
+    if (!btn) return;
+    if (b === bp) {
+      btn.style.background = 'var(--accent-emerald)';
+      btn.style.borderColor = 'var(--accent-emerald)';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'rgba(255,255,255,0.05)';
+      btn.style.borderColor = 'rgba(255,255,255,0.1)';
+      btn.style.color = '#a1a1aa';
+    }
+  });
+  
+  const current = skillBlueprints[bp];
+  document.getElementById('skill-bp-title').innerText = current.title;
+  document.getElementById('skill-bp-desc').innerText = current.desc;
+  document.getElementById('skill-json-output').innerText = current.json;
+  
+  // reset logs
+  if (window.skillSimInterval) {
+    clearInterval(window.skillSimInterval);
+    window.skillSimInterval = null;
+  }
+  document.getElementById('skill-sim-logs').innerText = 'Нажмите "Run Simulation", чтобы увидеть лог исполнения навыка...';
+};
+
+window.copySkillJson = function() {
+  const jsonText = document.getElementById('skill-json-output').innerText;
+  navigator.clipboard.writeText(jsonText).then(() => {
+    alert('JSON навыка скопирован в буфер обмена!');
+  });
+};
+
+window.simulateSkillRun = function() {
+  const logsPre = document.getElementById('skill-sim-logs');
+  if (!logsPre) return;
+  
+  if (window.skillSimInterval) {
+    clearInterval(window.skillSimInterval);
+  }
+  
+  const current = skillBlueprints[window.skillBlueprint];
+  logsPre.innerText = "🚀 Инициализация запуска навыка...\n\n";
+  
+  let index = 0;
+  window.skillSimInterval = setInterval(() => {
+    if (index < current.logs.length) {
+      logsPre.innerText += current.logs[index] + "\n\n";
+      logsPre.scrollTop = logsPre.scrollHeight;
+      index++;
+    } else {
+      clearInterval(window.skillSimInterval);
+      window.skillSimInterval = null;
+    }
+  }, 1000);
+};
+
+// 3. Railway Canvas Console
+window.railwaySelectedNode = 'web';
+window.railwayLogOpen = true;
+
+const railwayNodesInfo = {
+  web: {
+    title: "Next.js Web Service",
+    cpu: "12%",
+    ram: "112 MB / 256 MB",
+    cost: "0.24$/month",
+    logs: [
+      "[system] Deploying next-app from branch main...",
+      "[build] ✓ Next.js compiled successfully",
+      "[runtime] Server listening on port 3000",
+      "[runtime] GET /api/health - 200 OK (8ms)"
+    ]
+  },
+  db: {
+    title: "PostgreSQL 16 Database",
+    cpu: "4%",
+    ram: "84 MB / 512 MB",
+    cost: "0.12$/month",
+    logs: [
+      "[db] PostgreSQL Database server initialized",
+      "[db] Database system is ready to accept connections on port 5432",
+      "[db] connection received from: web-service:52134",
+      "[db] pg_dump auto-backup initiated"
+    ]
+  },
+  redis: {
+    title: "Redis Cache Store",
+    cpu: "1%",
+    ram: "16 MB / 128 MB",
+    cost: "0.05$/month",
+    logs: [
+      "[redis] Running redis-server v7.2.4",
+      "[redis] Server started, Redis version 7.2.4",
+      "[redis] DB loaded from disk: 0.015 seconds",
+      "[redis] Ready to accept connections"
+    ]
+  }
+};
+
+window.selectRailwayNode = function(node) {
+  window.railwaySelectedNode = node;
+  const nodes = ['web', 'db', 'redis'];
+  nodes.forEach(n => {
+    const card = document.getElementById('rwy-node-' + n);
+    if (!card) return;
+    if (n === node) {
+      card.style.background = 'rgba(255,255,255,0.06)';
+      card.style.borderColor = 'rgba(167, 139, 250, 0.6)';
+      card.style.boxShadow = '0 0 12px rgba(167, 139, 250, 0.2)';
+    } else {
+      card.style.background = 'rgba(255,255,255,0.02)';
+      card.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+      card.style.boxShadow = 'none';
+    }
+  });
+  
+  const current = railwayNodesInfo[node];
+  document.getElementById('rwy-selected-title').innerText = current.title;
+  document.getElementById('rwy-cpu').innerText = current.cpu;
+  document.getElementById('rwy-ram').innerText = current.ram;
+  document.getElementById('rwy-cost').innerText = current.cost;
+  
+  const consoleLog = document.getElementById('rwy-log-console');
+  if (consoleLog) {
+    consoleLog.innerText = current.logs.join('\n');
+    consoleLog.scrollTop = consoleLog.scrollHeight;
+  }
+};
+
+window.redeployRailwayNode = function() {
+  const node = window.railwaySelectedNode;
+  const statusLed = document.getElementById('rwy-status-' + node);
+  const statusText = document.getElementById('rwy-text-' + node);
+  const consoleLog = document.getElementById('rwy-log-console');
+  
+  if (statusLed) {
+    statusLed.style.background = '#fbbf24';
+    statusLed.style.boxShadow = '0 0 8px #fbbf24';
+  }
+  if (statusText) {
+    statusText.innerText = 'Building...';
+  }
+  if (consoleLog) {
+    consoleLog.innerText = `[system] Re-deploy requested for ${node}...\n[build] Starting build pipeline...\n[build] Installing dependencies...\n`;
+  }
+  
+  setTimeout(() => {
+    if (statusLed) {
+      statusLed.style.background = '#22c55e';
+      statusLed.style.boxShadow = '0 0 8px #22c55e';
+    }
+    const current = railwayNodesInfo[node];
+    if (statusText) {
+      statusText.innerText = node === 'db' ? 'Connected (' + current.cost + ')' : 'Active (' + current.cost + ')';
+    }
+    if (consoleLog) {
+      consoleLog.innerText += `[build] Container built successfully\n[system] Deploy successful!\n` + current.logs.slice(2).join('\n');
+      consoleLog.scrollTop = consoleLog.scrollHeight;
+    }
+  }, 1500);
+};
+
+window.toggleRailwayLogs = function() {
+  window.railwayLogOpen = !window.railwayLogOpen;
+  const consoleLog = document.getElementById('rwy-log-console');
+  const toggleIcon = document.getElementById('rwy-log-toggle-icon');
+  
+  if (consoleLog) {
+    if (window.railwayLogOpen) {
+      consoleLog.style.display = 'block';
+      toggleIcon.innerText = '▲';
+    } else {
+      consoleLog.style.display = 'none';
+      toggleIcon.innerText = '▼';
+    }
+  }
+};
 
 if (typeof module !== 'undefined') {
   module.exports = { tracks, levels, nodes, toolsDatabase };

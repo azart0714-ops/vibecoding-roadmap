@@ -153,6 +153,19 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l3_5_prompt_caching", to: "l4_5_release_tags" },
     { from: "l3_8_ai_models", to: "l4_1_private_git" },
 
+    // Claude Code CLI Ecosystem flows
+    { from: "l3_2_claude_cli", to: "l3_13_claude_code_guide" },
+    { from: "l3_12_git_worktrees", to: "l3_13_claude_code_guide" },
+    { from: "l3_13_claude_code_guide", to: "l3_14_claude_code_modes" },
+    { from: "l3_14_claude_code_modes", to: "l3_15_model_selection" },
+    { from: "l3_8_ai_models", to: "l3_15_model_selection" },
+    { from: "l3_15_model_selection", to: "l3_16_new_features_v2" },
+    { from: "l3_16_new_features_v2", to: "l3_17_config_hierarchy" },
+    { from: "l3_17_config_hierarchy", to: "l3_18_env_vars" },
+    { from: "l3_18_env_vars", to: "l3_19_rules_files" },
+    { from: "l3_19_rules_files", to: "l3_20_reusable_skills" },
+    { from: "l3_20_reusable_skills", to: "l4_1_private_git" },
+
     // L4 -> L5 (Git Controls to Executive Autonomous Planning)
     { from: "l4_1_private_git", to: "l5_1_autonomous_planning" },
     { from: "l4_2_gitignore", to: "l5_3_claude_md_auto" },
@@ -240,8 +253,38 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l6_7_analytics_monitoring", to: "l6_8_yookassa_brevo" },
     { from: "l6_8_yookassa_brevo", to: "l7_13_apple_dev" },
     { from: "l7_12_deploy_checklist", to: "l7_13_apple_dev" },
-    { from: "l7_13_apple_dev", to: "l7_14_test_isolation" },
-    { from: "l7_14_test_isolation", to: "l8_1_swarm_workflow" }
+    { from: "l7_14_test_isolation", to: "l8_1_swarm_workflow" },
+    { from: "l0_8_guides_resources", to: "l0_11_context_engineering" },
+    { from: "l0_11_context_engineering", to: "l0_12_reward_hacking" },
+    { from: "l0_12_reward_hacking", to: "l0_13_a11y_audit" },
+    { from: "l0_13_a11y_audit", to: "l0_14_svg_migration" },
+    { from: "l0_14_svg_migration", to: "l1_5_project_checklists" },
+
+    // L1 Sequential Flow
+    { from: "l1_5_project_checklists", to: "l1_6_prompt_formula" },
+    { from: "l1_6_prompt_formula", to: "l1_7_six_prompt_techniques" },
+    { from: "l1_7_six_prompt_techniques", to: "l1_8_cli_tools_matrix" },
+    { from: "l1_8_cli_tools_matrix", to: "l1_9_ai_books" },
+    { from: "l1_9_ai_books", to: "l1_10_figma_workflow" },
+    { from: "l1_10_figma_workflow", to: "l1_11_v0_generation" },
+    { from: "l1_11_v0_generation", to: "l1_12_storybook_docs" },
+    { from: "l1_12_storybook_docs", to: "l1_13_quality_gates" },
+    { from: "l1_13_quality_gates", to: "l1_14_handoff_standard" },
+    { from: "l1_14_handoff_standard", to: "l2_1_human_ai_roles" },
+
+    // L2 Cycle 5 Sequential Flow
+    { from: "l2_20_cursorrules_hygiene", to: "l2_21_five_critical_mistakes" },
+    { from: "l2_21_five_critical_mistakes", to: "l2_22_claude_projects" },
+    { from: "l2_22_claude_projects", to: "l2_23_agent_roles" },
+    { from: "l2_23_agent_roles", to: "l2_24_context_reset" },
+    { from: "l2_24_context_reset", to: "l2_25_thinking_budget" },
+    { from: "l2_25_thinking_budget", to: "l2_26_claude_prompt_templates" },
+    { from: "l2_26_claude_prompt_templates", to: "l3_1_vscode" },
+
+    // Cycle 7 - L4 Deploy & Shadcn Connections
+    { from: "l4_10_reusable_blocks", to: "l4_11_deploy_strategy" },
+    { from: "l4_11_deploy_strategy", to: "l4_12_shadcn_revolution" },
+    { from: "l4_12_shadcn_revolution", to: "l5_1_autonomous_planning" }
   ];
 
   // Specific visual weights for Bento cards
@@ -267,6 +310,8 @@ document.addEventListener("DOMContentLoaded", () => {
     l4_10_reusable_blocks: "weight-medium",
     l7_10_testing_principles: "weight-medium",
     l8_10_agent_customization: "weight-medium",
+    l4_11_deploy_strategy: "weight-medium",
+    l4_12_shadcn_revolution: "weight-medium",
 
     // Milestone 6 Bento weights
     l2_10_ai_lies: "weight-medium",
@@ -279,6 +324,10 @@ document.addEventListener("DOMContentLoaded", () => {
     l2_17_nightly_tests: "weight-medium",
     l0_6_savings_metrics: "weight-medium",
     l0_7_tools_cost: "weight-medium",
+    l0_11_context_engineering: "weight-medium",
+    l0_12_reward_hacking: "weight-medium",
+    l0_13_a11y_audit: "weight-medium",
+    l0_14_svg_migration: "weight-medium",
 
     // Milestone 14 Bento Weights
     l5_7_prisma_vibecoding: "weight-medium",
@@ -296,7 +345,37 @@ document.addEventListener("DOMContentLoaded", () => {
     l5_9_docker_multicontainer: "weight-medium",
     l6_8_yookassa_brevo: "weight-medium",
     l7_13_apple_dev: "weight-medium",
-    l7_14_test_isolation: "weight-medium"
+    l7_14_test_isolation: "weight-medium",
+
+    // L1 New Nodes Bento Weights
+    l1_6_prompt_formula: "weight-medium",
+    l1_7_six_prompt_techniques: "weight-medium",
+    l1_8_cli_tools_matrix: "weight-medium",
+    l1_9_ai_books: "weight-medium",
+    l1_10_figma_workflow: "weight-medium",
+    l1_11_v0_generation: "weight-medium",
+    l1_12_storybook_docs: "weight-medium",
+    l1_13_quality_gates: "weight-medium",
+    l1_14_handoff_standard: "weight-medium",
+
+    // L2 Cycle 5 New Nodes Bento Weights
+    l2_20_cursorrules_hygiene: "weight-medium",
+    l2_21_five_critical_mistakes: "weight-medium",
+    l2_22_claude_projects: "weight-medium",
+    l2_23_agent_roles: "weight-medium",
+    l2_24_context_reset: "weight-medium",
+    l2_25_thinking_budget: "weight-medium",
+    l2_26_claude_prompt_templates: "weight-medium",
+
+    // L3 Cycle 6 New Nodes Bento Weights (Claude Code CLI)
+    l3_13_claude_code_guide: "weight-large",
+    l3_14_claude_code_modes: "weight-medium",
+    l3_15_model_selection: "weight-medium",
+    l3_16_new_features_v2: "weight-medium",
+    l3_17_config_hierarchy: "weight-medium",
+    l3_18_env_vars: "weight-medium",
+    l3_19_rules_files: "weight-large",
+    l3_20_reusable_skills: "weight-medium"
   };
 
   // 2. Initialize Renders
