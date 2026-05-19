@@ -284,7 +284,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cycle 7 - L4 Deploy & Shadcn Connections
     { from: "l4_10_reusable_blocks", to: "l4_11_deploy_strategy" },
     { from: "l4_11_deploy_strategy", to: "l4_12_shadcn_revolution" },
-    { from: "l4_12_shadcn_revolution", to: "l5_1_autonomous_planning" }
+    { from: "l4_12_shadcn_revolution", to: "l4_13_ui_libraries_comparison" },
+    { from: "l4_13_ui_libraries_comparison", to: "l4_14_radix_primitives" },
+    { from: "l4_14_radix_primitives", to: "l4_15_ai_design_system" },
+    { from: "l4_15_ai_design_system", to: "l4_16_mobile_first_tailwind" },
+    { from: "l4_16_mobile_first_tailwind", to: "l4_17_accessibility_a11y" },
+    { from: "l4_17_accessibility_a11y", to: "l4_18_zustand_state" },
+    { from: "l4_18_zustand_state", to: "l5_1_autonomous_planning" }
   ];
 
   // Specific visual weights for Bento cards
@@ -312,6 +318,12 @@ document.addEventListener("DOMContentLoaded", () => {
     l8_10_agent_customization: "weight-medium",
     l4_11_deploy_strategy: "weight-medium",
     l4_12_shadcn_revolution: "weight-medium",
+    l4_13_ui_libraries_comparison: "weight-medium",
+    l4_14_radix_primitives: "weight-medium",
+    l4_15_ai_design_system: "weight-medium",
+    l4_16_mobile_first_tailwind: "weight-medium",
+    l4_17_accessibility_a11y: "weight-medium",
+    l4_18_zustand_state: "weight-medium",
 
     // Milestone 6 Bento weights
     l2_10_ai_lies: "weight-medium",
@@ -1390,6 +1402,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleStepCompletion(node.id, idx, e.target.checked);
       });
     });
+    if (window.updateZustandUI) window.updateZustandUI();
   }
 
   function closeDrawer() {
@@ -1683,6 +1696,31 @@ document.addEventListener("DOMContentLoaded", () => {
       mapCanvas.classList.remove("smooth-transform");
     }, 600);
   }
+
+  // --- Zustand Store Simulator ---
+  let zustandCounter = 0;
+  window.incrementZustandCounter = function() {
+    zustandCounter++;
+    window.updateZustandUI();
+  };
+  window.decrementZustandCounter = function() {
+    zustandCounter--;
+    window.updateZustandUI();
+  };
+  window.updateZustandUI = function() {
+    const el = document.getElementById("zustand-counter-val");
+    if (el) {
+      el.innerText = zustandCounter;
+      // Premium interactive scale bounce micro-animation
+      el.style.transform = "scale(1.15)";
+      el.style.color = zustandCounter >= 0 ? "#a78bfa" : "#f87171";
+      el.style.transition = "transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.15s ease";
+      setTimeout(() => {
+        el.style.transform = "scale(1)";
+        el.style.color = "#fff";
+      }, 80);
+    }
+  };
 
   // Start initialization
   init();

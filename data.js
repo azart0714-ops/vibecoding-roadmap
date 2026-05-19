@@ -955,6 +955,161 @@ const toolsDatabase = {
     desc: "Платформа для обмена ИИ-компонентами и готовыми промптами для UI.",
     setup: "Доступно на uithub.com.",
     run: "Копируйте лучшие практики верстки от сообщества вайбкодеров."
+  },
+  "Shadcn/ui": {
+    desc: "Коллекция переиспользуемых компонентов, копируемых прямо в ваш проект (без установки в node_modules). Идеально для модификации кода силами ИИ.",
+    setup: "Инициализация в проекте: npx shadcn@latest init",
+    run: "Добавление компонента: npx shadcn@latest add button"
+  },
+  "Radix UI": {
+    desc: "Библиотека безстилевых (headless) доступных UI-примитивов, обеспечивающая соответствие WCAG AA и фокус-менеджмент.",
+    setup: "Устанавливается автоматически при добавлении компонентов Shadcn.",
+    run: "Обеспечивает доступность с клавиатуры и правильные WAI-ARIA теги."
+  },
+  "Tailwind CSS": {
+    desc: "Утилитарный CSS-фреймворк для быстрой стилизации прямо в разметке. Любимый инструмент ИИ благодаря отсутствию каскадных конфликтов.",
+    setup: "Устанавливается при инициализации Next.js/Vite или через npx tailwindcss init.",
+    run: "Пишите классы вроде `flex items-center justify-between p-4 bg-slate-900` прямо в className."
+  },
+  "v0.dev": {
+    desc: "Генеративный ИИ-инструмент от Vercel для создания адаптивных UI-интерфейсов на базе Tailwind CSS и Shadcn/ui.",
+    setup: "Доступно онлайн на v0.dev (требуется авторизация через GitHub/Vercel).",
+    run: "Опишите желаемый UI промптом и скопируйте сгенерированный React/HTML код в проект."
+  },
+  "MUI": {
+    desc: "Популярная библиотека компонентов Material Design, скрывающая свой код в node_modules, что затрудняет кастомизацию для ИИ.",
+    setup: "npm install @mui/material @emotion/react @emotion/styled",
+    run: "Используйте готовые компоненты вроде <Button variant=\"contained\">."
+  },
+  "Chakra UI": {
+    desc: "Простая библиотека компонентов со стилизацией через props. Удобна, но уступает Shadcn по гибкости для ИИ.",
+    setup: "npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion",
+    run: "Используйте декларативные стили: <Box bg=\"tomato\" w=\"100%\" p={4}>."
+  },
+  "Ant Design": {
+    desc: "Корпоративная библиотека компонентов с жестким дизайном. Крайне сложна для рефакторинга и адаптации силами ИИ.",
+    setup: "npm install andd",
+    run: "Подходит для тяжелых внутренних админ-панелей с фиксированным стилем."
+  },
+  "Vibecoding Score": {
+    desc: "Сводная оценка пригодности инструментов и библиотек для совместной разработки человека и ИИ-агентов.",
+    setup: "Методология оценки доступности кода для LLM-моделей.",
+    run: "Позволяет быстро отсекать инструменты, скрывающие логику внутри пакетов."
+  },
+  "Headless UI": {
+    desc: "Подход к созданию UI-компонентов, где библиотека отвечает за поведение и a11y, а стили задаются разработчиком вручную.",
+    setup: "Реализуется с помощью Radix UI, React Aria или Headless UI от Tailwind Labs.",
+    run: "Позволяет ИИ свободно менять дизайн, не ломая функционал доступности."
+  },
+  "WCAG AA": {
+    desc: "Международный стандарт доступности веб-контента для людей с ограниченными возможностями.",
+    setup: "Обязательный критерий при разработке коммерческих интерфейсов.",
+    run: "Проверяйте соблюдение контрастности 4.5:1, управление с клавиатуры и семантику тегов."
+  },
+  "Accessibility": {
+    desc: "Обеспечение доступности интерфейса для всех категорий пользователей, включая скринридеры.",
+    setup: "Семантический HTML, правильные WAI-ARIA атрибуты и управление фокусом.",
+    run: "Используйте для отладки инструменты axe DevTools, WAVE или аудит Lighthouse."
+  },
+  "Design Tokens": {
+    desc: "Базовые визуальные константы дизайн-системы (цвета, шрифты, отступы, скругления).",
+    setup: "Задаются в виде CSS-переменных в `:root` секции CSS файла.",
+    run: "Маппятся в Tailwind CSS конфиге для автодополнения в редакторе."
+  },
+  "global.css": {
+    desc: "Главный CSS-файл проекта, где определяются глобальные стили, темы и дизайн-токены.",
+    setup: "Создается в корне или папке `src/` при инициализации проекта.",
+    run: "Импортируйте в `_app.js` / `layout.js` для применения стилей ко всему приложению."
+  },
+  "Showcase.html": {
+    desc: "Изолированная страница-витрина, на которой отрендерены все UI-компоненты во всех возможных состояниях.",
+    setup: "Создайте `/showcase` или `showcase.html` в корне проекта.",
+    run: "Служит эталонным скриншотом для обучения мультимодальных ИИ-моделей дизайну вашего приложения."
+  },
+  "UI Atoms": {
+    desc: "Мельчайшие неделимые блоки интерфейса (кнопки, инпуты, иконки, бейджи).",
+    setup: "Проектируются на первом этапе сборки дизайн-системы.",
+    run: "Комбинируются для создания более сложных молекул и организмов (форм, карточек)."
+  },
+  "E2E Testing": {
+    desc: "Сквозное тестирование интерфейса, имитирующее реальные действия пользователя в браузере.",
+    setup: "Установите Playwright: npm init playwright@latest.",
+    run: "Запустите тесты: npx playwright test для проверки работоспособности сценариев."
+  },
+  "Device Mode": {
+    desc: "Инструмент эмуляции различных разрешений экранов мобильных устройств и планшетов в Chrome DevTools.",
+    setup: "Встроен в любой современный браузер (Chrome, Firefox, Safari). Дополнительная установка не требуется.",
+    run: "Откройте DevTools (F12 / Cmd+Opt+I) и нажмите иконку мобильных устройств в левом верхнем углу (Ctrl+Shift+M)."
+  },
+  "Tailwind Breakpoints": {
+    desc: "Система встроенных медиа-запросов Tailwind CSS (sm, md, lg, xl, 2xl) для адаптивной верстки.",
+    setup: "Включена по умолчанию в Tailwind CSS. Настраивается в `tailwind.config.js` в секции `screens`.",
+    run: "Применяйте префиксы к классам, например: `w-full md:w-1/2 lg:w-1/3` для изменения ширины на разных экранах."
+  },
+  "Responsive Design": {
+    desc: "Методология веб-дизайна, обеспечивающая оптимальное отображение интерфейса на любых устройствах.",
+    setup: "Определяется использованием гибких сеток (Flexbox, Grid), медиа-запросов и относительных единиц (rem, em, %).",
+    run: "Используйте адаптивную сетку и CSS Container Queries для независимой подстройки блоков под размер контейнера."
+  },
+  "WCAG 2.1": {
+    desc: "Руководство по обеспечению доступности веб-контента (Web Content Accessibility Guidelines) версии 2.1.",
+    setup: "Официальный международный стандарт W3C. Не требует установки, служит эталоном для аудита интерфейсов.",
+    run: "Интегрируйте правила WCAG (например, уровень AA) в ТЗ для ИИ и проверяйте контрастность, фокус и теги."
+  },
+  "ARIA Labels": {
+    desc: "Спецификация WAI-ARIA атрибутов (aria-label, aria-describedby) для передачи контекста вспомогательным технологиям.",
+    setup: "Поддерживается всеми современными браузерами и скринридерами из коробки.",
+    run: "Добавляйте в HTML: `<button aria-label=\"Закрыть модальное окно\">X</button>` для невизуального описания."
+  },
+  "Keyboard Navigation": {
+    desc: "Обеспечение управления и перемещения по всем интерактивным элементам страницы с клавиатуры.",
+    setup: "Реализуется с помощью атрибута `tabindex` и обработки событий нажатия клавиш (keydown).",
+    run: "Используйте `Tab` для перехода, `Enter/Space` для активации и `Escape` для закрытия всплывающих окон."
+  },
+  "Focus Management": {
+    desc: "Технология контроля за активным элементом (focus) в интерфейсе при динамическом изменении DOM.",
+    setup: "Используется встроенный JS API (`element.focus()`) или библиотеки примитивов вроде Radix UI / Focus Trap.",
+    run: "Удерживайте фокус внутри открытого модального окна (Focus Trap) и возвращайте его на триггер при закрытии."
+  },
+  "axe DevTools": {
+    desc: "Один из лучших автоматических инструментов для тестирования доступности (a11y) веб-страниц.",
+    setup: "Установите расширение axe DevTools из интернет-магазина Chrome / Firefox Extensions.",
+    run: "Откройте панель разработчика (DevTools), перейдите на вкладку 'axe DevTools' и нажмите 'Scan all of my page'."
+  },
+  "Lighthouse": {
+    desc: "Автоматизированный инструмент от Google для анализа качества веб-страниц (Performance, SEO, A11y).",
+    setup: "Встроен в Google Chrome DevTools. Дополнительная установка не требуется.",
+    run: "Откройте DevTools -> вкладка 'Lighthouse' -> выберите 'Accessibility' -> нажмите 'Analyze page load'."
+  },
+  "WAVE": {
+    desc: "Web Accessibility Evaluation Tool — интерактивный инструмент визуального анализа доступности страниц.",
+    setup: "Доступен как онлайн-сервис wave.webaim.org или в виде расширения для Chrome/Firefox.",
+    run: "Нажмите на иконку WAVE на панели инструментов браузера для получения детальной интерактивной карты A11y ошибок."
+  },
+  "Zustand": {
+    desc: "Легковесный, быстрый и чрезвычайно лаконичный стейт-менеджер для React без бойлерплейта.",
+    setup: "Установите в проект с помощью пакетного менеджера: `npm install zustand` или `yarn add zustand`.",
+    run: "Создайте стор через `create` и используйте как обычный хук React: `const count = useStore(state => state.count)`."
+  },
+  "Boilerplate Reduction": {
+    desc: "Практика минимизации шаблонного (повторяющегося) кода для улучшения читаемости и понимания ИИ.",
+    setup: "Достигается за счет выбора декларативных библиотек (Zustand, Tailwind, React Query) вместо императивных.",
+    run: "Заменяйте громоздкие конструкции (Redux Actions/Reducers) на лаконичные функции и прямые подписки."
+  },
+  "TypeScript-first": {
+    desc: "Подход к разработке, при котором типы проектируются в первую очередь, обеспечивая автодополнение и надежность.",
+    setup: "Встроено в современные шаблоны Vite/Next.js. Требуется компилятор typescript (`tsc`).",
+    run: "Описывайте строгие интерфейсы стейта и пропсов, чтобы ИИ мгновенно видел ошибки типизации при кодинге."
+  },
+  "State Store": {
+    desc: "Централизованное хранилище состояния приложения, отделенное от визуального слоя представления.",
+    setup: "Создается с помощью стейт-менеджеров (Zustand/Redux) как синглтон для управления жизненным циклом данных.",
+    run: "Подписывайте компоненты только на необходимые срезы (selectors) стора для оптимизации рендеринга."
+  },
+  "No Provider": {
+    desc: "Архитектурный паттерн Zustand, избавляющий от необходимости оборачивать компоненты в React Context Provider.",
+    setup: "Является фундаментальной особенностью Zustand, работающего напрямую с внешним стором (external store).",
+    run: "Импортируйте хук стора в любой файл и используйте его. Нет риска поломки контекста и лишней вложенности."
   }
 };
 
@@ -3497,6 +3652,229 @@ const nodes = [
       }
     ],
     tools: ["Shadcn/ui", "Radix UI", "Tailwind CSS", "v0.dev"]
+  },
+  {
+    id: "l4_13_ui_libraries_comparison",
+    level: "L4",
+    track: "stack",
+    title: "Сравнительный анализ UI-библиотек",
+    shortDesc: "Сравнение Shadcn/ui vs MUI vs Chakra vs Ant Design под призмой Vibecoding.",
+    steps: [
+      {
+        text: "Сравнительная таблица UI-стеков.",
+        details: `Интерактивное сравнение показывает неоспоримое преимущество Shadcn/ui для совместной работы человека и ИИ-агентов. Ограничения закрытых пакетов в node_modules блокируют ИИ:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); overflow-x: auto;">
+  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 11px; color: #e2e8f0; line-height: 1.4;">
+    <thead>
+      <tr style="border-bottom: 2px solid rgba(255,255,255,0.15); color: #c084fc;">
+        <th style="padding: 8px 4px; font-weight: 600;">Библиотека</th>
+        <th style="padding: 8px 4px; font-weight: 600;">AI-friendly</th>
+        <th style="padding: 8px 4px; font-weight: 600;">Customization</th>
+        <th style="padding: 8px 4px; font-weight: 600;">Размер бандла</th>
+        <th style="padding: 8px 4px; font-weight: 600;">Доступность</th>
+        <th style="padding: 8px 4px; font-weight: 600;">TS</th>
+        <th style="padding: 8px 4px; font-weight: 600; text-align: right;">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(139, 92, 246, 0.05);">
+        <td style="padding: 8px 4px; font-weight: 600; color: #fff;">Shadcn/ui</td>
+        <td style="padding: 8px 4px; color: #fbbf24;">⭐⭐⭐⭐⭐ (Отлично)</td>
+        <td style="padding: 8px 4px; color: #34d399;">⭐⭐⭐⭐⭐ (Абсолютная)</td>
+        <td style="padding: 8px 4px; color: #38bdf8;">⚡ Очень малый</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Radix (WAI-ARIA)</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Отличная</td>
+        <td style="padding: 8px 4px; text-align: right; font-weight: 700; color: #a78bfa;">9.8 / 10</td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <td style="padding: 8px 4px; font-weight: 600; color: #cbd5e1;">MUI (Material UI)</td>
+        <td style="padding: 8px 4px; color: #f87171;">⭐⭐ (Плохо)</td>
+        <td style="padding: 8px 4px; color: #94a3b8;">⭐⭐⭐ (Сложная)</td>
+        <td style="padding: 8px 4px; color: #f87171;">🐢 Большой</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Хорошая</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Отличная</td>
+        <td style="padding: 8px 4px; text-align: right; font-weight: 700; color: #94a3b8;">5.5 / 10</td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <td style="padding: 8px 4px; font-weight: 600; color: #cbd5e1;">Chakra UI</td>
+        <td style="padding: 8px 4px; color: #fbbf24;">⭐⭐⭐ (Средне)</td>
+        <td style="padding: 8px 4px; color: #38bdf8;">⭐⭐⭐⭐ (Удобная)</td>
+        <td style="padding: 8px 4px; color: #fbbf24;">🐢 Средний</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Отличная</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Отличная</td>
+        <td style="padding: 8px 4px; text-align: right; font-weight: 700; color: #cbd5e1;">6.5 / 10</td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <td style="padding: 8px 4px; font-weight: 600; color: #cbd5e1;">Ant Design</td>
+        <td style="padding: 8px 4px; color: #f87171;">⭐ (Крайне плохо)</td>
+        <td style="padding: 8px 4px; color: #f87171;">⭐⭐ (Жесткая)</td>
+        <td style="padding: 8px 4px; color: #f87171;">🐢 Очень большой</td>
+        <td style="padding: 8px 4px; color: #fbbf24;">⚠️ Средняя</td>
+        <td style="padding: 8px 4px; color: #34d399;">✅ Хорошая</td>
+        <td style="padding: 8px 4px; text-align: right; font-weight: 700; color: #f87171;">4.0 / 10</td>
+      </tr>
+    </tbody>
+  </table>
+</div>`
+      },
+      {
+        text: "Скрытый код в node_modules.",
+        details: "Традиционные UI-библиотеки прячут реализацию компонентов за импортами пакетов. Для ИИ это 'черный ящик': агент не может изменить разметку, починить внутренний баг рендеринга или добавить кастомную анимацию, не прибегая к сложным патчам."
+      },
+      {
+        text: "Метрики Vibecoding Score.",
+        details: "Score оценивается по 3 критериям: доступность исходного кода для контекста ИИ (50%), модульность и независимость файлов (30%), совместимость с CSS-in-JS vs Tailwind (20%). Shadcn/ui выигрывает по всем фронтам."
+      }
+    ],
+    tools: ["Shadcn/ui", "MUI", "Chakra UI", "Ant Design", "Vibecoding Score"]
+  },
+  {
+    id: "l4_14_radix_primitives",
+    level: "L4",
+    track: "stack",
+    title: "Radix UI Primitives — Основа Shadcn",
+    shortDesc: "Разбор headless-компонентов: Dialog, Dropdown, Popover, Tooltip, Toast, Tabs/Accordion.",
+    steps: [
+      {
+        text: "Роль безстилевых (Headless) примитивов.",
+        details: "Radix UI берет на себя всю сложную логику доступности (WAI-ARIA, управление фокусом, клавиатурные сокращения), оставляя стилизацию разработчику и ИИ. Это идеальный симбиоз: логика стабильна, а визуал пластичен."
+      },
+      {
+        text: "Ключевые примитивы в арсенале.",
+        details: `Каждый примитив решает сложную UX/A11y задачу:
+<div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px;">
+  <div style="background: rgba(255,255,255,0.03); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+    <strong style="color: #c084fc;">💬 Dialog / Popover</strong><br>
+    Управление фокусом, блокировка прокрутки и закрытие по Esc.
+  </div>
+  <div style="background: rgba(255,255,255,0.03); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+    <strong style="color: #38bdf8;">🗂️ Accordion / Tabs</strong><br>
+    Правильная индексация вкладок и доступность скринридеров.
+  </div>
+  <div style="background: rgba(255,255,255,0.03); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+    <strong style="color: #34d399;">🛎️ Toast</strong><br>
+    Асинхронные уведомления с поддержкой очередей и времени жизни.
+  </div>
+  <div style="background: rgba(255,255,255,0.03); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+    <strong style="color: #fbbf24;">🔍 Tooltip / Dropdown</strong><br>
+    Умное позиционирование и следование за триггером.
+  </div>
+</div>`
+      },
+      {
+        text: "Преимущества для a11y (WCAG AA).",
+        details: "Самостоятельное написание доступного модального окна занимает десятки часов и полно багов (утечка фокуса, прокрутка подложки). Radix UI закрывает этот вопрос на 100%, гарантируя прохождение автоматических аудитов доступности."
+      }
+    ],
+    tools: ["Radix UI", "Headless UI", "WCAG AA", "Accessibility"]
+  },
+  {
+    id: "l4_15_ai_design_system",
+    level: "L4",
+    track: "stack",
+    title: "Создание Design System с AI за 1 час",
+    shortDesc: "Пошаговое руководство по быстрой генерации дизайн-системы силами ИИ-ассистента.",
+    steps: [
+      {
+        text: "Этап 1: Дизайн-токены и global.css (15 минут).",
+        details: "Попросите ИИ сгенерировать цветовую палитру, шрифтовую сетку и радиусы скруглений в виде CSS-переменных в `:root`. Интегрируйте их в Tailwind-конфиг для поддержки динамических тем (светлая/темная)."
+      },
+      {
+        text: "Этап 2: Базовые атомарные компоненты (15 минут).",
+        details: "Создание атомов: Button, Input, Card, Badge. Используйте CLI-генераторы (например, shadcn add) или попросите ИИ создать их на основе ваших токенов для исключения расхождений в отступах и границах."
+      },
+      {
+        text: "Этап 3: Создание страницы-витрины (15 минут).",
+        details: "Создайте изолированный файл `showcase.html` или компонент `Showcase`, где отрендерите все компоненты во всех состояниях (default, hover, active, disabled). Это дает ИИ визуальный ориентир для сборки будущих страниц."
+      },
+      {
+        text: "Этап 4: Тестирование и E2E верификация (15 минут).",
+        details: "Напишите простой Playwright тест, который обходит все интерактивные состояния компонентов, проверяя их работоспособность и стабильность стилей при изменении темы."
+      }
+    ],
+    tools: ["Design Tokens", "global.css", "Showcase.html", "UI Atoms", "E2E Testing"]
+  },
+  {
+    id: "l4_16_mobile_first_tailwind",
+    level: "L4",
+    track: "stack",
+    title: "Mobile-first адаптивность с Tailwind",
+    shortDesc: "Адаптивный дизайн, контрольные точки Tailwind CSS и приемы тестирования с Device Mode.",
+    steps: [
+      {
+        text: "Принцип Mobile-first проектирования.",
+        details: "Начинайте верстку с мобильного экрана (без префиксов типа `md:`), а затем расширяйте дизайн для десктопов с помощью медиазапросов Tailwind."
+      },
+      {
+        text: "Использование Tailwind Breakpoints.",
+        details: "Научитесь правильно комбинировать префиксы `sm:`, `md:`, `lg:`, `xl:` для гибкой смены сеток, размеров шрифтов и видимости элементов."
+      },
+      {
+        text: "Тестирование в Chrome DevTools Device Mode.",
+        details: "Эмулируйте мобильные устройства (iPhone, Pixel, iPad) в панели разработчика Chrome для быстрой отладки верстки, тач-событий и жестов."
+      }
+    ],
+    tools: ["Tailwind CSS", "Device Mode", "Tailwind Breakpoints", "Responsive Design"]
+  },
+  {
+    id: "l4_17_accessibility_a11y",
+    level: "L4",
+    track: "stack",
+    title: "Accessibility (A11y) — Обязательный минимум",
+    shortDesc: "Как разрабатывать доступные веб-интерфейсы в соответствии с WCAG 2.1 Level AA с помощью семантики и ARIA.",
+    steps: [
+      {
+        text: "Стандарты доступности WCAG 2.1 Level AA.",
+        details: "Важнейшие правила контрастности текста (минимум 4.5:1), обязательного использования `alt` для изображений, понятных текстовых подписей и адаптации для людей с ограниченными возможностями."
+      },
+      {
+        text: "Семантика HTML и ARIA-атрибуты.",
+        details: "Обязательное использование семантических тегов (`main`, `nav`, `section`, `article`, `header`, `footer`, `button` вместо `div` с onClick) и ARIA (`aria-label`, `aria-expanded`, `aria-describedby`) для скринридеров."
+      },
+      {
+        text: "Keyboard Navigation и Focus Management.",
+        details: "Обеспечение навигации по всей странице кнопками `Tab`, `Enter`, `Space` и `Escape`. Использование фокус-ловушек (Focus Traps) при открытии модальных диалогов, выпадающих списков и штор."
+      },
+      {
+        text: "Автоматический аудит доступности.",
+        details: "Использование профессиональных плагинов для проверки: axe DevTools, Lighthouse, WAVE и интеграция линтеров для раннего обнаружения ошибок доступности."
+      }
+    ],
+    tools: ["WCAG 2.1", "ARIA Labels", "Keyboard Navigation", "Focus Management", "axe DevTools", "Lighthouse", "WAVE"]
+  },
+  {
+    id: "l4_18_zustand_state",
+    level: "L4",
+    track: "stack",
+    title: "Zustand — Идеальный State Manager для Vibecoding",
+    shortDesc: "Почему ультралегкий Zustand превосходит тяжелые Redux и Context для ИИ-разработки в 2026 году.",
+    steps: [
+      {
+        text: "Zustand против Redux и Context.",
+        details: "Меньше шаблонного кода (boilerplate) в 10 раз по сравнению с Redux. В отличие от React Context, Zustand не вызывает ненужных ререндеров всего дерева компонентов при обновлении отдельных полей."
+      },
+      {
+        text: "Удобство для ИИ-помощников (AI-friendly).",
+        details: "ИИ часто делает семантические ошибки при генерации развесистого Redux-кода (reducers, action creators, selectors). Лаконичный API Zustand (10-15 строк кода на store) ИИ понимает и пишет правильно с первой попытки."
+      },
+      {
+        text: "Развертывание без провайдеров (No Provider).",
+        details: "Состояние Zustand импортируется напрямую как хук React, не требуя оборачивания корневого приложения в `Provider`. Это снижает зацепление компонентов и упрощает рефакторинг с ИИ."
+      },
+      {
+        text: "Интерактивный виджет Zustand Store.",
+        details: `Попробуйте интерактивный Zustand store в реальном времени! Никаких провайдеров, полная типизация и моментальное реактивное обновление:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 6px; font-family: monospace;">ZUSTAND COUNTER STORE STATE:</div>
+  <div id="zustand-counter-val" style="font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 12px; font-family: monospace;">0</div>
+  <div style="display: flex; gap: 8px; justify-content: center;">
+    <button id="zustand-dec-btn" onclick="event.stopPropagation(); window.decrementZustandCounter && window.decrementZustandCounter();" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s;">-</button>
+    <button id="zustand-inc-btn" onclick="event.stopPropagation(); window.incrementZustandCounter && window.incrementZustandCounter();" style="background: #8b5cf6; border: none; color: #fff; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);">+</button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Zustand", "Boilerplate Reduction", "TypeScript-first", "State Store", "No Provider"]
   },
 
   // ================= LEVEL L5 =================

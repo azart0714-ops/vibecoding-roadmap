@@ -65,50 +65,22 @@ vibecoding-roadmap/
 ## 🎯 Текущий Статус
 
 ### ✅ Завершенные этапы и исследования
-- [x] **Task 1 (L0)**: Официальные гайды и ресурсы — сообщества, awesome lists, фреймворки, базы данных, UI/A11y, анимации, swarm-системы и QA
-- [x] **Task 2 (L0)**: Реальные метрики экономии — Cline (10x токенов, 5x время), дизайн-системы (30с), тесты (10с), готовые блоки (80%), шоукейсы (60м)
-- [x] **Task 3 (L0)**: Чек-листы для каждого этапа — "Перед началом проекта" (L1), "Перед коммитом" (L2), "Перед деплоем" (L7)
-- [x] **Task 4 (L0)**: Дополнительные диаграммы — ASCII-пирамида тестирования, Feature-based vs Монолит, Workflow Claude + MCP, структура скилов и память Claude Projects
-- [x] **Task 5 (L0)**: Альтернативы Railway — Render, Vercel, Netlify, Supabase, Fly.io (плюсы, минусы, ценообразование, поддержка Docker)
-- [x] **Task 6 (L0)**: Концепция "Context Engineer" — управление промпт-кешированием, .cursorignore, Handoff-протокол, snapshot-файлы и лимиты токенов
-- [x] **Task 7 (L0)**: Борьба со срезанием углов (Reward Hacking Prevention) — запрет ИИ оставлять // TODO, жесткие правила написания полного кода
-- [x] **Task 8 (L0)**: Обязательный аудит доступности (a11y) — WCAG 2.1 AA, touch-targets 44px, контрастность 4.5:1 / 3:1, button вместо div, aria-label для иконок
-- [x] **Task 9 (L0)**: Правила переноса SVG-кода из v0.dev — легковесные Lucide иконки, изоляция SVG XML-кода, оптимизация с SVGO
-- [x] **Task 10 (L1)**: Книги для AI - методология — сканирование и анализ специализированной литературы, интеграция инсайтов в CLAUDE.md / .cursorrules
-- [x] **Task 11 (L1)**: Figma для прототипирования — wireframes, дизайн UI компонентов, плагины Figma to Code / Design Tokens, экспорт Figma → AI → Code
-- [x] **Task 12 (L1)**: v0.dev - AI генерация UI — генерация React компонентов по описанию (Shadcn/ui + Tailwind), итеративное улучшение и адаптация
-- [x] **Task 13 (L1)**: Storybook - документация компонентов — изолированная разработка компонентов, визуальное и регрессионное тестирование UI
-- [x] **Task 14 (L1)**: Тройные врата качества (Vibecoding Quality Gates) — Plan Mode (план в `plan.md`), Self-Verification (тесты/линтеры), Human Review (diff-аудит)
-- [x] **Task 15 (L1)**: Стандартизация Handoff-артефактов — обязательная генерация handoff-файлов при передаче задач между ИИ-агентами (Payload, DoD)
-- [x] **Task 16 (L2)**: Claude Projects - структура — организация проектов в Claude, ограничения лимитов, изолированные чаты, иерархия памяти, пользовательские инструкции
-- [x] **Task 17 (L2)**: Примеры ролей агентов — iOS Developer, Code Reviewer (фокус на костыли), UI/UX Designer, Mentor, Tech Lead, Security Auditor
-- [x] **Task 18 (L2)**: Security Hook - автоматическая проверка — pre-commit проверки на уязвимости и безопасность, симулятор логов
-- [x] **Task 19 (L2)**: Паттерн "Context Reset" — регулярный сброс чатов, сохранение прогресса через файлы статусов, handoff payload генератор
-- [x] **Task 20 (L2)**: Режимы глубокого мышления — бюджет рассуждений (Thinking Budget), текстовые триггеры для пошагового логического вывода
-- [x] **Task 21 (L2)**: Шаблоны промптов для Claude Projects — жесткие System, Meta, и Task-промпты для структурирования разработки
-- [x] **Task 22 (L3)**: Claude Code CLI - Полное руководство — Официальный CLI инструмент от Anthropic (Interactive REPL, Non-Interactive, Plan Mode, Session Management, Hooks, MCP, Skills)
-- [x] **Task 23 (L3)**: Режимы работы Claude Code — 3 основных режима (Interactive REPL, Non-Interactive, Plan Mode)
-- [x] **Task 24 (L3)**: Выбор модели - когда что использовать — Opus, Sonnet (рекомендуется), Haiku, Extended Context, Fast Mode, Effort Control
-- [x] **Task 25 (L3)**: Новые возможности v2.1.105+ — Session Recap, Push Notifications, Windows PowerShell Tool, Read-Only Bash, Distributed Tracing, Native Binary, Shortcuts, Subagent Stall Timeout
-- [x] **Task 26 (L3)**: Иерархия конфигурации Claude Code — Global settings (~/.claude/settings.json), Project settings (.claude/settings.json), Environment variables, CLI flags
-- [x] **Task 27 (L3)**: Environment Variables - полный список — `ANTHROPIC_API_KEY`, `CLAUDE_MODEL`, `CLAUDE_MAX_TOKENS`, `CLAUDE_TEMPERATURE`, `CLAUDE_TIMEOUT`
 
----
+ - [x] **Task 33 (L4)**: Shadcn/ui vs MUI vs Chakra UI vs Ant Design — Сравнительная таблица (AI-friendly score, Customization, Bundle size, Accessibility, TypeScript support)
+ - [x] **Task 34 (L4)**: Radix UI Primitives — Основа Shadcn (Полная интеграция выделенного нода)
+ - [x] **Task 35 (L4)**: Создание Design System с AI (Полная интеграция выделенного нода)
+ - [x] **Task 38 (L4)**: Mobile-first с Tailwind - best practices (Responsive дизайн, Tailwind breakpoints, Chrome DevTools Device Mode)
+ - [x] **Task 39 (L4)**: Accessibility (A11y) - обязательный минимум (WCAG 2.1 Level AA compliance, Semantic HTML, ARIA labels, Keyboard navigation, Focus management, Color contrast 4.5:1, Alt text, Инструменты axe DevTools/Lighthouse/WAVE)
+ - [x] **Task 40 (L4)**: Zustand - идеальный state manager для vibecoding (Почему Zustand лучше Redux для AI, Минимальный boilerplate, TypeScript-first, No Provider, AI-friendly)
 
-## 🛠 КРАТКОСРОЧНЫЕ ЗАДАЧИ (CYCLE 7):
+## 🛠 КРАТКОСРОЧНЫЕ ЗАДАЧИ (CYCLE 9):
 
-- [x] **Task 28 (L3)**: Файлы правил для AI-ассистентов (.cursorrules, .mdc, CLAUDE.md)
-- [x] **Task 29 (L3)**: Повторно используемые навыки (Awesome Claude Skills)
-- [x] **Task 30 (L4)**: Railway - лучшие $5 на инфраструктуру — Canvas UI, 650+ шаблонов, prod/dev/staging окружения, детальные логи и мониторинг
-- [x] **Task 31 (L4)**: Deployment стратегия для разных проектов — Vercel + Neon vs Railway + Vercel vs Cloudflare Pages
-- [x] **Task 32 (L4)**: Shadcn/ui - революция в UI компонентах — компонентный подход для AI-кодинга, кастомизация, адаптивность (включая сравнение с MUI, Chakra, Ant Design)
-
- - [ ] **Task 33 (L4)**: Shadcn/ui vs MUI vs Chakra UI vs Ant Design — Сравнительная таблица (AI-friendly score, Customization, Bundle size, Accessibility, TypeScript support)
- - [x] **Task 34 (L4)**: Radix UI Primitives — Основа Shadcn
- - [x] **Task 35 (L4)**: Создание Design System с AI
- - [x] **Task 36 (L4)**: Showcase.html — Must Have инструмент для Vibecoding
- - [x] **Task 37 (L4)**: 5 обязательных блоков для любого проекта (80/20 Rule)
- 
+ - [ ] **Task 41 (L4)**: Когда использовать Context vs Zustand vs Redux (Decision tree для выбора стейт-менеджера в vibecoding)
+ - [ ] **Task 42 (L4)**: UX принципы для vibecoding (Принципы построения интерактивных интерфейсов силами ИИ-ассистентов)
+ - [ ] **Task 43 (L4)**: Loading States - обязательный минимум (Скелетоны, спиннеры и индикаторы загрузки для лучшего UX)
+ - [ ] **Task 44 (L4)**: Error States - UX для обработки ошибок (Дизайн понятных ошибок, авто-восстановление, логирование для ИИ)
+ - [ ] **Task 45 (L4)**: Empty States - дизайн пустых состояний (Красивое вовлечение пользователя, быстрые действия, подсказки ИИ)
+ - [ ] **Task 46 (L4)**: Micro-interactions - детали имеют значение (Hover-эффекты, плавные переходы, ripple effect, toast notifications)
  ---
 
 ## 🔑 Ключевые Концепции Проекта
@@ -140,6 +112,6 @@ vibecoding-roadmap/
 
 ---
 
-**Последнее обновление**: 2026-05-19 03:10  
+**Последнее обновление**: 2026-05-19 08:14  
 **Обновил**: Antigravity  
 **Следующий шаг**: Ожидание новых директив и следующих этапов (Cycle 8 — Уровень L5 и далее).
