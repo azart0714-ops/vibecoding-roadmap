@@ -230,7 +230,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Milestone 14 Connections (Prisma, DB Providers, Vercel)
     { from: "l5_6_handoff_protocol", to: "l5_7_prisma_vibecoding" },
-    { from: "l5_7_prisma_vibecoding", to: "l5_8_db_providers" },
+    { from: "l5_7_prisma_vibecoding", to: "l5_9_prisma_safety" },
+    { from: "l5_9_prisma_safety", to: "l5_10_drizzle_edge" },
+    { from: "l5_10_drizzle_edge", to: "l5_8_db_providers" },
     { from: "l5_8_db_providers", to: "l7_3_postgres_neon" },
     { from: "l7_4_staging_railway", to: "l7_11_vercel_gold" },
     { from: "l7_11_vercel_gold", to: "l8_1_swarm_workflow" },
@@ -299,7 +301,16 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l4_24_micro_interactions", to: "l4_25_component_composition" },
     { from: "l4_25_component_composition", to: "l4_26_react_devtools" },
     { from: "l4_26_react_devtools", to: "l4_27_typography_scale" },
-    { from: "l4_27_typography_scale", to: "l5_1_autonomous_planning" }
+    { from: "l4_27_typography_scale", to: "l4_28_container_queries" },
+    { from: "l4_28_container_queries", to: "l4_29_fluid_typography" },
+    { from: "l4_29_fluid_typography", to: "l4_30_touch_targets" },
+    { from: "l4_30_touch_targets", to: "l4_31_core_web_vitals" },
+    { from: "l4_31_core_web_vitals", to: "l4_32_perceived_performance" },
+    { from: "l4_32_perceived_performance", to: "l4_33_image_optimization" },
+    { from: "l4_33_image_optimization", to: "l4_34_wcag_standards" },
+    { from: "l4_34_wcag_standards", to: "l4_35_keyboard_navigation" },
+    { from: "l4_35_keyboard_navigation", to: "l4_36_screen_readers" },
+    { from: "l4_36_screen_readers", to: "l5_1_autonomous_planning" }
   ];
 
   // Specific visual weights for Bento cards
@@ -361,6 +372,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Milestone 14 Bento Weights
     l5_7_prisma_vibecoding: "weight-medium",
+    l5_9_prisma_safety: "weight-medium",
+    l5_10_drizzle_edge: "weight-medium",
     l5_8_db_providers: "weight-medium",
     l7_11_vercel_gold: "weight-medium",
 
@@ -783,7 +796,10 @@ document.addEventListener("DOMContentLoaded", () => {
         node.title.toLowerCase().includes(query) || 
         node.shortDesc.toLowerCase().includes(query) ||
         node.tools.some(t => t.toLowerCase().includes(query)) ||
-        node.steps.some(s => s.toLowerCase().includes(query));
+        node.steps.some(s => {
+          const stepText = typeof s === "object" ? s.text : s;
+          return stepText.toLowerCase().includes(query);
+        });
       
       const matchLevel = currentLevelFilter === "all" || node.level === currentLevelFilter;
       const matchTrack = currentTrackFilter === "all" || node.track === currentTrackFilter;
@@ -1400,7 +1416,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       
       // Accordion click event to toggle collapse/expand (multi-accordion!)
-      li.addEventListener("click", () => {
+      li.querySelector(".step-card-header").addEventListener("click", () => {
         const isExpanded = li.classList.contains("expanded");
         const detailsEl = li.querySelector(".step-details");
         
@@ -2241,6 +2257,669 @@ document.addEventListener("DOMContentLoaded", () => {
     adjustStepDetailsHeight();
   };
 
+  // Simulators for Container Queries
+  window.updateContainerQueryWidth = function(widthStr) {
+    const width = parseInt(widthStr) || 450;
+    const widthVal = document.getElementById("container-width-val");
+    const parentContainer = document.getElementById("cq-parent-container");
+    const card = document.getElementById("cq-card");
+    const badge = document.getElementById("cq-card-badge");
+
+    if (widthVal) {
+      widthVal.innerText = `${width}px`;
+    }
+    if (parentContainer) {
+      parentContainer.style.width = `${width}px`;
+    }
+    if (card && badge) {
+      if (width < 380) {
+        card.style.flexDirection = "column";
+        card.style.alignItems = "stretch";
+        badge.innerText = "@container (max-width: 379px) -> Stack";
+        badge.style.color = "#f43f5e";
+        badge.style.background = "rgba(244,63,94,0.15)";
+        badge.style.borderColor = "rgba(244,63,94,0.25)";
+      } else {
+        card.style.flexDirection = "row";
+        card.style.alignItems = "center";
+        badge.innerText = "@container (min-width: 380px) -> Row";
+        badge.style.color = "#3b82f6";
+        badge.style.background = "rgba(59,130,246,0.15)";
+        badge.style.borderColor = "rgba(59,130,246,0.25)";
+      }
+    }
+    adjustStepDetailsHeight();
+  };
+
+  // Simulators for Fluid Typography
+  window.updateFluidTypography = function() {
+    const minSlider = document.getElementById("fluid-min-slider");
+    const maxSlider = document.getElementById("fluid-max-slider");
+    const vpSlider = document.getElementById("fluid-viewport-slider");
+
+    const vpVal = document.getElementById("fluid-viewport-val");
+    const previewContainer = document.getElementById("fluid-preview-container");
+    const previewText = document.getElementById("fluid-preview-text");
+    const formulaCode = document.getElementById("fluid-formula-code");
+
+    if (!minSlider || !maxSlider || !vpSlider) return;
+
+    const min = parseInt(minSlider.value) || 14;
+    const max = parseInt(maxSlider.value) || 32;
+    const vpPercent = parseInt(vpSlider.value) || 100;
+
+    if (vpVal) {
+      vpVal.innerText = `${vpPercent}%`;
+    }
+    if (previewContainer) {
+      previewContainer.style.width = `${vpPercent}%`;
+    }
+
+    // Interpolate fluid font size based on viewport width (50% to 100%)
+    const currentSize = Math.round(min + (max - min) * ((vpPercent - 50) / 50));
+    if (previewText) {
+      previewText.style.fontSize = `${currentSize}px`;
+      previewText.innerText = `Fluid Text (${currentSize}px)`;
+    }
+    if (formulaCode) {
+      const preferredRem = (min / 16).toFixed(2);
+      const preferredVw = ((max - min) / 8).toFixed(1);
+      formulaCode.innerText = `clamp(${min}px, ${preferredRem}rem + ${preferredVw}vw, ${max}px)`;
+    }
+    adjustStepDetailsHeight();
+  };
+
+  // Simulators for Touch Targets
+  window.touchHits = 0;
+  window.touchMisses = 0;
+  window.simulateTouchClick = function(type, success) {
+    if (success) {
+      window.touchHits++;
+      const hitEl = document.getElementById("touch-hit-cnt");
+      if (hitEl) {
+        hitEl.innerText = window.touchHits;
+        hitEl.style.color = "#10b981";
+        hitEl.style.textShadow = "0 0 10px rgba(16, 185, 129, 0.6)";
+        setTimeout(() => {
+          hitEl.style.textShadow = "none";
+        }, 300);
+      }
+    } else {
+      window.touchMisses++;
+      const missEl = document.getElementById("touch-miss-cnt");
+      if (missEl) {
+        missEl.innerText = window.touchMisses;
+        missEl.style.color = "#f43f5e";
+        missEl.style.textShadow = "0 0 10px rgba(244, 63, 94, 0.6)";
+        setTimeout(() => {
+          missEl.style.textShadow = "none";
+        }, 300);
+      }
+    }
+  };
+
+  // Simulators for Core Web Vitals
+  window.simulateLayoutShift = function() {
+    const zone = document.getElementById("cwv-shifting-zone");
+    const content = document.getElementById("cwv-shifted-content");
+    if (zone && content) {
+      zone.style.paddingTop = "25px";
+      zone.style.background = "rgba(239, 68, 68, 0.12)";
+      zone.style.borderColor = "rgba(239, 68, 68, 0.4)";
+      content.innerText = "⚠️ ВНИМАНИЕ: Сдвиг макета! Текст сместился вниз.";
+      content.style.color = "#f87171";
+    }
+    
+    // Update metric cards to poor
+    const lcpCard = document.getElementById("cwv-lcp-card");
+    const lcpVal = document.getElementById("cwv-lcp-val");
+    const lcpStatus = document.getElementById("cwv-lcp-status");
+    if (lcpCard && lcpVal && lcpStatus) {
+      lcpCard.style.background = "rgba(239, 68, 68, 0.15)";
+      lcpCard.style.borderColor = "rgba(239, 68, 68, 0.3)";
+      lcpVal.innerText = "5.4s";
+      lcpVal.style.color = "#f87171";
+      lcpStatus.innerText = "POOR ❌";
+      lcpStatus.style.background = "#ef4444";
+    }
+
+    const clsCard = document.getElementById("cwv-cls-card");
+    const clsVal = document.getElementById("cwv-cls-val");
+    const clsStatus = document.getElementById("cwv-cls-status");
+    if (clsCard && clsVal && clsStatus) {
+      clsCard.style.background = "rgba(239, 68, 68, 0.15)";
+      clsCard.style.borderColor = "rgba(239, 68, 68, 0.3)";
+      clsVal.innerText = "0.45";
+      clsVal.style.color = "#f87171";
+      clsStatus.innerText = "POOR ❌";
+      clsStatus.style.background = "#ef4444";
+    }
+
+    const inpCard = document.getElementById("cwv-inp-card");
+    const inpVal = document.getElementById("cwv-inp-val");
+    const inpStatus = document.getElementById("cwv-inp-status");
+    if (inpCard && inpVal && inpStatus) {
+      inpCard.style.background = "rgba(239, 68, 68, 0.15)";
+      inpCard.style.borderColor = "rgba(239, 68, 68, 0.3)";
+      inpVal.innerText = "240ms";
+      inpVal.style.color = "#f87171";
+      inpStatus.innerText = "POOR ❌";
+      inpStatus.style.background = "#ef4444";
+    }
+  };
+
+  window.optimizeCoreWebVitals = function() {
+    const zone = document.getElementById("cwv-shifting-zone");
+    const content = document.getElementById("cwv-shifted-content");
+    if (zone && content) {
+      zone.style.paddingTop = "4px";
+      zone.style.background = "rgba(16, 185, 129, 0.1)";
+      zone.style.borderColor = "rgba(16, 185, 129, 0.4)";
+      content.innerText = "✅ Место под контент зарезервировано (CLS = 0)";
+      content.style.color = "#34d399";
+    }
+
+    // Update metric cards to optimized
+    const lcpCard = document.getElementById("cwv-lcp-card");
+    const lcpVal = document.getElementById("cwv-lcp-val");
+    const lcpStatus = document.getElementById("cwv-lcp-status");
+    if (lcpCard && lcpVal && lcpStatus) {
+      lcpCard.style.background = "rgba(16, 185, 129, 0.15)";
+      lcpCard.style.borderColor = "rgba(16, 185, 129, 0.3)";
+      lcpVal.innerText = "1.2s";
+      lcpVal.style.color = "#34d399";
+      lcpStatus.innerText = "GOOD 🟢";
+      lcpStatus.style.background = "#10b981";
+    }
+
+    const clsCard = document.getElementById("cwv-cls-card");
+    const clsVal = document.getElementById("cwv-cls-val");
+    const clsStatus = document.getElementById("cwv-cls-status");
+    if (clsCard && clsVal && clsStatus) {
+      clsCard.style.background = "rgba(16, 185, 129, 0.15)";
+      clsCard.style.borderColor = "rgba(16, 185, 129, 0.3)";
+      clsVal.innerText = "0.01";
+      clsVal.style.color = "#34d399";
+      clsStatus.innerText = "GOOD 🟢";
+      clsStatus.style.background = "#10b981";
+    }
+
+    const inpCard = document.getElementById("cwv-inp-card");
+    const inpVal = document.getElementById("cwv-inp-val");
+    const inpStatus = document.getElementById("cwv-inp-status");
+    if (inpCard && inpVal && inpStatus) {
+      inpCard.style.background = "rgba(16, 185, 129, 0.15)";
+      inpCard.style.borderColor = "rgba(16, 185, 129, 0.3)";
+      inpVal.innerText = "45ms";
+      inpVal.style.color = "#34d399";
+      inpStatus.innerText = "GOOD 🟢";
+      inpStatus.style.background = "#10b981";
+    }
+  };
+
+  // Simulators for Perceived Performance
+  window.simulateSkeletonLoading = function() {
+    const btn = document.getElementById("perc-simulate-btn");
+    const spinnerLoader = document.getElementById("perc-spinner-loader");
+    const spinnerContent = document.getElementById("perc-spinner-content");
+    const skeletonLoader = document.getElementById("perc-skeleton-loader");
+    const skeletonContent = document.getElementById("perc-skeleton-content");
+
+    if (!btn || window.percLoadingActive) return;
+
+    window.percLoadingActive = true;
+    btn.disabled = true;
+    
+    if (spinnerLoader) spinnerLoader.style.display = "flex";
+    if (spinnerContent) spinnerContent.style.display = "none";
+    if (skeletonLoader) skeletonLoader.style.display = "flex";
+    if (skeletonContent) skeletonContent.style.display = "none";
+
+    let timeLeft = 2.0;
+    btn.innerText = `Загрузка... (${timeLeft.toFixed(1)}с)`;
+
+    const interval = setInterval(() => {
+      timeLeft -= 0.2;
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        window.percLoadingActive = false;
+        btn.disabled = false;
+        btn.innerText = "Запустить симуляцию (2 сек)";
+
+        if (spinnerLoader) spinnerLoader.style.display = "none";
+        if (spinnerContent) spinnerContent.style.display = "block";
+        if (skeletonLoader) skeletonLoader.style.display = "none";
+        if (skeletonContent) skeletonContent.style.display = "block";
+      } else {
+        btn.innerText = `Загрузка... (${timeLeft.toFixed(1)}с)`;
+      }
+    }, 200);
+  };
+
+  // Simulators for Image Optimization
+  window.changeImageFormatType = function(format) {
+    const pngBtn = document.getElementById("img-opt-png-btn");
+    const webpBtn = document.getElementById("img-opt-webp-btn");
+    const avifBtn = document.getElementById("img-opt-avif-btn");
+    
+    const sizeVal = document.getElementById("img-opt-size-val");
+    const timeVal = document.getElementById("img-opt-time-val");
+    const statusVal = document.getElementById("img-opt-status-val");
+    const progressBar = document.getElementById("img-opt-progress-bar");
+
+    if (!pngBtn || !webpBtn || !avifBtn || !sizeVal || !timeVal || !statusVal || !progressBar) return;
+
+    // Reset styles
+    [pngBtn, webpBtn, avifBtn].forEach(b => {
+      b.style.border = "1px solid rgba(255,255,255,0.1)";
+      b.style.background = "rgba(0,0,0,0.3)";
+      b.style.color = "#a1a1aa";
+    });
+
+    if (format === 'png') {
+      pngBtn.style.border = "1px solid rgba(239, 68, 68, 0.4)";
+      pngBtn.style.background = "rgba(239, 68, 68, 0.15)";
+      pngBtn.style.color = "#fff";
+
+      sizeVal.innerText = "1.8 MB";
+      timeVal.innerText = "6.4s";
+      timeVal.style.color = "#f87171";
+      statusVal.innerText = "Плохо 🔴";
+      statusVal.style.color = "#f87171";
+      progressBar.style.width = "100%";
+      progressBar.style.background = "#ef4444";
+    } else if (format === 'webp') {
+      webpBtn.style.border = "1px solid rgba(167, 139, 250, 0.4)";
+      webpBtn.style.background = "rgba(167, 139, 250, 0.15)";
+      webpBtn.style.color = "#fff";
+
+      sizeVal.innerText = "120 KB";
+      timeVal.innerText = "0.4s";
+      timeVal.style.color = "#34d399";
+      statusVal.innerText = "Хорошо 🟢";
+      statusVal.style.color = "#34d399";
+      progressBar.style.width = "20%";
+      progressBar.style.background = "#8b5cf6";
+    } else if (format === 'avif') {
+      avifBtn.style.border = "1px solid rgba(16, 185, 129, 0.4)";
+      avifBtn.style.background = "rgba(16, 185, 129, 0.15)";
+      avifBtn.style.color = "#fff";
+
+      sizeVal.innerText = "54 KB";
+      timeVal.innerText = "0.2s";
+      timeVal.style.color = "#10b981";
+      statusVal.innerText = "Отлично 🟢";
+      statusVal.style.color = "#10b981";
+      progressBar.style.width = "9%";
+      progressBar.style.background = "#10b981";
+    }
+  };
+
+  // Simulators for WCAG Contrast Checker
+  window.updateContrastSlider = function(value) {
+    const textPreview = document.getElementById("contrast-preview-text");
+    const ratioVal = document.getElementById("contrast-ratio-val");
+    const badge = document.getElementById("contrast-status-badge");
+
+    if (!textPreview || !ratioVal || !badge) return;
+
+    const val = parseInt(value);
+    
+    // Interpolate ratio from 1.8 to 8.5
+    const ratio = 1.8 + (val / 100) * 6.7;
+    ratioVal.innerText = `${ratio.toFixed(1)}:1`;
+
+    // Interpolate color from rgb(80,70,90) up to rgb(251,191,36)
+    const r = Math.round(80 + (val / 100) * 171);
+    const g = Math.round(70 + (val / 100) * 121);
+    const b = Math.round(90 - (val / 100) * 54);
+    textPreview.style.color = `rgb(${r}, ${g}, ${b})`;
+
+    if (ratio < 4.5) {
+      ratioVal.style.color = "#f87171";
+      badge.innerText = "FAIL ❌";
+      badge.style.background = "#ef4444";
+      badge.style.color = "#fff";
+    } else if (ratio >= 4.5 && ratio < 7.0) {
+      ratioVal.style.color = "#34d399";
+      badge.innerText = "PASS AA ✅";
+      badge.style.background = "#10b981";
+      badge.style.color = "#fff";
+    } else {
+      ratioVal.style.color = "#a78bfa";
+      badge.innerText = "PASS AAA 🌟";
+      badge.style.background = "#6366f1";
+      badge.style.color = "#fff";
+    }
+  };
+
+  // Simulators for Keyboard Navigation Focus Trap
+  window.focusTrapActive = false;
+  window.trappedFocusIndex = 0;
+  
+  window.toggleKeyboardFocusTrap = function() {
+    window.focusTrapActive = !window.focusTrapActive;
+    
+    const indicator = document.getElementById("trap-status-indicator");
+    const modalBox = document.getElementById("trap-modal-box");
+    
+    if (!indicator || !modalBox) return;
+
+    if (window.focusTrapActive) {
+      indicator.innerText = "АКТИВИРОВАНА 🟢";
+      indicator.style.color = "#10b981";
+      modalBox.style.borderColor = "rgba(167, 139, 250, 0.6)";
+      modalBox.style.boxShadow = "0 0 10px rgba(139, 92, 246, 0.15)";
+      
+      // Select index 0 to start
+      window.trappedFocusIndex = 0;
+      window.updateTrappedFocusHighlight();
+    } else {
+      indicator.innerText = "ОТКЛЮЧЕНА ❌";
+      indicator.style.color = "#ef4444";
+      modalBox.style.borderColor = "rgba(255,255,255,0.06)";
+      modalBox.style.boxShadow = "none";
+      
+      // Clear styles
+      const input = document.getElementById("trap-el-input");
+      const button = document.getElementById("trap-el-button");
+      const link = document.getElementById("trap-el-link");
+      
+      if (input) input.style.borderColor = "rgba(255,255,255,0.1)";
+      if (button) {
+        button.style.borderColor = "rgba(255,255,255,0.1)";
+        button.style.boxShadow = "none";
+      }
+      if (link) {
+        link.style.outline = "none";
+        link.style.color = "#a78bfa";
+      }
+    }
+  };
+
+  window.cycleTrappedFocus = function() {
+    if (!window.focusTrapActive) {
+      // Just visually alert about focus trap being disabled
+      const modalBox = document.getElementById("trap-modal-box");
+      if (modalBox) {
+        modalBox.style.borderColor = "rgba(239, 68, 68, 0.4)";
+        setTimeout(() => {
+          if (!window.focusTrapActive) modalBox.style.borderColor = "rgba(255,255,255,0.06)";
+        }, 300);
+      }
+      return;
+    }
+
+    window.trappedFocusIndex = (window.trappedFocusIndex + 1) % 3;
+    window.updateTrappedFocusHighlight();
+  };
+
+  window.updateTrappedFocusHighlight = function() {
+    const input = document.getElementById("trap-el-input");
+    const button = document.getElementById("trap-el-button");
+    const link = document.getElementById("trap-el-link");
+
+    if (!input || !button || !link) return;
+
+    // Reset styles
+    input.style.borderColor = "rgba(255,255,255,0.1)";
+    button.style.borderColor = "rgba(255,255,255,0.1)";
+    button.style.boxShadow = "none";
+    link.style.outline = "none";
+    link.style.color = "#a78bfa";
+
+    if (window.trappedFocusIndex === 0) {
+      input.style.borderColor = "#a78bfa";
+      input.focus();
+    } else if (window.trappedFocusIndex === 1) {
+      button.style.borderColor = "#a78bfa";
+      button.style.boxShadow = "0 0 8px rgba(167, 139, 250, 0.4)";
+      button.focus();
+    } else if (window.trappedFocusIndex === 2) {
+      link.style.outline = "1.5px solid #8b5cf6";
+      link.style.color = "#fff";
+      link.focus();
+    }
+  };
+
+  // Simulators for Screen Reader
+  window.clickScreenReaderElement = function(type) {
+    const textEl = document.getElementById("sr-narrator-text");
+    if (!textEl) return;
+
+    if (type === 'bad') {
+      textEl.innerText = '📢 Озвучка: "Кнопка. Пустое описание." (Пользователь не знает назначения кнопки!) ❌';
+      textEl.style.color = "#ef4444";
+    } else if (type === 'good') {
+      textEl.innerText = '📢 Озвучка: "Кнопка. Открыть настройки профиля. Инструмент." 🟢';
+      textEl.style.color = "#34d399";
+    } else if (type === 'alert') {
+      textEl.innerText = '📢 Озвучка (прерывание по role="alert"): "Внимание! Ваше сетевое соединение разорвано." ⚠️';
+      textEl.style.color = "#fbbf24";
+      
+      const parent = textEl.parentElement;
+      if (parent) {
+        parent.style.borderColor = "rgba(245, 158, 11, 0.5)";
+        parent.style.boxShadow = "0 0 10px rgba(245, 158, 11, 0.2)";
+        setTimeout(() => {
+          parent.style.borderColor = "rgba(255,255,255,0.06)";
+          parent.style.boxShadow = "none";
+        }, 500);
+      }
+    }
+  };
+  
+  // Simulators for Prisma Safety Guardrails
+  window.prismaSafetyGuardActive = true;
+  
+  window.togglePrismaSafetyGuard = function(active) {
+    window.prismaSafetyGuardActive = active;
+    const label = document.querySelector(".text-rose-400");
+    if (active) {
+      if (label) {
+        label.style.color = "#fb7185";
+        label.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span> PRISMA SAFETY TERMINAL`;
+      }
+    } else {
+      if (label) {
+        label.style.color = "#94a3b8";
+        label.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span> PRISMA TERMINAL`;
+      }
+    }
+  };
+
+  window.simulatePrismaSafety = function() {
+    const log = document.getElementById("prisma-terminal-log");
+    const approvalUI = document.getElementById("prisma-human-approval-ui");
+    const simulateBtn = document.getElementById("prisma-simulate-btn");
+
+    if (!log) return;
+
+    // Reset log content to start sequence
+    log.innerHTML = `<div>$ npx prisma db push --force-reset</div>`;
+    
+    setTimeout(() => {
+      log.innerHTML += `<div class="text-slate-400">Environment: DEVELOPMENT</div>`;
+      log.innerHTML += `<div class="text-slate-400">Checking prisma/schema.prisma ...</div>`;
+      
+      setTimeout(() => {
+        if (window.prismaSafetyGuardActive) {
+          log.innerHTML += `<div class="text-rose-400 font-bold">🚨 [AI-SAFETY] BLOCKED!</div>`;
+          log.innerHTML += `<div class="text-amber-400 font-sans">Причина: Обнаружен авто-запуск деструктивной команды ИИ.</div>`;
+          log.innerHTML += `<div class="text-amber-400 font-sans">Требуется подтверждение человека (Human-in-the-loop).</div>`;
+          if (approvalUI) approvalUI.classList.remove("hidden");
+          if (simulateBtn) simulateBtn.disabled = true;
+        } else {
+          log.innerHTML += `<div class="text-slate-400">Applying changes...</div>`;
+          setTimeout(() => {
+            log.innerHTML += `<div class="text-rose-500 font-bold">❌ БАЗА ДАННЫХ СТЕРТА!</div>`;
+            log.innerHTML += `<div class="text-rose-400 font-sans">Удалено таблиц: 3 (Users, Orders, Payments)</div>`;
+            log.innerHTML += `<div class="text-rose-400 font-sans">Утеряно записей: 14,204</div>`;
+            
+            const screen = document.getElementById("prisma-terminal-screen");
+            if (screen) {
+              screen.style.borderColor = "rgba(239, 68, 68, 0.6)";
+              screen.style.boxShadow = "0 0 10px rgba(239, 68, 68, 0.3)";
+            }
+          }, 600);
+        }
+      }, 600);
+    }, 400);
+  };
+
+  window.approvePrismaSafetyCommand = function() {
+    const log = document.getElementById("prisma-terminal-log");
+    const approvalUI = document.getElementById("prisma-human-approval-ui");
+    const simulateBtn = document.getElementById("prisma-simulate-btn");
+
+    if (!log) return;
+    if (approvalUI) approvalUI.classList.add("hidden");
+    if (simulateBtn) simulateBtn.disabled = false;
+
+    log.innerHTML += `<div class="text-emerald-400 font-bold font-sans">✅ Разрешено человеком. Запуск миграции...</div>`;
+    setTimeout(() => {
+      log.innerHTML += `<div class="text-emerald-400 font-sans">🟢 Схема синхронизирована! База данных сохранена.</div>`;
+    }, 600);
+  };
+
+  window.resetPrismaSafetyDemo = function() {
+    const log = document.getElementById("prisma-terminal-log");
+    const approvalUI = document.getElementById("prisma-human-approval-ui");
+    const simulateBtn = document.getElementById("prisma-simulate-btn");
+    const screen = document.getElementById("prisma-terminal-screen");
+    const guardToggle = document.getElementById("prisma-guard-toggle");
+
+    if (guardToggle) guardToggle.checked = true;
+    window.prismaSafetyGuardActive = true;
+
+    if (log) {
+      log.innerHTML = `<div>$ npx prisma db push --force-reset</div>
+      <div class="text-slate-400">// Готов к симуляции команды ИИ...</div>`;
+    }
+    if (approvalUI) approvalUI.classList.add("hidden");
+    if (simulateBtn) simulateBtn.disabled = false;
+    if (screen) {
+      screen.style.borderColor = "rgba(255,255,255,0.06)";
+      screen.style.boxShadow = "none";
+    }
+    window.togglePrismaSafetyGuard(true);
+  };
+
+  // Simulators for Drizzle Edge
+  window.drizzleEdgeMode = 'prisma';
+  window.drizzleFieldAdded = false;
+
+  window.toggleDrizzleEdgeMode = function(mode) {
+    window.drizzleEdgeMode = mode;
+    const prismaBtn = document.getElementById("drizzle-toggle-prisma");
+    const drizzleBtn = document.getElementById("drizzle-toggle-drizzle");
+    const schemaCode = document.getElementById("drizzle-schema-code");
+    const bundleBar = document.getElementById("drizzle-bundle-bar");
+    const bundleVal = document.getElementById("drizzle-bundle-val");
+    const compileBtn = document.getElementById("drizzle-compile-btn");
+    const compLog = document.getElementById("drizzle-compiler-log");
+
+    if (!prismaBtn || !drizzleBtn || !schemaCode || !bundleBar || !bundleVal || !compLog) return;
+
+    window.drizzleFieldAdded = false;
+
+    if (mode === 'prisma') {
+      prismaBtn.className = "px-2 py-0.5 text-[10px] rounded transition bg-slate-800 text-white";
+      drizzleBtn.className = "px-2 py-0.5 text-[10px] rounded transition text-slate-400";
+      
+      schemaCode.innerText = `model User {
+  id    Int    @id
+  name  String
+}`;
+      
+      bundleBar.className = "bg-rose-500 h-full w-[100%] transition-all duration-300";
+      bundleVal.innerText = "12.4 MB";
+      bundleVal.className = "text-[10px] font-bold text-rose-400 font-sans";
+      
+      compLog.innerText = "🟢 Ready.";
+      compLog.className = "text-[10px] text-emerald-400 leading-tight";
+
+      if (compileBtn) compileBtn.classList.remove("hidden");
+    } else {
+      prismaBtn.className = "px-2 py-0.5 text-[10px] rounded transition text-slate-400";
+      drizzleBtn.className = "px-2 py-0.5 text-[10px] rounded transition bg-slate-800 text-white";
+      
+      schemaCode.innerText = `export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull()
+});`;
+      
+      bundleBar.className = "bg-emerald-500 h-full w-[1.2%] transition-all duration-300";
+      bundleVal.innerText = "146 KB";
+      bundleVal.className = "text-[10px] font-bold text-emerald-400 font-sans";
+      
+      compLog.innerText = "🟢 Ready (TypeScript-native).";
+      compLog.className = "text-[10px] text-emerald-400 leading-tight";
+
+      if (compileBtn) compileBtn.classList.add("hidden");
+    }
+  };
+
+  window.addDrizzleColumn = function() {
+    const schemaCode = document.getElementById("drizzle-schema-code");
+    const compLog = document.getElementById("drizzle-compiler-log");
+    const compileBtn = document.getElementById("drizzle-compile-btn");
+
+    if (!schemaCode || !compLog) return;
+
+    window.drizzleFieldAdded = true;
+
+    if (window.drizzleEdgeMode === 'prisma') {
+      schemaCode.innerText = `model User {
+  id    Int    @id
+  name  String
+  email String   // ИИ добавил поле!
+}`;
+      compLog.innerText = "❌ TS Error: Property 'email' does not exist on type 'User'. (Не запущен prisma generate!)";
+      compLog.className = "text-[10px] text-rose-400 leading-tight font-sans";
+      if (compileBtn) {
+        compileBtn.style.border = "1.5px dashed #6366f1";
+        compileBtn.style.animation = "pulse 1.5s infinite";
+      }
+    } else {
+      schemaCode.innerText = `export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email') // ИИ добавил поле!
+});`;
+      compLog.innerText = "🟢 Типы обновлены мгновенно (1ms)! Ошибок компиляции нет.";
+      compLog.className = "text-[10px] text-emerald-400 leading-tight font-sans";
+    }
+  };
+
+  window.runPrismaGenerate = function() {
+    const compLog = document.getElementById("drizzle-compiler-log");
+    const compileBtn = document.getElementById("drizzle-compile-btn");
+
+    if (!compLog || window.drizzleEdgeMode !== 'prisma') return;
+
+    compLog.innerText = "⏳ Running prisma generate...";
+    compLog.className = "text-[10px] text-indigo-400 leading-tight font-sans";
+
+    if (compileBtn) {
+      compileBtn.style.animation = "none";
+      compileBtn.style.border = "none";
+      compileBtn.disabled = true;
+    }
+
+    setTimeout(() => {
+      if (compLog) {
+        compLog.innerText = "🟢 Сгенерирован Prisma Client. Ошибки типов устранены (820ms).";
+        compLog.className = "text-[10px] text-emerald-400 leading-tight font-sans";
+      }
+      if (compileBtn) compileBtn.disabled = false;
+    }, 820);
+  };
+
+  window.resetDrizzleEdgeDemo = function() {
+    window.toggleDrizzleEdgeMode('prisma');
+  };
+
   // Helper to dynamically adjust expanded step card heights
   function adjustStepDetailsHeight() {
     const activeDetails = document.querySelector('.step-card.expanded .step-details');
@@ -2259,6 +2938,77 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typoSelect && !typoSelect.dataset.initialized) {
       typoSelect.dataset.initialized = "true";
       window.updateTypographyScale(typoSelect.value);
+    }
+    const cqSlider = document.getElementById("container-width-slider");
+    if (cqSlider && !cqSlider.dataset.initialized) {
+      cqSlider.dataset.initialized = "true";
+      window.updateContainerQueryWidth(cqSlider.value);
+    }
+    const fluidMinSlider = document.getElementById("fluid-min-slider");
+    if (fluidMinSlider && !fluidMinSlider.dataset.initialized) {
+      fluidMinSlider.dataset.initialized = "true";
+      window.updateFluidTypography();
+    }
+    const hitEl = document.getElementById("touch-hit-cnt");
+    if (hitEl && !hitEl.dataset.initialized) {
+      hitEl.dataset.initialized = "true";
+      window.touchHits = 0;
+      window.touchMisses = 0;
+      hitEl.innerText = "0";
+      const missEl = document.getElementById("touch-miss-cnt");
+      if (missEl) missEl.innerText = "0";
+    }
+    const cwvVal = document.getElementById("cwv-lcp-val");
+    if (cwvVal && !cwvVal.dataset.initialized) {
+      cwvVal.dataset.initialized = "true";
+      window.optimizeCoreWebVitals();
+    }
+    const percBtn = document.getElementById("perc-simulate-btn");
+    if (percBtn && !percBtn.dataset.initialized) {
+      percBtn.dataset.initialized = "true";
+      window.percLoadingActive = false;
+      const spinnerLoader = document.getElementById("perc-spinner-loader");
+      const spinnerContent = document.getElementById("perc-spinner-content");
+      const skeletonLoader = document.getElementById("perc-skeleton-loader");
+      const skeletonContent = document.getElementById("perc-skeleton-content");
+      if (spinnerLoader) spinnerLoader.style.display = "none";
+      if (spinnerContent) spinnerContent.style.display = "block";
+      if (skeletonLoader) skeletonLoader.style.display = "none";
+      if (skeletonContent) skeletonContent.style.display = "block";
+    }
+    const imgOptSize = document.getElementById("img-opt-size-val");
+    if (imgOptSize && !imgOptSize.dataset.initialized) {
+      imgOptSize.dataset.initialized = "true";
+      window.changeImageFormatType('webp');
+    }
+    const contrastSlider = document.getElementById("contrast-color-slider");
+    if (contrastSlider && !contrastSlider.dataset.initialized) {
+      contrastSlider.dataset.initialized = "true";
+      window.updateContrastSlider(contrastSlider.value);
+    }
+    const trapIndicator = document.getElementById("trap-status-indicator");
+    if (trapIndicator && !trapIndicator.dataset.initialized) {
+      trapIndicator.dataset.initialized = "true";
+      window.focusTrapActive = false;
+      window.trappedFocusIndex = 0;
+      trapIndicator.innerText = "ОТКЛЮЧЕНА ❌";
+      trapIndicator.style.color = "#ef4444";
+    }
+    const srNarratorText = document.getElementById("sr-narrator-text");
+    if (srNarratorText && !srNarratorText.dataset.initialized) {
+      srNarratorText.dataset.initialized = "true";
+      srNarratorText.innerText = "📢 Нажмите кнопку выше для озвучки...";
+      srNarratorText.style.color = "#a1a1aa";
+    }
+    const prismaSimBtn = document.getElementById("prisma-simulate-btn");
+    if (prismaSimBtn && !prismaSimBtn.dataset.initialized) {
+      prismaSimBtn.dataset.initialized = "true";
+      window.resetPrismaSafetyDemo();
+    }
+    const drizzleColBtn = document.getElementById("drizzle-add-col-btn");
+    if (drizzleColBtn && !drizzleColBtn.dataset.initialized) {
+      drizzleColBtn.dataset.initialized = "true";
+      window.resetDrizzleEdgeDemo();
     }
   }, 300);
 

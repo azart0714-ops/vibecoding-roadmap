@@ -4439,6 +4439,423 @@ const nodes = [
     ],
     tools: ["Typography Scale", "Modular Scale", "Type Scale System", "Fluid Sizing"]
   },
+  {
+    id: "l4_28_container_queries",
+    level: "L4",
+    track: "engineering",
+    title: "Container Queries — адаптация компонентов к размеру контейнера",
+    shortDesc: "Использование директивы @container вместо @media для адаптации к ширине родительского контейнера.",
+    steps: [
+      {
+        text: "Понимание ограничений Media Queries.",
+        details: "Медиа-запросы @media зависят от размера вьюпорта всего экрана, что мешает переиспользованию компонентов в разных сайдбарах или сетках."
+      },
+      {
+        text: "Введение директивы @container.",
+        details: "Контейнерные запросы позволяют стилизовать дочерний элемент в зависимости от размеров его непосредственного родителя, объявленного как container-type."
+      },
+      {
+        text: "Объявление контекста контейнера.",
+        details: "Для родительского элемента задается свойство container-type: inline-size; и опционально имя через container-name."
+      },
+      {
+        text: "Интерактивная симуляция Container Queries.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #3b82f6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">CONTAINER QUERIES PLAYGROUND</div>
+  
+  <div style="margin-bottom: 10px;">
+    <div style="display: flex; justify-content: space-between; font-size: 9px; color: #a1a1aa; margin-bottom: 4px;">
+      <span>Ширина контейнера:</span>
+      <span id="container-width-val" style="color: #3b82f6; font-weight: bold;">450px</span>
+    </div>
+    <input type="range" id="container-width-slider" min="300" max="500" value="450" onchange="event.stopPropagation(); window.updateContainerQueryWidth && window.updateContainerQueryWidth(this.value);" oninput="event.stopPropagation(); window.updateContainerQueryWidth && window.updateContainerQueryWidth(this.value);" style="width: 100%; cursor: pointer; accent-color: #3b82f6;">
+  </div>
+  
+  <div id="cq-parent-container" style="width: 450px; margin: 0 auto; border: 1px dashed rgba(255,255,255,0.2); padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.25); transition: width 0.2s ease;">
+    <div id="cq-card" style="display: flex; gap: 10px; padding: 10px; border-radius: 6px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); align-items: center; justify-content: space-between;">
+      <div style="font-size: 11px; color: #fff; font-weight: 500;">Карточка товара</div>
+      <span id="cq-card-badge" style="font-size: 9px; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(59,130,246,0.25); background: rgba(59,130,246,0.15); color: #3b82f6; font-family: monospace;">@container (min-width: 380px) -> Row</span>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Container Queries", "container-type", "container-name", "@container"]
+  },
+  {
+    id: "l4_29_fluid_typography",
+    level: "L4",
+    track: "engineering",
+    title: "Fluid Typography — адаптивные размеры шрифтов с clamp",
+    shortDesc: "Создание плавно масштабируемого текста без использования ступенчатых медиа-запросов на основе clamp().",
+    steps: [
+      {
+        text: "Понимание концепции отзывчивых шрифтов.",
+        details: "Отзывчивые шрифты масштабируются плавно в зависимости от размеров экрана, обеспечивая отличную читаемость без скачков."
+      },
+      {
+        text: "Синтаксис функции CSS clamp().",
+        details: "clamp(MIN, VAL, MAX) принимает три значения: минимальный порог, идеальный динамический размер (обычно в vw/vh/rem) и максимальный лимит."
+      },
+      {
+        text: "Интегрированная формула расчета.",
+        details: "Формула clamp() связывает размеры вьюпорта с размерами шрифтов с помощью линейной интерполяции."
+      },
+      {
+        text: "Интерактивный симулятор Fluid Typography.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">FLUID TYPOGRAPHY PLAYGROUND</div>
+  
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+    <div>
+      <div style="display: flex; justify-content: space-between; font-size: 9px; color: #a1a1aa;">
+        <span>Минимальный размер (min):</span>
+      </div>
+      <input type="range" id="fluid-min-slider" min="12" max="20" value="16" oninput="event.stopPropagation(); window.updateFluidTypography();" style="width: 100%; accent-color: #a78bfa; cursor: pointer;">
+    </div>
+    
+    <div>
+      <div style="display: flex; justify-content: space-between; font-size: 9px; color: #a1a1aa;">
+        <span>Максимальный размер (max):</span>
+      </div>
+      <input type="range" id="fluid-max-slider" min="24" max="48" value="40" oninput="event.stopPropagation(); window.updateFluidTypography();" style="width: 100%; accent-color: #a78bfa; cursor: pointer;">
+    </div>
+    
+    <div>
+      <div style="display: flex; justify-content: space-between; font-size: 9px; color: #a1a1aa;">
+        <span>Ширина вьюпорта превью:</span>
+        <span id="fluid-viewport-val" style="color: #a78bfa; font-weight: bold;">80%</span>
+      </div>
+      <input type="range" id="fluid-viewport-slider" min="50" max="100" value="80" oninput="event.stopPropagation(); window.updateFluidTypography();" style="width: 100%; accent-color: #a78bfa; cursor: pointer;">
+    </div>
+  </div>
+  
+  <div style="border: 1px solid rgba(255,255,255,0.06); padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.2); margin-bottom: 8px;">
+    <div style="font-size: 8px; color: #8b5cf6; font-family: monospace; margin-bottom: 4px;">СГЕНЕРИРОВАННЫЙ CSS:</div>
+    <code id="fluid-formula-code" style="font-size: 9px; color: #a78bfa; font-family: monospace; display: block; word-break: break-all;">clamp(16px, 1.00rem + 3.0vw, 40px)</code>
+  </div>
+  
+  <div id="fluid-preview-container" style="width: 80%; border: 1px dashed rgba(255,255,255,0.15); background: rgba(255,255,255,0.02); padding: 8px; border-radius: 4px; transition: width 0.1s ease; margin: 0 auto; text-align: center;">
+    <span id="fluid-preview-text" style="color: #fff; font-weight: 500; font-family: 'Inter', sans-serif;">Fluid Text</span>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Fluid Typography", "CSS clamp()", "calc()", "vw/vh"]
+  },
+  {
+    id: "l4_30_touch_targets",
+    level: "L4",
+    track: "engineering",
+    title: "Touch Targets — стандарты размеров мобильных кликабельных элементов",
+    shortDesc: "Обеспечение размеров сенсорных целей не менее 44x44px (Apple) или 48x48px (Material Design) для удобства нажатия.",
+    steps: [
+      {
+        text: "Рекомендации Apple и Google по сенсорным элементам.",
+        details: "Apple Human Interface Guidelines рекомендует минимальный размер сенсорной цели 44x44pt, а Google Material Design — 48x48dp."
+      },
+      {
+        text: "Свободное пространство и внешние отступы.",
+        details: "Для предотвращения случайных нажатий рядом расположенных элементов сенсорные цели должны иметь достаточное расстояние между собой."
+      },
+      {
+        text: "Увеличение кликабельной зоны через padding.",
+        details: "Если визуально элемент должен быть маленьким, расширить его сенсорную область можно с помощью CSS-отступов (padding) или невидимого псевдоэлемента ::before/::after."
+      },
+      {
+        text: "Сравнение удобства сенсорных зон на мобильных.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #10b981; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">TOUCH TARGETS TESTER</div>
+  
+  <div style="display: flex; justify-content: space-around; margin-bottom: 12px; font-size: 10px;">
+    <div style="text-align: center;">
+      <span style="color: #a1a1aa; display: block; font-size: 8px;">ПОПАДАНИЙ (HITS):</span>
+      <span id="touch-hit-cnt" style="font-size: 16px; font-weight: bold; color: #10b981;">0</span>
+    </div>
+    <div style="text-align: center;">
+      <span style="color: #a1a1aa; display: block; font-size: 8px;">ПРОМАХОВ (MISSES):</span>
+      <span id="touch-miss-cnt" style="font-size: 16px; font-weight: bold; color: #f43f5e;">0</span>
+    </div>
+  </div>
+  
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.04);">
+      <span style="font-size: 9px; color: #a1a1aa;">Правильный (48x48px):</span>
+      <button onclick="event.stopPropagation(); window.simulateTouchClick && window.simulateTouchClick('good', true);" style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; border-radius: 8px; background: #10b981; border: none; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px;">✅</button>
+    </div>
+    
+    <div onclick="window.simulateTouchClick && window.simulateTouchClick('bad', false);" style="display: flex; align-items: center; justify-content: space-between; padding: 6px 12px; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.04); cursor: pointer;">
+      <span style="font-size: 9px; color: #a1a1aa; pointer-events: none;">Маленький (16x16px):</span>
+      <button onclick="event.stopPropagation(); window.simulateTouchClick && window.simulateTouchClick('bad', true);" style="width: 16px; height: 16px; min-width: 16px; min-height: 16px; border-radius: 2px; background: #ef4444; border: none; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; padding: 0; font-size: 6px;">❌</button>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Touch Targets", "Padding Area", "iOS Guidelines", "Material Design Spacing"]
+  },
+  {
+    id: "l4_31_core_web_vitals",
+    level: "L4",
+    track: "engineering",
+    title: "Core Web Vitals — ключевые метрики производительности UX",
+    shortDesc: "Оптимизация параметров LCP, CLS и INP для обеспечения высокого рейтинга UX и поисковой оптимизации (SEO).",
+    steps: [
+      {
+        text: "Понимание основных метрик Core Web Vitals.",
+        details: "LCP (Largest Contentful Paint) измеряет скорость загрузки основного контента, CLS (Cumulative Layout Shift) — визуальную стабильность, INP (Interaction to Next Paint) — интерактивность."
+      },
+      {
+        text: "Устранение причин сдвига макета.",
+        details: "Задавайте явные размеры width/height для картинок, резервируйте место под динамические рекламные блоки и загружайте шрифты с помощью font-display: swap."
+      },
+      {
+        text: "Интерактивная панель мониторинга Core Web Vitals.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #3b82f6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">CORE WEB VITALS PLAYGROUND</div>
+  
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px;">
+    <div id="cwv-lcp-card" style="padding: 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.25); text-align: center; transition: all 0.2s ease;">
+      <div style="font-size: 8px; color: #a1a1aa; font-family: monospace;">LCP</div>
+      <div id="cwv-lcp-val" style="font-size: 12px; font-weight: bold; color: #fff; margin: 2px 0;">2.5s</div>
+      <div id="cwv-lcp-status" style="font-size: 7px; padding: 1px 4px; border-radius: 3px; background: #10b981; color: #fff; display: inline-block;">GOOD 🟢</div>
+    </div>
+    
+    <div id="cwv-cls-card" style="padding: 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.25); text-align: center; transition: all 0.2s ease;">
+      <div style="font-size: 8px; color: #a1a1aa; font-family: monospace;">CLS</div>
+      <div id="cwv-cls-val" style="font-size: 12px; font-weight: bold; color: #fff; margin: 2px 0;">0.01</div>
+      <div id="cwv-cls-status" style="font-size: 7px; padding: 1px 4px; border-radius: 3px; background: #10b981; color: #fff; display: inline-block;">GOOD 🟢</div>
+    </div>
+    
+    <div id="cwv-inp-card" style="padding: 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.25); text-align: center; transition: all 0.2s ease;">
+      <div style="font-size: 8px; color: #a1a1aa; font-family: monospace;">INP</div>
+      <div id="cwv-inp-val" style="font-size: 12px; font-weight: bold; color: #fff; margin: 2px 0;">45ms</div>
+      <div id="cwv-inp-status" style="font-size: 7px; padding: 1px 4px; border-radius: 3px; background: #10b981; color: #fff; display: inline-block;">GOOD 🟢</div>
+    </div>
+  </div>
+  
+  <div id="cwv-shifting-zone" style="padding: 4px; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; background: rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; transition: all 0.2s ease;">
+    <span id="cwv-shifted-content" style="font-size: 9px; color: #a1a1aa; transition: all 0.2s ease;">Место под контент зарезервировано (CLS = 0)</span>
+  </div>
+  
+  <div style="display: flex; gap: 6px;">
+    <button id="cwv-simulate-shift-btn" onclick="event.stopPropagation(); window.simulateLayoutShift && window.simulateLayoutShift();" style="flex: 1; padding: 6px; font-size: 9px; border-radius: 4px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; cursor: pointer;">Вызвать сдвиг ⚠️</button>
+    <button id="cwv-optimize-btn" onclick="event.stopPropagation(); window.optimizeCoreWebVitals && window.optimizeCoreWebVitals();" style="flex: 1; padding: 6px; font-size: 9px; border-radius: 4px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; cursor: pointer;">Оптимизировать ⚡</button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Core Web Vitals", "LCP", "CLS", "INP", "Lighthouse"]
+  },
+  {
+    id: "l4_32_perceived_performance",
+    level: "L4",
+    track: "engineering",
+    title: "Perceived Performance — психология скорости",
+    shortDesc: "Применение скелетонов, мгновенного отклика и плавных лоадеров для улучшения субъективного восприятия скорости.",
+    steps: [
+      {
+        text: "Разница между реальной и воспринимаемой скоростью.",
+        details: "Субъективное время ожидания сокращается, если пользователь сразу понимает, что система занята делом, видя красивый и индикативный индикатор."
+      },
+      {
+        text: "Скелетоны (Skeleton Screens) против спиннеров.",
+        details: "Скелетоны создают ощущение постепенной загрузки структуры страницы, тогда как классический спиннер привлекает внимание к самому процессу томительного ожидания."
+      },
+      {
+        text: "Симуляция психологического восприятия времени.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">PERCEIVED PERFORMANCE PLAYGROUND</div>
+  
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+    <div style="border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.2); text-align: center;">
+      <span style="font-size: 8px; color: #f43f5e; display: block; font-family: monospace; margin-bottom: 6px;">СПИННЕР (Ожидание)</span>
+      
+      <div id="perc-spinner-loader" style="display: none; height: 32px; align-items: center; justify-content: center;">
+        <div style="width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #f43f5e; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+      </div>
+      <div id="perc-spinner-content" style="display: block; font-size: 9px; color: #fff;">
+        📦 Данные загружены!
+      </div>
+    </div>
+    
+    <div style="border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.2);">
+      <span style="font-size: 8px; color: #10b981; display: block; font-family: monospace; text-align: center; margin-bottom: 6px;">СКЕЛЕТОН (Предпросмотр)</span>
+      
+      <div id="perc-skeleton-loader" style="display: none; flex-direction: column; gap: 4px; height: 32px; justify-content: center;">
+        <div style="height: 8px; background: rgba(255,255,255,0.08); border-radius: 2px; width: 80%; animation: pulse 1.5s infinite;"></div>
+        <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: 2px; width: 50%; animation: pulse 1.5s infinite;"></div>
+      </div>
+      <div id="perc-skeleton-content" style="display: block; font-size: 9px; color: #fff; text-align: center; line-height: 32px;">
+        🎉 Профиль готов!
+      </div>
+    </div>
+  </div>
+  
+  <button id="perc-simulate-btn" onclick="event.stopPropagation(); window.simulateSkeletonLoading && window.simulateSkeletonLoading();" style="width: 100%; padding: 6px; font-size: 9px; border-radius: 4px; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #a78bfa; cursor: pointer;">Запустить симуляцию (2 сек)</button>
+</div>`
+      }
+    ],
+    tools: ["Perceived Performance", "Skeleton Screen", "Optimistic UI", "Progressive Image Loading"]
+  },
+  {
+    id: "l4_33_image_optimization",
+    level: "L4",
+    track: "engineering",
+    title: "Image Optimization — оптимизация графики",
+    shortDesc: "Применение современных сжатых форматов WebP и AVIF, адаптивных медиа-запросов и ленивой загрузки (lazy loading).",
+    steps: [
+      {
+        text: "Сравнение современных графических форматов.",
+        details: "AVIF обеспечивает сжатие до 50% лучше по сравнению с WebP и до 80% лучше по сравнению с классическим PNG при сохранении высокого качества деталей."
+      },
+      {
+        text: "Преимущества ленивой загрузки (lazy loading).",
+        details: "Атрибут loading='lazy' для тегов img указывает браузеру откладывать загрузку изображений, находящихся за пределами первого экрана, экономя трафик."
+      },
+      {
+        text: "Симуляция оптимизации веса картинок.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #10b981; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">IMAGE OPTIMIZATION COMPILER</div>
+  
+  <div style="display: flex; gap: 4px; margin-bottom: 10px;">
+    <button id="img-opt-png-btn" onclick="event.stopPropagation(); window.changeImageFormatType && window.changeImageFormatType('png');" style="flex: 1; padding: 4px; font-size: 8px; border-radius: 4px; cursor: pointer; color: #a1a1aa; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">PNG</button>
+    <button id="img-opt-webp-btn" onclick="event.stopPropagation(); window.changeImageFormatType && window.changeImageFormatType('webp');" style="flex: 1; padding: 4px; font-size: 8px; border-radius: 4px; cursor: pointer; color: #a1a1aa; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">WEBP</button>
+    <button id="img-opt-avif-btn" onclick="event.stopPropagation(); window.changeImageFormatType && window.changeImageFormatType('avif');" style="flex: 1; padding: 4px; font-size: 8px; border-radius: 4px; cursor: pointer; color: #a1a1aa; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);">AVIF</button>
+  </div>
+  
+  <div style="border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.2); font-size: 9px; color: #a1a1aa;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+      <span>Размер файла:</span>
+      <span id="img-opt-size-val" style="color: #fff; font-weight: bold;">120 KB</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+      <span>Время загрузки (3G):</span>
+      <span id="img-opt-time-val" style="color: #34d399; font-weight: bold;">0.4s</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+      <span>Оценка UX:</span>
+      <span id="img-opt-status-val" style="color: #34d399; font-weight: bold;">Хорошо 🟢</span>
+    </div>
+    <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+      <div id="img-opt-progress-bar" style="width: 20%; height: 100%; background: #8b5cf6; transition: all 0.2s ease;"></div>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Image Optimization", "WebP", "AVIF", "lazyloading", "srcset"]
+  },
+  {
+    id: "l4_34_wcag_standards",
+    level: "L4",
+    track: "engineering",
+    title: "WCAG 2.1 Level AA — стандарты доступности",
+    shortDesc: "Обязательные требования к контрастности текста, поддержке экранных дикторов и навигации для лиц с ограничениями.",
+    steps: [
+      {
+        text: "Основные правила веб-доступности WCAG.",
+        details: "Доступность строится на 4 принципах (POUR): воспринимаемость (Perceivable), управляемость (Operable), понятность (Understandable) и надежность (Robust)."
+      },
+      {
+        text: "Тестирование контрастности текста.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">WCAG CONTRAST CHECKER</div>
+  
+  <div style="margin-bottom: 10px;">
+    <div style="display: flex; justify-content: space-between; font-size: 9px; color: #a1a1aa; margin-bottom: 4px;">
+      <span>Контрастность фона и текста:</span>
+      <span id="contrast-ratio-val" style="color: #a78bfa; font-weight: bold;">4.5:1</span>
+    </div>
+    <input type="range" id="contrast-color-slider" min="0" max="100" value="50" oninput="event.stopPropagation(); window.updateContrastSlider && window.updateContrastSlider(this.value);" style="width: 100%; accent-color: #a78bfa; cursor: pointer;">
+  </div>
+  
+  <div style="display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.25);">
+    <div id="contrast-preview-text" style="font-size: 11px; font-weight: bold; font-family: 'Inter', sans-serif; transition: color 0.1s ease;">Превью текста</div>
+    <span id="contrast-status-badge" style="font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: monospace;">PASS AA ✅</span>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["WCAG 2.1", "Accessibility", "A11y", "Contrast Ratio"]
+  },
+  {
+    id: "l4_35_keyboard_navigation",
+    level: "L4",
+    track: "engineering",
+    title: "Keyboard Navigation — поддержка клавиатуры",
+    shortDesc: "Обеспечение полной управляемости через клавиши Tab, фокус-индикаторы и реализацию ловушек фокуса (Focus Traps).",
+    steps: [
+      {
+        text: "Логический порядок обхода элементов (Tab Order).",
+        details: "Семантически верный HTML гарантирует, что обход элементов клавишей Tab соответствует визуальному порядку чтения интерфейса сверху вниз и слева направо."
+      },
+      {
+        text: "Реализация Focus Traps в модалках.",
+        details: "При открытии модального окна или боковой панели фокус не должен выходить за их пределы на фоновые элементы страницы — это удерживается с помощью фокус-ловушки."
+      },
+      {
+        text: "Симуляция циклического управления фокусом.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #3b82f6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">KEYBOARD FOCUS TRAP</div>
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 9px;">
+    <span style="color: #a1a1aa;">Статус фокус-ловушки:</span>
+    <span id="trap-status-indicator" style="font-weight: bold; font-family: monospace; color: #ef4444;">ОТКЛЮЧЕНА ❌</span>
+  </div>
+  
+  <div id="trap-modal-box" style="border: 1px solid rgba(255,255,255,0.06); padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.25); display: flex; flex-direction: column; gap: 6px; transition: all 0.2s ease; margin-bottom: 10px;">
+    <input id="trap-el-input" type="text" placeholder="Введите имя..." style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 10px; outline: none; width: 100%;" onchange="event.stopPropagation();">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a id="trap-el-link" href="#" onclick="event.stopPropagation();" style="font-size: 9px; color: #a78bfa; text-decoration: none;">Забыли пароль?</a>
+      <button id="trap-el-button" onclick="event.stopPropagation();" style="padding: 4px 10px; font-size: 9px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer;">Войти</button>
+    </div>
+  </div>
+  
+  <div style="display: flex; gap: 6px;">
+    <button id="trap-toggle-btn" onclick="event.stopPropagation(); window.toggleKeyboardFocusTrap && window.toggleKeyboardFocusTrap();" style="flex: 1; padding: 6px; font-size: 8px; border-radius: 4px; background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); color: #a78bfa; cursor: pointer;">Вкл/Выкл ловушку 🔒</button>
+    <button id="trap-cycle-btn" onclick="event.stopPropagation(); window.cycleTrappedFocus && window.cycleTrappedFocus();" style="flex: 1; padding: 6px; font-size: 8px; border-radius: 4px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); color: #3382f6; cursor: pointer;">Симулировать Tab ➡️</button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Keyboard Navigation", "Focus Trap", "tabindex", "outline-focus"]
+  },
+  {
+    id: "l4_36_screen_readers",
+    level: "L4",
+    track: "engineering",
+    title: "Screen Readers — озвучка доступности интерфейсов",
+    shortDesc: "Применение семантических ролей ARIA, скрытого вспомогательного текста и разметки для речевых синтезаторов.",
+    steps: [
+      {
+        text: "Роль экранных дикторов и скринридеров.",
+        details: "Синтезаторы речи озвучивают структуру страницы для незрячих пользователей, ориентируясь на теги и ARIA-атрибуты."
+      },
+      {
+        text: "Свойства aria-label и атрибуты ролей.",
+        details: "Если интерактивный элемент не имеет текстового описания (например, кнопка-иконка), необходимо задавать атрибут aria-label или использовать скрытые классы sr-only."
+      },
+      {
+        text: "Озвучка и симуляция скринридера в браузере.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #fbbf24; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">SCREEN READER NARRATOR</div>
+  
+  <div style="display: flex; gap: 4px; margin-bottom: 10px;">
+    <button id="sr-bad-btn" onclick="event.stopPropagation(); window.clickScreenReaderElement && window.clickScreenReaderElement('bad');" style="flex: 1; padding: 6px; font-size: 8px; border-radius: 4px; cursor: pointer; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171;">Плохой ❌</button>
+    <button id="sr-good-btn" onclick="event.stopPropagation(); window.clickScreenReaderElement && window.clickScreenReaderElement('good');" style="flex: 1; padding: 6px; font-size: 8px; border-radius: 4px; cursor: pointer; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399;">Хороший 🟢</button>
+    <button id="sr-alert-btn" onclick="event.stopPropagation(); window.clickScreenReaderElement && window.clickScreenReaderElement('alert');" style="flex: 1; padding: 6px; font-size: 8px; border-radius: 4px; cursor: pointer; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24;">Alert ⚠️</button>
+  </div>
+  
+  <div style="border: 1px solid rgba(255,255,255,0.06); padding: 8px; border-radius: 6px; background: rgba(0,0,0,0.25); min-height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+    <span id="sr-narrator-text" style="font-size: 9px; color: #a1a1aa; font-family: monospace; text-align: center; width: 100%;">📢 Нажмите кнопку выше для озвучки...</span>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Screen Reader", "ARIA Roles", "aria-label", "sr-only"]
+  },
 
   // ================= LEVEL L5 =================
   {
@@ -4652,6 +5069,132 @@ const nodes = [
       }
     ],
     tools: ["Neon DB", "Supabase Suite", "pgvector", "Database Branching"]
+  },
+  {
+    id: "l5_9_prisma_safety",
+    level: "L5",
+    track: "stack",
+    title: "Безопасность Prisma CLI",
+    shortDesc: "ИИ-ограничители (AI Safety Guardrails) и предотвращение деструктивных миграций.",
+    steps: [
+      {
+        text: "Внедрение CLI AI Safety Guardrails.",
+        details: "Использование скриптов-оберток для блокировки опасных CLI команд при обнаружении признаков автоматического запуска ИИ-агентом."
+      },
+      {
+        text: "Запрет автоматического 'migrate reset'.",
+        details: `Жесткая блокировка сброса базы данных в средах разработки без явного интерактивного подтверждения со стороны человека. Попробуйте ИИ-ограничитель в терминале ниже:
+      <div class="showcase-widget p-4 bg-slate-900/60 rounded-xl border border-slate-800 text-slate-300 font-mono text-sm max-w-lg mx-auto" style="margin-top: 10px;">
+        <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+          <span class="text-xs text-rose-400 flex items-center gap-1 font-sans">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            PRISMA SAFETY TERMINAL
+          </span>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400 font-sans">ИИ-Ограничитель:</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="prisma-guard-toggle" class="sr-only peer" checked onchange="window.togglePrismaSafetyGuard(this.checked)">
+              <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600 peer-checked:after:bg-white"></div>
+            </label>
+          </div>
+        </div>
+
+        <div id="prisma-terminal-screen" class="bg-black/80 p-3 rounded-lg min-h-[160px] flex flex-col justify-between mb-3 border border-slate-950">
+          <div id="prisma-terminal-log" class="text-xs space-y-1 overflow-y-auto max-h-[140px] text-emerald-400">
+            <div>$ npx prisma db push --force-reset</div>
+            <div class="text-slate-400">// Готов к симуляции команды ИИ...</div>
+          </div>
+          <div id="prisma-human-approval-ui" class="hidden mt-2 p-2 bg-amber-950/40 border border-amber-900/60 rounded flex items-center justify-between">
+            <span class="text-xs text-amber-300 font-sans">⚠️ Подтвердить деструктивную миграцию?</span>
+            <button id="prisma-approve-btn" onclick="window.approvePrismaSafetyCommand()" class="px-2 py-1 bg-amber-600 hover:bg-amber-500 text-white rounded text-xs font-sans transition animate-bounce">Разрешить ✅</button>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button id="prisma-simulate-btn" onclick="window.simulatePrismaSafety()" class="flex-1 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-sans text-xs font-semibold transition">
+            Симулировать команду ИИ
+          </button>
+          <button onclick="window.resetPrismaSafetyDemo()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-sans text-xs transition">
+            Сбросить
+          </button>
+        </div>
+      </div>`
+      },
+      {
+        text: "Верификация недеструктивности 'db push'.",
+        details: "Анализ влияния изменений в Prisma Schema на существующие таблицы с предупреждением о возможной утере данных перед развертыванием."
+      }
+    ],
+    tools: ["Prisma Guardrails", "Human-in-the-loop CLI", "Schema Verification"]
+  },
+  {
+    id: "l5_10_drizzle_edge",
+    level: "L5",
+    track: "stack",
+    title: "Drizzle ORM Edge-схемы",
+    shortDesc: "TypeScript-native описание БД без отставания типов и с поддержкой Edge Runtimes.",
+    steps: [
+      {
+        text: "TypeScript-native моделирование.",
+        details: "Описание таблиц и связей непосредственно на TypeScript. ИИ видит изменения мгновенно без промежуточных шагов сборки типа prisma generate."
+      },
+      {
+        text: "Полная Edge-совместимость.",
+        details: "Использование Drizzle ORM в Cloudflare Workers или Next.js Edge благодаря суперлегковесному размеру бандла."
+      },
+      {
+        text: "Декларативное описание политик RLS.",
+        details: `Защищенное описание Row-Level Security (RLS) прямо в схеме данных в виде декларативных TypeScript хелперов. Сравните Prisma и Drizzle в песочнице Edge ниже:
+      <div class="showcase-widget p-4 bg-slate-900/60 rounded-xl border border-slate-800 text-slate-300 font-mono text-sm max-w-lg mx-auto" style="margin-top: 10px;">
+        <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+          <span class="text-xs text-cyan-400 flex items-center gap-1 font-sans">
+            <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+            DRIZZLE VS PRISMA EDGE
+          </span>
+          <div class="flex bg-slate-950 p-0.5 rounded border border-slate-800 font-sans">
+            <button id="drizzle-toggle-prisma" onclick="window.toggleDrizzleEdgeMode('prisma')" class="px-2 py-0.5 text-[10px] rounded transition bg-slate-800 text-white">Prisma</button>
+            <button id="drizzle-toggle-drizzle" onclick="window.toggleDrizzleEdgeMode('drizzle')" class="px-2 py-0.5 text-[10px] rounded transition text-slate-400">Drizzle</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div class="bg-black/75 p-2 rounded border border-slate-900 flex flex-col justify-between min-h-[140px]">
+            <div class="text-[10px] text-slate-500 border-b border-slate-900 pb-1 mb-1 font-sans font-semibold">SCHEMA</div>
+            <pre id="drizzle-schema-code" class="text-[10px] text-indigo-300 leading-tight overflow-x-auto">model User {
+  id    Int    @id
+  name  String
+}</pre>
+            <button id="drizzle-add-col-btn" onclick="window.addDrizzleColumn()" class="mt-2 w-full py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-sans rounded transition">Добавить поле ИИ</button>
+          </div>
+
+          <div class="bg-black/75 p-2 rounded border border-slate-900 flex flex-col justify-between min-h-[140px]">
+            <div class="text-[10px] text-slate-500 border-b border-slate-900 pb-1 mb-1 font-sans font-semibold">TS COMPILER & BUNDLE</div>
+            <div class="space-y-2">
+              <div>
+                <div class="text-[9px] text-slate-400 font-sans">Bundle Size:</div>
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 bg-slate-950 h-1.5 rounded overflow-hidden">
+                    <div id="drizzle-bundle-bar" class="bg-rose-500 h-full w-[100%] transition-all duration-300"></div>
+                  </div>
+                  <span id="drizzle-bundle-val" class="text-[10px] font-bold text-rose-400">12.4 MB</span>
+                </div>
+              </div>
+              <div>
+                <div class="text-[9px] text-slate-400 font-sans">Status:</div>
+                <div id="drizzle-compiler-log" class="text-[10px] text-emerald-400 leading-tight">🟢 Ready.</div>
+              </div>
+            </div>
+            <button id="drizzle-compile-btn" onclick="window.runPrismaGenerate()" class="w-full py-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-sans rounded transition mt-1">prisma generate</button>
+          </div>
+        </div>
+
+        <button onclick="window.resetDrizzleEdgeDemo()" class="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-sans text-xs transition">
+          Сбросить песочницу
+        </button>
+      </div>`
+      }
+    ],
+    tools: ["Drizzle ORM", "TypeScript Schema", "Edge Runtime", "RLS policies"]
   },
 
   // ================= LEVEL L6 =================

@@ -325,6 +325,489 @@ const path = require('path');
     }
   }
 
+  // 8c. Test L4 Tasks 50, 51, 52 (Container Queries, Fluid Typography, Touch Targets)
+  console.log("\n=== ТЕСТИРОВАНИЕ НОВЫХ ИНТЕРАКТИВНЫХ КОМПОНЕНТОВ L4 (Tasks 50, 51, 52) ===");
+  
+  // A. Container Queries
+  console.log("Тестирование Task 50 (Container Queries)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_28_container_queries"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+  
+  // Expand 4th step card containing playground
+  const cqStepCard = page.locator('#drawer-steps .step-card').nth(3);
+  await cqStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  const cqSlider = page.locator('#container-width-slider');
+  await cqSlider.fill('350');
+  await cqSlider.dispatchEvent('input');
+  await page.waitForTimeout(200);
+
+  let cqWidthVal = await page.locator('#container-width-val').textContent();
+  console.log(`Ширина контейнера после сдвига: ${cqWidthVal}`);
+  if (cqWidthVal !== '350px') {
+    throw new Error(`Ошибка: Значение ширины контейнера не обновилось! Ожидалось 350px, получено: ${cqWidthVal}`);
+  }
+
+  let cqBadgeText = await page.locator('#cq-card-badge').textContent();
+  console.log(`Текст бейджа при ширине 350px: ${cqBadgeText}`);
+  if (!cqBadgeText.includes('Stack') && !cqBadgeText.includes('max-width')) {
+    throw new Error(`Ошибка: Бейдж не переключился на стек при узком контейнере! Получено: ${cqBadgeText}`);
+  }
+
+  await cqSlider.fill('450');
+  await cqSlider.dispatchEvent('input');
+  await page.waitForTimeout(200);
+
+  cqBadgeText = await page.locator('#cq-card-badge').textContent();
+  console.log(`Текст бейджа после сброса на 450px: ${cqBadgeText}`);
+  if (!cqBadgeText.includes('Row') && !cqBadgeText.includes('min-width')) {
+    throw new Error(`Ошибка: Бейдж не переключился обратно на строку! Получено: ${cqBadgeText}`);
+  }
+  console.log("✅ Task 50 (Container Queries) протестирован успешно!");
+
+  // B. Fluid Typography
+  console.log("Тестирование Task 51 (Fluid Typography)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_29_fluid_typography"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  // Expand 4th step card containing playground
+  const fluidStepCard = page.locator('#drawer-steps .step-card').nth(3);
+  await fluidStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  await page.locator('#fluid-min-slider').fill('16');
+  await page.locator('#fluid-min-slider').dispatchEvent('input');
+  await page.locator('#fluid-max-slider').fill('40');
+  await page.locator('#fluid-max-slider').dispatchEvent('input');
+  await page.locator('#fluid-viewport-slider').fill('80');
+  await page.locator('#fluid-viewport-slider').dispatchEvent('input');
+  await page.waitForTimeout(200);
+
+  let fluidFormula = await page.locator('#fluid-formula-code').textContent();
+  console.log(`Сгенерированная формула clamp(): ${fluidFormula}`);
+  if (!fluidFormula.includes('16px') || !fluidFormula.includes('40px')) {
+    throw new Error(`Ошибка: Сгенерированная clamp() формула некорректна! Получено: ${fluidFormula}`);
+  }
+
+  let fluidVpVal = await page.locator('#fluid-viewport-val').textContent();
+  console.log(`Ширина превью-зоны: ${fluidVpVal}`);
+  if (fluidVpVal !== '80%') {
+    throw new Error(`Ошибка: Значение ширины превью-зоны не обновилось! Ожидалось 80%, получено: ${fluidVpVal}`);
+  }
+  console.log("✅ Task 51 (Fluid Typography) протестирован успешно!");
+
+  // C. Touch Targets
+  console.log("Тестирование Task 52 (Touch Targets)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_30_touch_targets"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  // Expand 4th step card containing playground
+  const touchStepCard = page.locator('#drawer-steps .step-card').nth(3);
+  await touchStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  // Let's click the accessible green button (should trigger hit)
+  console.log("Нажимаем на хорошую сенсорную кнопку (48x48px)...");
+  const goodBtn = page.locator('button[onclick*="simulateTouchClick(\'good\', true)"]').first();
+  await goodBtn.click();
+  await page.waitForTimeout(150);
+
+  // Let's click the bad button itself (should trigger hit)
+  console.log("Нажимаем на плохую маленькую кнопку (16x16px)...");
+  const badBtn = page.locator('button[onclick*="simulateTouchClick(\'bad\', true)"]').first();
+  await badBtn.click();
+  await page.waitForTimeout(150);
+
+  // Let's click outside the bad button but inside its bad row container (should trigger miss)
+  console.log("Кликаем мимо плохой кнопки во внешнюю область плашки (симулируем промах)...");
+  const badRow = page.locator('div[onclick*="simulateTouchClick(\'bad\', false)"]').first();
+  // Click specifically towards the left edge to avoid the red button on the right
+  await badRow.click({ position: { x: 5, y: 5 } });
+  await page.waitForTimeout(150);
+
+  let touchHits = await page.locator('#touch-hit-cnt').textContent();
+  let touchMisses = await page.locator('#touch-miss-cnt').textContent();
+  console.log(`Показатели: Успешно: ${touchHits}, Промахи: ${touchMisses}`);
+  
+  if (parseInt(touchHits) < 2) {
+    throw new Error(`Ошибка: Счетчик попаданий не обновился! Ожидалось минимум 2, получено: ${touchHits}`);
+  }
+  if (parseInt(touchMisses) < 1) {
+    throw new Error(`Ошибка: Счетчик промахов не обновился! Ожидалось минимум 1, получено: ${touchMisses}`);
+  }
+  console.log("✅ Task 52 (Touch Targets) протестирован успешно!");
+
+  // D. Core Web Vitals
+  console.log("Тестирование Task 53 (Core Web Vitals)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_31_core_web_vitals"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  const cwvStepCard = page.locator('#drawer-steps .step-card').nth(2);
+  await cwvStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  let cwvLcpVal = await page.locator('#cwv-lcp-val').textContent();
+  console.log(`Начальный LCP: ${cwvLcpVal}`);
+  
+  console.log("Симулируем сдвиг макета (Layout Shift)...");
+  await page.click('#cwv-simulate-shift-btn');
+  await page.waitForTimeout(200);
+  
+  let cwvClsStatus = await page.locator('#cwv-cls-status').textContent();
+  let shiftedLcpVal = await page.locator('#cwv-lcp-val').textContent();
+  console.log(`LCP после сдвига: ${shiftedLcpVal}, Статус CLS: ${cwvClsStatus}`);
+  if (shiftedLcpVal !== '5.4s' || !cwvClsStatus.includes('POOR')) {
+    throw new Error(`Ошибка: Метрики Core Web Vitals не ухудшились при сдвиге! LCP=${shiftedLcpVal}, CLS=${cwvClsStatus}`);
+  }
+
+  console.log("Оптимизируем Core Web Vitals...");
+  await page.click('#cwv-optimize-btn');
+  await page.waitForTimeout(200);
+
+  let optClsStatus = await page.locator('#cwv-cls-status').textContent();
+  let optLcpVal = await page.locator('#cwv-lcp-val').textContent();
+  console.log(`Оптимизированный LCP: ${optLcpVal}, Статус CLS: ${optClsStatus}`);
+  if (optLcpVal !== '1.2s' || !optClsStatus.includes('GOOD')) {
+    throw new Error(`Ошибка: Оптимизация Core Web Vitals не сработала! LCP=${optLcpVal}, CLS=${optClsStatus}`);
+  }
+  console.log("✅ Task 53 (Core Web Vitals) протестирован успешно!");
+
+  // E. Perceived Performance
+  console.log("Тестирование Task 54 (Perceived Performance)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_32_perceived_performance"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  const percStepCard = page.locator('#drawer-steps .step-card').nth(2);
+  await percStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  console.log("Запускаем симуляцию загрузки в 2 секунды...");
+  await page.click('#perc-simulate-btn');
+  await page.waitForTimeout(300);
+
+  let isBtnDisabled = await page.locator('#perc-simulate-btn').isDisabled();
+  let spinnerVisible = await page.locator('#perc-spinner-loader').isVisible();
+  console.log(`Кнопка заблокирована во время загрузки: ${isBtnDisabled}, Спиннер виден: ${spinnerVisible}`);
+  if (!isBtnDisabled || !spinnerVisible) {
+    throw new Error("Ошибка: Во время симуляции кнопка должна быть заблокирована и лоадер должен быть активен!");
+  }
+
+  console.log("Ожидаем окончания симуляции загрузки (2.2 сек)...");
+  await page.waitForTimeout(2200);
+
+  isBtnDisabled = await page.locator('#perc-simulate-btn').isDisabled();
+  let spinnerHidden = await page.locator('#perc-spinner-loader').isHidden();
+  console.log(`Кнопка разблокирована после загрузки: ${!isBtnDisabled}, Спиннер скрыт: ${spinnerHidden}`);
+  if (isBtnDisabled || !spinnerHidden) {
+    throw new Error("Ошибка: Симуляция загрузки не завершилась по таймеру!");
+  }
+  console.log("✅ Task 54 (Perceived Performance) протестирован успешно!");
+
+  // F. Image Optimization
+  console.log("Тестирование Task 55 (Image Optimization)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_33_image_optimization"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  const imgStepCard = page.locator('#drawer-steps .step-card').nth(2);
+  await imgStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  console.log("Выбираем формат PNG...");
+  await page.click('#img-opt-png-btn');
+  await page.waitForTimeout(100);
+  let pngSize = await page.locator('#img-opt-size-val').textContent();
+  let pngStatus = await page.locator('#img-opt-status-val').textContent();
+  console.log(`PNG размер: ${pngSize}, статус: ${pngStatus}`);
+  if (pngSize !== '1.8 MB' || !pngStatus.includes('Плохо')) {
+    throw new Error(`Ошибка: Неверный вес или статус PNG! Размер=${pngSize}, Статус=${pngStatus}`);
+  }
+
+  console.log("Выбираем формат AVIF...");
+  await page.click('#img-opt-avif-btn');
+  await page.waitForTimeout(100);
+  let avifSize = await page.locator('#img-opt-size-val').textContent();
+  let avifStatus = await page.locator('#img-opt-status-val').textContent();
+  console.log(`AVIF размер: ${avifSize}, статус: ${avifStatus}`);
+  if (avifSize !== '54 KB' || !avifStatus.includes('Отлично')) {
+    throw new Error(`Ошибка: Неверный вес или статус AVIF! Размер=${avifSize}, Статус=${avifStatus}`);
+  }
+  console.log("✅ Task 55 (Image Optimization) протестирован успешно!");
+
+  // G. WCAG 2.1 Level AA
+  console.log("Тестирование Task 56 (WCAG 2.1 Level AA)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_34_wcag_standards"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  const wcagStepCard = page.locator('#drawer-steps .step-card').nth(1);
+  await wcagStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  console.log("Сдвигаем слайдер контрастности влево (плохой контраст)...");
+  await page.locator('#contrast-color-slider').fill('10');
+  await page.locator('#contrast-color-slider').dispatchEvent('input');
+  await page.waitForTimeout(100);
+  let failBadge = await page.locator('#contrast-status-badge').textContent();
+  let failRatio = await page.locator('#contrast-ratio-val').textContent();
+  console.log(`Контраст: ${failRatio}, Результат: ${failBadge}`);
+  if (!failBadge.includes('FAIL')) {
+    throw new Error(`Ошибка: Слайдер с низким контрастом должен вызывать FAIL! Контраст: ${failRatio}, Результат: ${failBadge}`);
+  }
+
+  console.log("Сдвигаем слайдер вправо (отличный контраст)...");
+  await page.locator('#contrast-color-slider').fill('95');
+  await page.locator('#contrast-color-slider').dispatchEvent('input');
+  await page.waitForTimeout(100);
+  let passBadge = await page.locator('#contrast-status-badge').textContent();
+  let passRatio = await page.locator('#contrast-ratio-val').textContent();
+  console.log(`Контраст: ${passRatio}, Результат: ${passBadge}`);
+  if (!passBadge.includes('PASS AAA')) {
+    throw new Error(`Ошибка: Слайдер с высоким контрастом должен вызывать PASS AAA! Контраст: ${passRatio}, Результат: ${passBadge}`);
+  }
+  console.log("✅ Task 56 (WCAG 2.1 Level AA) протестирован успешно!");
+
+  // H. Keyboard Navigation
+  console.log("Тестирование Task 57 (Keyboard Navigation)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_35_keyboard_navigation"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  const keyNavStepCard = page.locator('#drawer-steps .step-card').nth(2);
+  await keyNavStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  let initialTrapStatus = await page.locator('#trap-status-indicator').textContent();
+  console.log(`Начальный статус фокус-ловушки: ${initialTrapStatus}`);
+  if (!initialTrapStatus.includes('ОТКЛЮЧЕНА')) {
+    throw new Error("Ошибка: Фокус-ловушка должна быть отключена по умолчанию!");
+  }
+
+  console.log("Активируем фокус-ловушку...");
+  await page.click('#trap-toggle-btn');
+  await page.waitForTimeout(100);
+  let activeTrapStatus = await page.locator('#trap-status-indicator').textContent();
+  console.log(`Статус фокус-ловушки после клика: ${activeTrapStatus}`);
+  if (!activeTrapStatus.includes('АКТИВИРОВАНА')) {
+    throw new Error("Ошибка: Ловушка не активировалась после клика по переключателю!");
+  }
+
+  console.log("Эмулируем клавишу Tab через кнопку симуляции...");
+  await page.click('#trap-cycle-btn');
+  await page.waitForTimeout(100);
+  let buttonFocused = await page.evaluate(() => document.activeElement.id === 'trap-el-button');
+  console.log(`Фокус перешел на кнопку модалки: ${buttonFocused}`);
+
+  console.log("Отключаем фокус-ловушку...");
+  await page.click('#trap-toggle-btn');
+  await page.waitForTimeout(100);
+  let disabledTrapStatus = await page.locator('#trap-status-indicator').textContent();
+  console.log(`Итоговый статус фокус-ловушки: ${disabledTrapStatus}`);
+  if (!disabledTrapStatus.includes('ОТКЛЮЧЕНА')) {
+    throw new Error("Ошибка: Ловушка не деактивировалась!");
+  }
+  console.log("✅ Task 57 (Keyboard Navigation) протестирован успешно!");
+
+  // I. Screen Readers
+  console.log("Тестирование Task 58 (Screen Readers)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l4_36_screen_readers"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  const srStepCard = page.locator('#drawer-steps .step-card').nth(2);
+  await srStepCard.locator('.step-text').click();
+  await page.waitForTimeout(400);
+
+  console.log("Клик по недоступной кнопке (без aria-label)...");
+  await page.click('#sr-bad-btn');
+  await page.waitForTimeout(100);
+  let narratorTextBad = await page.locator('#sr-narrator-text').textContent();
+  console.log(`Диктор озвучил: "${narratorTextBad}"`);
+  if (!narratorTextBad.includes('Пустое описание')) {
+    throw new Error(`Ошибка: Описание должно сообщать об отсутствии aria-label! Получено: ${narratorTextBad}`);
+  }
+
+  console.log("Клик по доступной кнопке (с aria-label)...");
+  await page.click('#sr-good-btn');
+  await page.waitForTimeout(100);
+  let narratorTextGood = await page.locator('#sr-narrator-text').textContent();
+  console.log(`Диктор озвучил: "${narratorTextGood}"`);
+  if (!narratorTextGood.includes('Открыть настройки профиля')) {
+    throw new Error(`Ошибка: Описание должно озвучить aria-label! Получено: ${narratorTextGood}`);
+  }
+
+  console.log("Клик по кнопке срочного уведомления (role=alert)...");
+  await page.click('#sr-alert-btn');
+  await page.waitForTimeout(100);
+  let narratorTextAlert = await page.locator('#sr-narrator-text').textContent();
+  console.log(`Диктор озвучил: "${narratorTextAlert}"`);
+  if (!narratorTextAlert.includes('разорвано')) {
+    throw new Error(`Ошибка: Описание должно озвучить alert-сообщение! Получено: ${narratorTextAlert}`);
+  }
+  console.log("✅ Task 58 (Screen Readers) протестирован успешно!");
+  
+  // J. Prisma CLI AI-Safety Guardrails
+  console.log("Тестирование Task 59 (Prisma CLI AI-Safety Guardrails)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l5_9_prisma_safety"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  // Expand the step card containing the prisma safety widget
+  await page.evaluate(() => {
+    const cards = Array.from(document.querySelectorAll('#drawer-steps .step-card'));
+    const prismaCard = cards.find(card => card.querySelector('#prisma-simulate-btn'));
+    if (prismaCard) {
+      prismaCard.classList.add('expanded');
+      const details = prismaCard.querySelector('.step-details');
+      if (details) details.style.maxHeight = '1000px';
+    }
+  });
+  await page.waitForTimeout(400);
+
+  // 1. Verify guardrail active block
+  console.log("Симулируем команду ИИ при ВКЛЮЧЕННОМ ограничителе...");
+  await page.click('#prisma-simulate-btn', { force: true });
+  
+  // Wait deterministically for the human approval UI to appear
+  await page.waitForSelector('#prisma-human-approval-ui:not(.hidden)', { timeout: 5000 });
+  
+  let terminalText = await page.locator('#prisma-terminal-log').innerHTML();
+  console.log(`Текст терминала: ${terminalText}`);
+  if (!terminalText.includes('BLOCKED') || !terminalText.includes('Human-in-the-loop')) {
+    throw new Error("Ошибка: Ограничитель должен заблокировать команду ИИ и потребовать подтверждения человека!");
+  }
+
+  // 2. Click approve
+  console.log("Разрешаем миграцию вручную (Human approval)...");
+  
+  // Diagnostic log of approve action
+  await page.evaluate(() => {
+    console.log("[DIAGNOSTIC] window.approvePrismaSafetyCommand type: " + typeof window.approvePrismaSafetyCommand);
+    const btn = document.getElementById('prisma-approve-btn');
+    console.log("[DIAGNOSTIC] prisma-approve-btn exists: " + !!btn);
+    if (btn) console.log("[DIAGNOSTIC] prisma-approve-btn tag: " + btn.tagName + ", onclick: " + btn.getAttribute('onclick'));
+  });
+
+  await page.click('#prisma-approve-btn', { force: true });
+  
+  // Wait deterministically for the success message to be appended
+  await page.waitForFunction(() => {
+    const text = document.getElementById('prisma-terminal-log').innerHTML;
+    return text.includes('Разрешено человеком') && text.includes('Схема синхронизирована');
+  }, undefined, { timeout: 5000 });
+
+  console.log("Подтверждение человека сработало успешно!");
+
+  // 3. Verify guardrail off destruction
+  console.log("Отключаем ограничитель и симулируем команду ИИ...");
+  await page.click('#prisma-guard-toggle', { force: true }); // Toggle checkbox off
+  await page.waitForTimeout(300);
+  await page.click('#prisma-simulate-btn', { force: true });
+  
+  // Wait deterministically for the base reset destruction message
+  await page.waitForFunction(() => {
+    return document.getElementById('prisma-terminal-log').innerHTML.includes('БАЗА ДАННЫХ СТЕРТА');
+  }, undefined, { timeout: 5000 });
+
+  console.log("✅ Task 59 (Prisma CLI AI-Safety) протестирован успешно!");
+
+  // K. Drizzle ORM Edge TypeScript schemas
+  console.log("Тестирование Task 60 (Drizzle ORM Edge TypeScript schemas)...");
+  await page.evaluate(() => {
+    const node = document.querySelector('.canvas-node[data-id="l5_10_drizzle_edge"]');
+    if (node) node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  });
+  await page.waitForTimeout(500);
+
+  // Expand the step card containing the drizzle widget
+  await page.evaluate(() => {
+    const cards = Array.from(document.querySelectorAll('#drawer-steps .step-card'));
+    const drizzleCard = cards.find(card => card.querySelector('#drizzle-add-col-btn'));
+    if (drizzleCard) {
+      drizzleCard.classList.add('expanded');
+      const details = drizzleCard.querySelector('.step-details');
+      if (details) details.style.maxHeight = '1000px';
+    }
+  });
+  await page.waitForTimeout(400);
+
+  // 1. Check default Prisma Edge Bundle is 12MB
+  let bundleSize = await page.locator('#drizzle-bundle-val').textContent();
+  console.log(`Начальный размер бандла Prisma: ${bundleSize}`);
+  if (bundleSize !== '12.4 MB') {
+    throw new Error(`Ошибка: Начальный размер бандла Prisma должен быть 12.4 MB, получено: ${bundleSize}`);
+  }
+
+  // 2. Add col in Prisma mode -> gets TypeScript error
+  console.log("Добавляем поле ИИ в режиме Prisma...");
+  await page.click('#drizzle-add-col-btn', { force: true });
+  await page.waitForTimeout(200);
+  let compLog = await page.locator('#drizzle-compiler-log').textContent();
+  console.log(`Лог компилятора: ${compLog}`);
+  if (!compLog.includes('TS Error') || !compLog.includes('prisma generate')) {
+    throw new Error("Ошибка: Добавление поля в Prisma без компиляции должно вызывать ошибку типов!");
+  }
+
+  // 3. Compile Prisma -> resolves error
+  console.log("Запускаем prisma generate...");
+  await page.click('#drizzle-compile-btn', { force: true });
+  await page.waitForTimeout(1000);
+  compLog = await page.locator('#drizzle-compiler-log').textContent();
+  console.log(`Лог компилятора после генерации: ${compLog}`);
+  if (!compLog.includes('Сгенерирован Prisma Client') || !compLog.includes('устранены')) {
+    throw new Error("Ошибка: Компиляция Prisma не устранила ошибку типов!");
+  }
+
+  // 4. Switch to Drizzle
+  console.log("Переключаемся в режим Drizzle ORM...");
+  await page.click('#drizzle-toggle-drizzle', { force: true });
+  await page.waitForTimeout(200);
+
+  bundleSize = await page.locator('#drizzle-bundle-val').textContent();
+  console.log(`Размер бандла Drizzle: ${bundleSize}`);
+  if (bundleSize !== '146 KB') {
+    throw new Error(`Ошибка: Размер бандла Drizzle должен быть 146 KB, получено: ${bundleSize}`);
+  }
+
+  // 5. Add col in Drizzle mode -> compiles instantly
+  console.log("Добавляем поле ИИ в режиме Drizzle...");
+  await page.click('#drizzle-add-col-btn', { force: true });
+  await page.waitForTimeout(200);
+  compLog = await page.locator('#drizzle-compiler-log').textContent();
+  console.log(`Лог компилятора Drizzle: ${compLog}`);
+  if (!compLog.includes('обновлены мгновенно') || !compLog.includes('Ошибок компиляции нет')) {
+    throw new Error("Ошибка: Добавление поля в Drizzle должно обновляться мгновенно без ошибок!");
+  }
+  console.log("✅ Task 60 (Drizzle ORM Edge) протестирован успешно!");
+
+  console.log("=========================================================================\n");
+
   // 9. Close Side Drawer
   console.log("Закрытие сайдбара...");
   await page.click('#close-drawer');
