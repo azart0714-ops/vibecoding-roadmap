@@ -2729,6 +2729,316 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ================= NEW LEVEL 4 WIDGETS =================
+  // 1. Design Tokens Widget
+  window.updateDesignToken = function(type, value) {
+    const card = document.getElementById("dt-preview-card");
+    const badge = document.getElementById("dt-preview-badge");
+    const btn = document.getElementById("dt-preview-btn");
+    if (!card || !badge || !btn) return;
+
+    if (type === 'color') {
+      badge.style.backgroundColor = value;
+      btn.style.backgroundColor = value;
+      card.style.borderColor = value + "33"; // subtle opacity
+      
+      const parent = card.parentElement;
+      if (parent) {
+        const colorBtns = parent.querySelectorAll('button[onclick*="updateDesignToken(\'color\'"]');
+        colorBtns.forEach(b => {
+          // Normalize color check
+          const bg = b.style.backgroundColor;
+          if (bg === value || (value === '#3b82f6' && bg.includes('rgb(59, 130, 246)')) || 
+              (value === '#10b981' && bg.includes('rgb(16, 185, 129)')) || 
+              (value === '#f59e0b' && bg.includes('rgb(245, 158, 11)')) || 
+              (value === '#ec4899' && bg.includes('rgb(236, 72, 153)')) || 
+              (value === '#8b5cf6' && bg.includes('rgb(139, 92, 246)'))) {
+            b.style.borderColor = "#fff";
+          } else {
+            b.style.borderColor = "rgba(255, 255, 255, 0.2)";
+          }
+        });
+      }
+    } else if (type === 'radius') {
+      card.style.borderRadius = `${value}px`;
+      btn.style.borderRadius = `${value}px`;
+    } else if (type === 'padding') {
+      card.style.padding = `${value}px`;
+    }
+  };
+
+  // 2. Dark Mode Theme Widget
+  window.toggleDarkModeTheme = function(theme) {
+    const box = document.getElementById("dm-preview-box");
+    const title = document.getElementById("dm-preview-title");
+    const text = document.getElementById("dm-preview-text");
+    const badge = document.getElementById("dm-preview-badge");
+    
+    const lightBtn = document.getElementById("dm-btn-light");
+    const darkBtn = document.getElementById("dm-btn-dark");
+    const systemBtn = document.getElementById("dm-btn-system");
+    
+    if (!box || !title || !text || !badge || !lightBtn || !darkBtn || !systemBtn) return;
+    
+    [lightBtn, darkBtn, systemBtn].forEach(btn => {
+      btn.style.background = "rgba(255, 255, 255, 0.05)";
+      btn.style.borderColor = "rgba(255, 255, 255, 0.1)";
+      btn.style.color = "#fff";
+    });
+    
+    let activeBtn = systemBtn;
+    if (theme === 'light') activeBtn = lightBtn;
+    else if (theme === 'dark') activeBtn = darkBtn;
+    
+    activeBtn.style.background = "rgba(139, 92, 246, 0.2)";
+    activeBtn.style.borderColor = "rgba(139, 92, 246, 0.4)";
+    activeBtn.style.color = "#a78bfa";
+    
+    let resolvedTheme = theme;
+    if (theme === 'system') {
+      resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    if (resolvedTheme === 'dark') {
+      box.style.background = "#0f172a";
+      box.style.color = "#fff";
+      title.innerText = "Тёмная тема";
+      title.style.color = "#fff";
+      text.style.color = "#94a3b8";
+      badge.innerText = theme === 'system' ? "Active (System: Dark)" : "Active";
+      badge.style.background = "rgba(167, 139, 250, 0.15)";
+      badge.style.color = "#a78bfa";
+      badge.style.borderColor = "rgba(167, 139, 250, 0.3)";
+    } else {
+      box.style.background = "#f8fafc";
+      box.style.color = "#0f172a";
+      title.innerText = "Светлая тема";
+      title.style.color = "#0f172a";
+      text.style.color = "#475569";
+      badge.innerText = theme === 'system' ? "Active (System: Light)" : "Active";
+      badge.style.background = "rgba(59, 130, 246, 0.1)";
+      badge.style.color = "#3b82f6";
+      badge.style.borderColor = "rgba(59, 130, 246, 0.2)";
+    }
+  };
+
+  // 3. Focus Management Widget
+  window.fmFocusIndex = 0;
+  window.fmElements = ["fm-modal-close", "fm-modal-input", "fm-modal-save", "fm-modal-tab-btn"];
+  
+  window.toggleFocusManagementModal = function(show) {
+    const overlay = document.getElementById("fm-modal-overlay");
+    const openBtn = document.getElementById("fm-open-btn");
+    
+    if (!overlay || !openBtn) return;
+    
+    if (show) {
+      overlay.style.display = "block";
+      openBtn.style.display = "none";
+      window.fmFocusIndex = 1; // start on input
+      window.updateFmFocusHighlight();
+    } else {
+      overlay.style.display = "none";
+      openBtn.style.display = "inline-block";
+      openBtn.focus();
+      openBtn.style.outline = "2px solid #34d399";
+      setTimeout(() => { openBtn.style.outline = "none"; }, 1000);
+    }
+  };
+  
+  window.cycleFocusManagement = function() {
+    window.fmFocusIndex = (window.fmFocusIndex + 1) % window.fmElements.length;
+    window.updateFmFocusHighlight();
+  };
+  
+  window.updateFmFocusHighlight = function() {
+    const focusLbl = document.getElementById("fm-current-focus-lbl");
+    window.fmElements.forEach((id, idx) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      
+      if (idx === window.fmFocusIndex) {
+        el.focus();
+        el.style.outline = "2px solid #a78bfa";
+        el.style.outlineOffset = "2px";
+        if (focusLbl) {
+          focusLbl.innerText = `Текущий фокус: ${el.tagName.toLowerCase()}${el.id ? '#' + el.id.replace('fm-modal-', '') : ''}`;
+        }
+      } else {
+        el.style.outline = "none";
+      }
+    });
+  };
+
+  // 4. Framer Motion Widget
+  window.runFramerMotionSim = function(type) {
+    const target = document.getElementById("fmo-anim-target");
+    if (!target) return;
+    
+    target.style.transform = "none";
+    target.style.opacity = "1";
+    target.innerHTML = "✨";
+    
+    if (type === 'fade') {
+      target.style.transition = "none";
+      target.style.opacity = "0";
+      setTimeout(() => {
+        target.style.transition = "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
+        target.style.opacity = "1";
+      }, 50);
+    } else if (type === 'spring') {
+      target.style.transition = "none";
+      target.style.transform = "scale(0.3) rotate(-45deg)";
+      setTimeout(() => {
+        target.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
+        target.style.transform = "scale(1.2) rotate(10deg)";
+        setTimeout(() => {
+          target.style.transform = "scale(1) rotate(0deg)";
+        }, 300);
+      }, 50);
+    } else if (type === 'stagger') {
+      target.style.transition = "none";
+      target.style.width = "100%";
+      target.style.height = "auto";
+      target.style.background = "transparent";
+      target.style.display = "flex";
+      target.style.flexDirection = "column";
+      target.style.gap = "4px";
+      target.innerHTML = `
+        <div class="st-item" style="background:#ec4899; height:12px; border-radius:3px; opacity:0; transform:translateY(10px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+        <div class="st-item" style="background:#a78bfa; height:12px; border-radius:3px; opacity:0; transform:translateY(10px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.1s;"></div>
+        <div class="st-item" style="background:#8b5cf6; height:12px; border-radius:3px; opacity:0; transform:translateY(10px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: 0.2s;"></div>
+      `;
+      
+      setTimeout(() => {
+        const items = target.querySelectorAll(".st-item");
+        items.forEach(el => {
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0)";
+        });
+      }, 50);
+      
+      setTimeout(() => {
+        target.style.width = "40px";
+        target.style.height = "40px";
+        target.style.background = "linear-gradient(135deg, #ec4899, #8b5cf6)";
+        target.style.display = "flex";
+        target.style.flexDirection = "row";
+        target.style.gap = "0";
+        target.style.transition = "all 0.3s";
+        target.innerHTML = "✨";
+      }, 3000);
+    }
+  };
+
+  // 5. Prefers Reduced Motion Widget
+  window.reducedMotionActive = false;
+  window.toggleReducedMotionSim = function() {
+    window.reducedMotionActive = !window.reducedMotionActive;
+    
+    const status = document.getElementById("prm-status-lbl");
+    const spinner = document.getElementById("prm-spinner");
+    const btn = document.getElementById("prm-toggle-btn");
+    
+    if (!status || !spinner || !btn) return;
+    
+    if (window.reducedMotionActive) {
+      status.innerText = "АКТИВИРОВАНА 🟢";
+      status.style.color = "#10b981";
+      spinner.className = "spinning-slow";
+      btn.innerText = "Отключить Reduced Motion 🔓";
+      btn.style.borderColor = "rgba(16, 185, 129, 0.4)";
+      btn.style.color = "#10b981";
+      btn.style.background = "rgba(16, 185, 129, 0.15)";
+    } else {
+      status.innerText = "ВЫКЛЮЧЕНА 🚫";
+      status.style.color = "#ef4444";
+      spinner.className = "spinning-fast";
+      btn.innerText = "Эмулировать Reduced Motion 🔒";
+      btn.style.borderColor = "rgba(251, 191, 36, 0.3)";
+      btn.style.color = "#fbbf24";
+      btn.style.background = "rgba(251, 191, 36, 0.15)";
+    }
+  };
+
+  // 6. Form Validation Widget
+  window.validateFormWidget = function() {
+    const email = document.getElementById("fv-email");
+    const emailError = document.getElementById("fv-email-error");
+    const pass = document.getElementById("fv-password");
+    const lenRule = document.getElementById("fv-pass-len");
+    const numRule = document.getElementById("fv-pass-num");
+    const btn = document.getElementById("fv-submit-btn");
+    const successMsg = document.getElementById("fv-success-msg");
+    
+    if (!email || !pass || !btn) return;
+    
+    if (successMsg) successMsg.style.display = "none";
+    
+    const emailVal = email.value.trim();
+    const passVal = pass.value;
+    
+    const emailRegex = /^[^s@]+@[^s@]+\.[^s@]+$/;
+    const emailValid = emailRegex.test(emailVal);
+    
+    if (emailVal === "") {
+      if (emailError) emailError.style.display = "none";
+      email.style.borderColor = "rgba(255,255,255,0.1)";
+    } else if (emailValid) {
+      if (emailError) emailError.style.display = "none";
+      email.style.borderColor = "#10b981";
+    } else {
+      if (emailError) emailError.style.display = "block";
+      email.style.borderColor = "#ef4444";
+    }
+    
+    const passLenValid = passVal.length >= 6;
+    const passNumValid = /\d/.test(passVal);
+    
+    if (passVal === "") {
+      if (lenRule) { lenRule.style.color = "#a1a1aa"; lenRule.innerText = "• Мин. 6 символов"; }
+      if (numRule) { numRule.style.color = "#a1a1aa"; numRule.innerText = "• Мин. 1 цифра"; }
+      pass.style.borderColor = "rgba(255,255,255,0.1)";
+    } else {
+      if (lenRule) {
+        lenRule.style.color = passLenValid ? "#10b981" : "#ef4444";
+        lenRule.innerText = passLenValid ? "✓ Мин. 6 символов" : "✗ Мин. 6 символов";
+      }
+      if (numRule) {
+        numRule.style.color = passNumValid ? "#10b981" : "#ef4444";
+        numRule.innerText = passNumValid ? "✓ Мин. 1 цифра" : "✗ Мин. 1 цифра";
+      }
+      pass.style.borderColor = (passLenValid && passNumValid) ? "#10b981" : "#ef4444";
+    }
+    
+    const allValid = emailValid && passLenValid && passNumValid;
+    if (allValid) {
+      btn.disabled = false;
+      btn.style.cursor = "pointer";
+      btn.style.background = "#10b981";
+      btn.style.color = "#fff";
+      btn.style.borderColor = "#10b981";
+    } else {
+      btn.disabled = true;
+      btn.style.cursor = "not-allowed";
+      btn.style.background = "rgba(255,255,255,0.05)";
+      btn.style.color = "#6b7280";
+      btn.style.borderColor = "rgba(255,255,255,0.08)";
+    }
+  };
+  
+  window.submitFormWidget = function() {
+    const successMsg = document.getElementById("fv-success-msg");
+    const btn = document.getElementById("fv-submit-btn");
+    if (successMsg) {
+      successMsg.style.display = "block";
+      if (btn) {
+        btn.disabled = true;
+        btn.style.cursor = "not-allowed";
+      }
+    }
+  };
+
   // Auto-init sandbox playgrounds when opened in DOM
   setInterval(() => {
     const el = document.getElementById("empty-sandbox-content");
@@ -2795,17 +3105,42 @@ document.addEventListener("DOMContentLoaded", () => {
       trapIndicator.innerText = "ОТКЛЮЧЕНА ❌";
       trapIndicator.style.color = "#ef4444";
     }
+    const dtSlider = document.getElementById("dt-radius-slider");
+    if (dtSlider && !dtSlider.dataset.initialized) {
+      dtSlider.dataset.initialized = "true";
+      window.updateDesignToken('color', '#3b82f6');
+      window.updateDesignToken('radius', dtSlider.value);
+      const dtPad = document.getElementById("dt-padding-slider");
+      if (dtPad) window.updateDesignToken('padding', dtPad.value);
+    }
+    const dmBtn = document.getElementById("dm-btn-dark");
+    if (dmBtn && !dmBtn.dataset.initialized) {
+      dmBtn.dataset.initialized = "true";
+      window.toggleDarkModeTheme('dark');
+    }
+    const fmBtn = document.getElementById("fm-open-btn");
+    if (fmBtn && !fmBtn.dataset.initialized) {
+      fmBtn.dataset.initialized = "true";
+      window.toggleFocusManagementModal(false);
+    }
+    const prmBtn = document.getElementById("prm-toggle-btn");
+    if (prmBtn && !prmBtn.dataset.initialized) {
+      prmBtn.dataset.initialized = "true";
+      window.reducedMotionActive = false;
+      window.toggleReducedMotionSim();
+      window.reducedMotionActive = true;
+      window.toggleReducedMotionSim();
+    }
+    const fvEmail = document.getElementById("fv-email");
+    if (fvEmail && !fvEmail.dataset.initialized) {
+      fvEmail.dataset.initialized = "true";
+      window.validateFormWidget();
+    }
     const srNarratorText = document.getElementById("sr-narrator-text");
     if (srNarratorText && !srNarratorText.dataset.initialized) {
       srNarratorText.dataset.initialized = "true";
       srNarratorText.innerText = "📢 Нажмите кнопку выше для озвучки...";
       srNarratorText.style.color = "#a1a1aa";
-    }
-
-    const drizzleColBtn = document.getElementById("drizzle-add-col-btn");
-    if (drizzleColBtn && !drizzleColBtn.dataset.initialized) {
-      drizzleColBtn.dataset.initialized = "true";
-      window.resetDrizzleEdgeDemo();
     }
   }, 300);
 

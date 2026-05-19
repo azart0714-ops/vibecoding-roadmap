@@ -4856,6 +4856,269 @@ const nodes = [
     ],
     tools: ["Screen Reader", "ARIA Roles", "aria-label", "sr-only"]
   },
+  {
+    id: "l4_37_design_tokens",
+    level: "L4",
+    track: "stack",
+    title: "Design Tokens — основа дизайн-системы",
+    shortDesc: "Централизованное управление дизайн-переменными (цвета, отступы, тени, скругления) для создания гармоничного и легко изменяемого интерфейса.",
+    steps: [
+      {
+        text: "Семантическая структура дизайн-токенов.",
+        details: "В дизайн-системах токены делятся на глобальные (базовые значения типа #3b82f6), семантические (роли типа color-primary, status-success) и компонентные (конкретная реализация кнопки). Это позволяет легко обновлять тему без ручного изменения сотен файлов."
+      },
+      {
+        text: "Категории токенов: отступы, тени, скругления.",
+        details: "Шкала отступов (от 4px до 64px) и скруглений (от 2px до 24px) обеспечивает визуальную симметрию и упорядоченность. Использование строгой сетки устраняет визуальный хаос и делает верстку предсказуемой."
+      },
+      {
+        text: "Интерактивная панель дизайн-токенов.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #60a5fa; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">DESIGN TOKENS CONTROLLER</div>
+  
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; font-size: 9px; text-align: left;">
+    <div>
+      <label style="color: #a1a1aa; display: block; margin-bottom: 3px;">Основной цвет (Primary Token):</label>
+      <div style="display: flex; gap: 6px;">
+        <button onclick="event.stopPropagation(); window.updateDesignToken('color', '#3b82f6')" style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid #fff; background: #3b82f6; cursor: pointer; padding:0;"></button>
+        <button onclick="event.stopPropagation(); window.updateDesignToken('color', '#10b981')" style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: #10b981; cursor: pointer; padding:0;"></button>
+        <button onclick="event.stopPropagation(); window.updateDesignToken('color', '#f59e0b')" style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: #f59e0b; cursor: pointer; padding:0;"></button>
+        <button onclick="event.stopPropagation(); window.updateDesignToken('color', '#ec4899')" style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: #ec4899; cursor: pointer; padding:0;"></button>
+        <button onclick="event.stopPropagation(); window.updateDesignToken('color', '#8b5cf6')" style="width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: #8b5cf6; cursor: pointer; padding:0;"></button>
+      </div>
+    </div>
+    
+    <div>
+      <label style="color: #a1a1aa; display: block; margin-bottom: 3px;">Радиус скругления (Border Radius Token):</label>
+      <input id="dt-radius-slider" type="range" min="0" max="24" value="8" style="width: 100%; cursor: pointer;" oninput="event.stopPropagation(); window.updateDesignToken('radius', this.value)">
+    </div>
+    
+    <div>
+      <label style="color: #a1a1aa; display: block; margin-bottom: 3px;">Внутренние отступы (Padding Token):</label>
+      <input id="dt-padding-slider" type="range" min="4" max="28" value="12" style="width: 100%; cursor: pointer;" oninput="event.stopPropagation(); window.updateDesignToken('padding', this.value)">
+    </div>
+  </div>
+  
+  <div id="dt-preview-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; transition: all 0.2s ease; text-align: left;">
+    <span id="dt-preview-badge" style="font-size: 8px; font-weight: bold; background: #3b82f6; color: #fff; padding: 2px 6px; border-radius: 12px; margin-bottom: 6px; display: inline-block;">TOKEN BADGE</span>
+    <h5 style="margin: 0 0 4px 0; font-size: 11px; color: #fff;">Интерактивное превью</h5>
+    <p style="margin: 0 0 8px 0; font-size: 9px; color: #a1a1aa; line-height: 1.2;">Свойства этой карточки привязаны к CSS-переменным дизайн-системы.</p>
+    <button id="dt-preview-btn" onclick="event.stopPropagation();" style="width: 100%; border: none; background: #3b82f6; color: #fff; font-size: 9px; font-weight: bold; padding: 6px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">Применить изменения</button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["CSS Variables", "Design Tokens", "Tailwind Theme", "Figma Handoff"]
+  },
+  {
+    id: "l4_38_dark_mode",
+    level: "L4",
+    track: "stack",
+    title: "Dark Mode — правильная реализация темной темы",
+    shortDesc: "Интеграция двухстороннего переключения темной/светлой темы с сохранением пользовательских предпочтений и поддержкой системных настроек.",
+    steps: [
+      {
+        text: "Принцип переключения тем: класс .dark и CSS Variables.",
+        details: "Большинство современных дизайн-систем используют класс `dark` на корневом теге (html/body) и переопределяют семантические переменные внутри селектора `.dark { --background: #0f172a; ... }` для бесшовной смены цветов."
+      },
+      {
+        text: "Учет системных настроек и сохранение состояния.",
+        details: "Система должна проверять `matchMedia('(prefers-color-scheme: dark)')` при первом посещении, сохранять выбор пользователя в `localStorage` и мгновенно применять его до рендеринга страницы, предотвращая мерцание (flash of white)."
+      },
+      {
+        text: "Интерактивный тумблер темной темы с превью.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">DARK MODE SIMULATOR</div>
+  
+  <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 12px;">
+    <button onclick="event.stopPropagation(); window.toggleDarkModeTheme('light')" id="dm-btn-light" style="padding: 4px 10px; font-size: 9px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer; display: flex; align-items: center; gap: 4px;">☀️ Light</button>
+    <button onclick="event.stopPropagation(); window.toggleDarkModeTheme('dark')" id="dm-btn-dark" style="padding: 4px 10px; font-size: 9px; border-radius: 4px; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #a78bfa; cursor: pointer; display: flex; align-items: center; gap: 4px;">🌙 Dark</button>
+    <button onclick="event.stopPropagation(); window.toggleDarkModeTheme('system')" id="dm-btn-system" style="padding: 4px 10px; font-size: 9px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer; display: flex; align-items: center; gap: 4px;">💻 System</button>
+  </div>
+  
+  <div id="dm-preview-box" style="border: 1px solid rgba(255,255,255,0.06); padding: 14px; border-radius: 6px; background: #0f172a; color: #fff; text-align: left; transition: all 0.3s ease;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+      <h6 id="dm-preview-title" style="margin: 0; font-size: 11px; color: #fff; transition: color 0.3s;">Тёмная тема</h6>
+      <span id="dm-preview-badge" style="font-size: 8px; font-weight: bold; background: rgba(167, 139, 250, 0.15); color: #a78bfa; padding: 1px 4px; border-radius: 4px; border: 1px solid rgba(167, 139, 250, 0.3); transition: all 0.3s;">Active</span>
+    </div>
+    <p id="dm-preview-text" style="margin: 0; font-size: 9px; color: #94a3b8; line-height: 1.2; transition: color 0.3s;">Этот текст и фон плавно меняют свои цвета при переключении темы, имитируя работу полноценного приложения.</p>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Dark Mode", "next-themes", "prefers-color-scheme", "localStorage"]
+  },
+  {
+    id: "l4_39_focus_management",
+    level: "L4",
+    track: "engineering",
+    title: "Focus Management — управление фокусом",
+    shortDesc: "Создание бесшовной навигации для клавиатуры через программное управление фокусом, удержание фокуса (Focus Trap) и возврат при закрытии.",
+    steps: [
+      {
+        text: "Принципы доступного фокуса.",
+        details: "Интерактивные элементы всегда должны иметь различимый фокус-индикатор (например, `focus-visible:ring-2`). Не допускайте скрытия фокуса (`outline: none` без альтернатив), так как это ослепляет клавиатурных пользователей."
+      },
+      {
+        text: "Удержание фокуса (Focus Trap) в модалках.",
+        details: "При открытии модального диалогового окна фокус должен автоматически перемещаться внутрь и циклически удерживаться на его элементах, не позволяя пользователю выйти клавишей Tab во внешний фоновый интерфейс."
+      },
+      {
+        text: "Интерактивная визуализация Focus Trap.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #34d399; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">FOCUS TRAP SIMULATOR</div>
+  
+  <button id="fm-open-btn" onclick="event.stopPropagation(); window.toggleFocusManagementModal(true)" style="padding: 6px 12px; font-size: 9px; font-weight: bold; border-radius: 6px; background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.3); color: #34d399; cursor: pointer; transition: all 0.2s;">Открыть Диалог 🔓</button>
+  
+  <div id="fm-modal-overlay" style="display: none; margin-top: 10px; border: 1px solid rgba(167, 139, 250, 0.4); padding: 10px; border-radius: 6px; background: rgba(0,0,0,0.4); text-align: left; position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <span style="font-size: 9px; font-weight: bold; color: #a78bfa;">🔒 ЗАБЛОКИРОВАННЫЙ ФОКУС</span>
+      <button id="fm-modal-close" onclick="event.stopPropagation(); window.toggleFocusManagementModal(false)" style="background: none; border: none; color: #ef4444; font-size: 10px; cursor: pointer; font-weight: bold;">✕</button>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px;">
+      <input id="fm-modal-input" type="text" placeholder="Имя пользователя..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 9px; width: 100%; outline: none;" onchange="event.stopPropagation();">
+      <button id="fm-modal-save" onclick="event.stopPropagation(); window.toggleFocusManagementModal(false);" style="background: #8b5cf6; border: none; color: #fff; font-size: 9px; font-weight: bold; padding: 4px; border-radius: 4px; cursor: pointer; text-align: center;">Сохранить изменения</button>
+    </div>
+    
+    <div style="display: flex; gap: 4px; align-items: center; justify-content: space-between;">
+      <button id="fm-modal-tab-btn" onclick="event.stopPropagation(); window.cycleFocusManagement()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 8px; padding: 3px 6px; border-radius: 4px; cursor: pointer;">Симулировать Tab ➡️</button>
+      <span id="fm-current-focus-lbl" style="font-size: 7px; font-family: monospace; color: #a1a1aa;">Текущий фокус: input</span>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Focus Trap", "Focus Return", "tabindex", "focus-visible"]
+  },
+  {
+    id: "l4_40_framer_motion",
+    level: "L4",
+    track: "stack",
+    title: "Framer Motion — анимации для React",
+    shortDesc: "Разработка плавных, отзывчивых микро-взаимодействий, физических жестов и переходов между состояниями с помощью Framer Motion.",
+    steps: [
+      {
+        text: "Декларативное описание анимаций.",
+        details: "Вместо сложных CSS правил `@keyframes` Framer Motion предлагает пропсы `initial`, `animate` и `transition`. Использование пружин (spring transitions) придает элементам приятный физический вес."
+      },
+      {
+        text: "Анимации присутствия и списки.",
+        details: "Компонент `AnimatePresence` позволяет легко анимировать исчезновение элементов из DOM при их удалении. Это критично для списков задач, уведомлений и всплывающих алертов."
+      },
+      {
+        text: "Интерактивная песочница анимаций.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #ec4899; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">FRAMER MOTION SANDBOX</div>
+  
+  <div style="display: flex; gap: 4px; margin-bottom: 12px; justify-content: center;">
+    <button onclick="event.stopPropagation(); window.runFramerMotionSim('fade')" style="padding: 4px 8px; font-size: 8px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer;">Fade In</button>
+    <button onclick="event.stopPropagation(); window.runFramerMotionSim('spring')" style="padding: 4px 8px; font-size: 8px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer;">Spring Bounce</button>
+    <button onclick="event.stopPropagation(); window.runFramerMotionSim('stagger')" style="padding: 4px 8px; font-size: 8px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer;">Staggered List</button>
+  </div>
+  
+  <div id="fmo-sandbox-screen" style="border: 1px solid rgba(255,255,255,0.06); padding: 14px; border-radius: 6px; background: rgba(0,0,0,0.25); min-height: 80px; display: flex; align-items: center; justify-content: center;">
+    <div id="fmo-anim-target" style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #ec4899, #8b5cf6); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff;">✨</div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Framer Motion", "AnimatePresence", "Spring Physics", "Layout Animations"]
+  },
+  {
+    id: "l4_41_prefers_reduced_motion",
+    level: "L4",
+    track: "engineering",
+    title: "Prefers Reduced Motion — забота об отзывчивости",
+    shortDesc: "Уважение к системным настройкам пользователей с вестибулярными расстройствами путем отключения или замены резких анимаций.",
+    steps: [
+      {
+        text: "Медиа-запрос @media (prefers-reduced-motion).",
+        details: "Пользователи могут настроить операционную систему для уменьшения количества экранного движения. Наш долг — реагировать на это в CSS, отключая анимации или заменяя их на простые проявления (fade-in)."
+      },
+      {
+        text: "Адаптивные анимации в React и JS.",
+        details: "С помощью хука `useReducedMotion()` из Framer Motion мы можем мгновенно переопределять тип перехода на нулевой, сохраняя полную инклюзивность интерфейса."
+      },
+      {
+        text: "Интерактивный симулятор Reduced Motion.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #fbbf24; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">ACCESSIBLE MOTION PREFERENCES</div>
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 9px;">
+    <span style="color: #a1a1aa;">Системная симуляция Reduced Motion:</span>
+    <span id="prm-status-lbl" style="font-weight: bold; font-family: monospace; color: #ef4444;">ВЫКЛЮЧЕНА 🚫</span>
+  </div>
+  
+  <div id="prm-anim-area" style="border: 1px solid rgba(255,255,255,0.06); padding: 14px; border-radius: 6px; background: rgba(0,0,0,0.25); min-height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+    <div id="prm-spinner" class="spinning-fast" style="width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fbbf24; border-radius: 50%;"></div>
+    <style>
+      @keyframes spin-fast {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .spinning-fast {
+        animation: spin-fast 1s linear infinite !important;
+      }
+      .spinning-slow {
+        animation: spin-fast 6s linear infinite !important;
+        border-top-color: #10b981 !important;
+      }
+    </style>
+  </div>
+  
+  <button id="prm-toggle-btn" onclick="event.stopPropagation(); window.toggleReducedMotionSim()" style="margin-top: 10px; width: 100%; padding: 6px; font-size: 9px; font-weight: bold; border-radius: 4px; background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); color: #fbbf24; cursor: pointer;">Эмулировать Reduced Motion 🔒</button>
+</div>`
+      }
+    ],
+    tools: ["prefers-reduced-motion", "A11y Standards", "useReducedMotion", "CSS Accessibility"]
+  },
+  {
+    id: "l4_42_form_validation",
+    level: "L4",
+    track: "engineering",
+    title: "Form Validation — валидация форм с идеальным UX",
+    shortDesc: "Проектирование форм с мгновенной валидацией, предотвращением ошибок ввода и интерактивной обратной связью.",
+    steps: [
+      {
+        text: "Inline-валидация и обработка ошибок.",
+        details: "Хорошая форма сообщает об ошибках сразу (на лету/при блюре поля), а не заставляет заполнять всю форму и получать сюрпризы в конце. Ошибки должны иметь вежливое и понятное описание."
+      },
+      {
+        text: "Интеграция React Hook Form + Zod.",
+        details: "Использование библиотек декларативной валидации позволяет описывать строгие схемы типов (`z.string().email()`) и предотвращать отправку невалидных данных на сервер, улучшая производительность React за счет неконтролируемых полей."
+      },
+      {
+        text: "Интерактивная форма с умной валидацией.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #10b981; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">SMART FORM VALIDATOR</div>
+  
+  <div style="display: flex; flex-direction: column; gap: 8px; font-size: 9px;">
+    <div>
+      <label style="color: #a1a1aa; display: block; margin-bottom: 2px;">Email адрес:</label>
+      <input id="fv-email" type="text" placeholder="example@domain.com" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 9px; width: 100%; outline: none;" oninput="event.stopPropagation(); window.validateFormWidget();">
+      <div id="fv-email-error" style="color: #ef4444; font-size: 8px; margin-top: 2px; display: none;">Введите корректный email адрес</div>
+    </div>
+    
+    <div>
+      <label style="color: #a1a1aa; display: block; margin-bottom: 2px;">Пароль:</label>
+      <input id="fv-password" type="password" placeholder="••••••••" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 9px; width: 100%; outline: none;" oninput="event.stopPropagation(); window.validateFormWidget();">
+      
+      <div style="display: flex; gap: 8px; margin-top: 4px; font-size: 7px; color: #a1a1aa;">
+        <span id="fv-pass-len" style="transition: color 0.2s;">• Мин. 6 символов</span>
+        <span id="fv-pass-num" style="transition: color 0.2s;">• Мин. 1 цифра</span>
+      </div>
+    </div>
+    
+    <button id="fv-submit-btn" disabled onclick="event.stopPropagation(); window.submitFormWidget();" style="width: 100%; margin-top: 4px; border: none; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #6b7280; font-size: 9px; font-weight: bold; padding: 6px; border-radius: 6px; cursor: not-allowed; transition: all 0.2s ease; text-align: center;">Зарегистрироваться</button>
+    
+    <div id="fv-success-msg" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 9px; padding: 6px; border-radius: 4px; text-align: center; font-weight: bold; margin-top: 4px;">Успешная валидация! Форма готова к отправке 🎉</div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["React Hook Form", "Zod Schemas", "Inline Validation", "UX Patterns"]
+  },
 
   // ================= LEVEL L5 =================
   {
