@@ -290,7 +290,16 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l4_15_ai_design_system", to: "l4_16_mobile_first_tailwind" },
     { from: "l4_16_mobile_first_tailwind", to: "l4_17_accessibility_a11y" },
     { from: "l4_17_accessibility_a11y", to: "l4_18_zustand_state" },
-    { from: "l4_18_zustand_state", to: "l5_1_autonomous_planning" }
+    { from: "l4_18_zustand_state", to: "l4_19_state_decision_tree" },
+    { from: "l4_19_state_decision_tree", to: "l4_20_ux_principles" },
+    { from: "l4_20_ux_principles", to: "l4_21_loading_states" },
+    { from: "l4_21_loading_states", to: "l4_22_error_states" },
+    { from: "l4_22_error_states", to: "l4_23_empty_states" },
+    { from: "l4_23_empty_states", to: "l4_24_micro_interactions" },
+    { from: "l4_24_micro_interactions", to: "l4_25_component_composition" },
+    { from: "l4_25_component_composition", to: "l4_26_react_devtools" },
+    { from: "l4_26_react_devtools", to: "l4_27_typography_scale" },
+    { from: "l4_27_typography_scale", to: "l5_1_autonomous_planning" }
   ];
 
   // Specific visual weights for Bento cards
@@ -324,6 +333,15 @@ document.addEventListener("DOMContentLoaded", () => {
     l4_16_mobile_first_tailwind: "weight-medium",
     l4_17_accessibility_a11y: "weight-medium",
     l4_18_zustand_state: "weight-medium",
+    l4_19_state_decision_tree: "weight-medium",
+    l4_20_ux_principles: "weight-medium",
+    l4_21_loading_states: "weight-medium",
+    l4_22_error_states: "weight-medium",
+    l4_23_empty_states: "weight-medium",
+    l4_24_micro_interactions: "weight-medium",
+    l4_25_component_composition: "weight-wide",
+    l4_26_react_devtools: "weight-medium",
+    l4_27_typography_scale: "weight-wide",
 
     // Milestone 6 Bento weights
     l2_10_ai_lies: "weight-medium",
@@ -1721,6 +1739,528 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 80);
     }
   };
+
+  // --- Decision Tree Simulator ---
+  let decisionScale = null;
+  window.selectDecisionScale = function(scale) {
+    decisionScale = scale;
+    const step1 = document.getElementById("dec-step-1");
+    const step2 = document.getElementById("dec-step-2");
+    if (step1 && step2) {
+      step1.style.display = "none";
+      step2.style.display = "block";
+    }
+  };
+  window.selectDecisionFrequency = function(freq) {
+    const step2 = document.getElementById("dec-step-2");
+    const result = document.getElementById("dec-result");
+    const recommendation = document.getElementById("dec-recommendation");
+    if (step2 && result && recommendation) {
+      step2.style.display = "none";
+      result.style.display = "block";
+      
+      // Decision tree logic
+      if (decisionScale === "small" && freq === "low") {
+        recommendation.innerText = "REACT CONTEXT";
+        recommendation.style.color = "#60a5fa"; // Blue
+      } else if (decisionScale === "large") {
+        recommendation.innerText = "REDUX TOOLKIT (RTK)";
+        recommendation.style.color = "#f472b6"; // Pink
+      } else {
+        recommendation.innerText = "ZUSTAND";
+        recommendation.style.color = "#34d399"; // Green
+      }
+    }
+  };
+  window.resetDecisionTree = function() {
+    decisionScale = null;
+    const step1 = document.getElementById("dec-step-1");
+    const step2 = document.getElementById("dec-step-2");
+    const result = document.getElementById("dec-result");
+    if (step1 && step2 && result) {
+      step1.style.display = "block";
+      step2.style.display = "none";
+      result.style.display = "none";
+    }
+  };
+
+  // --- Loading States Simulator ---
+  window.runLoadingSim = function(type) {
+    const container = document.getElementById("load-sandbox-content");
+    if (!container) return;
+
+    if (type === "optimistic") {
+      // Optimistic UI updates instantly!
+      container.innerHTML = `
+        <div style="width: 100%; text-align: center; font-family: monospace;">
+          <div style="font-size: 13px; color: #34d399; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg class="animate-bounce" width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="animation: tap-press 1s infinite;"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 10.067A1.99 1.99 0 006 10.333z"/></svg>
+            Лайк добавлен! (Мгновенно)
+          </div>
+          <div style="font-size: 10px; color: #64748b; margin-top: 4px;">Запрос к серверу отправлен в фоновом режиме...</div>
+        </div>
+      `;
+      return;
+    }
+
+    // Spinner or Skeleton showing 2s delay simulation
+    let secondsLeft = 2.0;
+    container.innerHTML = getLoadingSimMarkup(type, secondsLeft);
+
+    const timerInterval = setInterval(() => {
+      secondsLeft -= 0.1;
+      if (secondsLeft <= 0) {
+        clearInterval(timerInterval);
+        container.innerHTML = `
+          <div style="width: 100%; text-align: center; font-family: monospace; animation: fadeIn 0.3s ease;">
+            <div style="font-size: 13px; color: #10b981; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Данные успешно загружены!
+            </div>
+            <div style="font-size: 10px; color: #64748b; margin-top: 4px;">Задержка сети: 2.0 сек</div>
+          </div>
+        `;
+      } else {
+        const timerVal = document.getElementById("loading-sim-timer");
+        if (timerVal) {
+          timerVal.innerText = secondsLeft.toFixed(1) + "s";
+        }
+      }
+    }, 100);
+
+    // Keep track of the active interval on container to clear it if another button is pressed
+    if (container.activeInterval) {
+      clearInterval(container.activeInterval);
+    }
+    container.activeInterval = timerInterval;
+  };
+
+  function getLoadingSimMarkup(type, initialSec) {
+    if (type === "spinner") {
+      return `
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; font-family: monospace; width: 100%;">
+          <div style="width: 24px; height: 24px; border: 3px solid rgba(139, 92, 246, 0.2); border-top-color: #8b5cf6; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+          <div style="font-size: 11px; color: #e2e8f0;">Загрузка списка... <span id="loading-sim-timer">${initialSec.toFixed(1)}s</span></div>
+        </div>
+      `;
+    } else {
+      // Skeleton Screen
+      return `
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 8px; font-family: monospace;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 10px; color: #8b5cf6; font-weight: bold;">Имитация макета... <span id="loading-sim-timer">${initialSec.toFixed(1)}s</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div class="skeleton-shimmer" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); position: relative; overflow: hidden;"></div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+              <div class="skeleton-shimmer" style="width: 60%; height: 10px; border-radius: 4px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden;"></div>
+              <div class="skeleton-shimmer" style="width: 40%; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  // ================= SIMULATORS FOR NEW L4 NODES =================
+  window.errorRecoveryInterval = null;
+
+  // Global simulator for L4_22 Error States
+  window.simulateError = function(action) {
+    const container = document.getElementById("error-sandbox-content");
+    if (!container) return;
+
+    // Clear any existing error recovery timers
+    if (window.errorRecoveryInterval) {
+      clearInterval(window.errorRecoveryInterval);
+      window.errorRecoveryInterval = null;
+    }
+
+    if (action === 'reset') {
+      container.style.borderColor = 'rgba(255,255,255,0.1)';
+      container.style.background = 'rgba(0,0,0,0.2)';
+      container.innerHTML = `<div style="color: #64748b; font-size: 11px; font-family: monospace; text-align: center;">Нажмите «Сгенерировать ошибку» для симуляции сбоя</div>`;
+      adjustStepDetailsHeight();
+      return;
+    }
+
+    if (action === 'trigger') {
+      container.style.borderColor = 'rgba(248, 113, 113, 0.4)';
+      container.style.background = 'rgba(248, 113, 113, 0.05)';
+      
+      let timeLeft = 3.0;
+      
+      const renderErrorState = () => {
+        container.innerHTML = `
+          <div style="width: 100%; display: flex; flex-direction: column; gap: 8px; font-family: monospace; text-align: left;">
+            <div style="display: flex; align-items: center; gap: 6px; color: #f87171; font-size: 11px; font-weight: bold;">
+              <span style="font-size: 12px;">⚠️</span>
+              <span>API Error (503 Service Unavailable)</span>
+            </div>
+            <div style="font-size: 10px; color: #94a3b8; line-height: 1.4;">
+              Временный сбой соединения. Авто-восстановление через <span style="color: #fca5a5; font-weight: bold;">${timeLeft.toFixed(1)}s</span>...
+            </div>
+            <div style="display: flex; gap: 6px; margin-top: 4px;">
+              <button id="error-sim-copy-btn" onclick="event.stopPropagation(); window.simulateError('copy');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; transition: all 0.2s;">Скопировать дамп для ИИ</button>
+            </div>
+          </div>
+        `;
+        adjustStepDetailsHeight();
+      };
+
+      renderErrorState();
+
+      window.errorRecoveryInterval = setInterval(() => {
+        timeLeft -= 0.1;
+        if (timeLeft <= 0) {
+          clearInterval(window.errorRecoveryInterval);
+          window.errorRecoveryInterval = null;
+          // Show recovery success
+          container.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+          container.style.background = 'rgba(52, 211, 153, 0.05)';
+          container.innerHTML = `
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 4px; font-family: monospace; text-align: center; color: #34d399; animation: fadeIn 0.3s ease;">
+              <div style="font-size: 16px;">✅</div>
+              <div style="font-size: 11px; font-weight: bold;">Соединение успешно восстановлено!</div>
+              <div style="font-size: 9px; color: #64748b;">Данные перезагружены из фонового повтора.</div>
+            </div>
+          `;
+          adjustStepDetailsHeight();
+        } else {
+          renderErrorState();
+        }
+      }, 100);
+      return;
+    }
+
+    if (action === 'copy') {
+      const errorLog = {
+        timestamp: new Date().toISOString(),
+        error: "API_503_SERVICE_UNAVAILABLE",
+        statusCode: 503,
+        requestUrl: "https://api.vibecoder.dev/v1/projects",
+        component: "ProjectGridWidget",
+        aiMetadata: {
+          context: "SOP Node L4_22 Error States Sandbox Simulation",
+          suggestedAction: "Implement exponential backoff retry. Provide structured copyable log format to AI to fix the state boundary if code fails."
+        }
+      };
+
+      navigator.clipboard.writeText(JSON.stringify(errorLog, null, 2))
+        .then(() => {
+          const btn = document.getElementById("error-sim-copy-btn");
+          if (btn) {
+            btn.textContent = "Скопировано! ✓";
+            btn.style.color = "#34d399";
+            btn.style.borderColor = "rgba(52, 211, 153, 0.4)";
+            setTimeout(() => {
+              if (btn) {
+                btn.textContent = "Скопировать дамп для ИИ";
+                btn.style.color = "#fff";
+                btn.style.borderColor = "rgba(255,255,255,0.12)";
+              }
+            }, 1500);
+          }
+        })
+        .catch(err => {
+          console.error("Failed to copy error dump: ", err);
+        });
+    }
+  };
+
+  // Global simulator for L4_23 Empty States
+  window.simulateEmptyAction = function(action) {
+    const container = document.getElementById("empty-sandbox-content");
+    if (!container) return;
+
+    if (action === 'clear') {
+      container.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; font-family: monospace; width: 100%; animation: fadeIn 0.25s ease;">
+          <div class="bounce-icon" style="font-size: 24px; color: #a78bfa;">📂</div>
+          <div>
+            <div style="font-size: 11px; color: #e2e8f0; font-weight: bold;">Список документов пуст</div>
+            <div style="font-size: 9px; color: #64748b; margin-top: 2px;">Создайте первый документ или загрузите демо-данные</div>
+          </div>
+          <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.18); padding: 6px 8px; border-radius: 4px; font-size: 9px; color: #c084fc; max-width: 90%;">
+            💡 <b>ИИ-Совет:</b> Кликните кнопку «Добавить шаблон» выше для наполнения базы.
+          </div>
+        </div>
+      `;
+    } else if (action === 'fill') {
+      container.innerHTML = `
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 6px; font-family: monospace; text-align: left; animation: fadeIn 0.25s ease;">
+          <div style="font-size: 10px; color: #34d399; font-weight: bold; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center;">
+            <span>НАЙДЕНО ДОКУМЕНТОВ: 3</span>
+            <button onclick="event.stopPropagation(); window.simulateEmptyAction('clear');" style="background: none; border: none; color: #f87171; font-size: 9px; cursor: pointer; text-decoration: underline; padding: 0;">Очистить все</button>
+          </div>
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 10px; color: #e2e8f0;">📄 Resume_Vibecoder.pdf</span>
+            <span style="font-size: 8px; color: #64748b;">12 KB</span>
+          </div>
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 10px; color: #e2e8f0;">📄 Portfolio_Mockup.sketch</span>
+            <span style="font-size: 8px; color: #64748b;">240 KB</span>
+          </div>
+          <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 6px 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 10px; color: #e2e8f0;">📄 Design_System.md</span>
+            <span style="font-size: 8px; color: #64748b;">18 KB</span>
+          </div>
+        </div>
+      `;
+    }
+    adjustStepDetailsHeight();
+  };
+
+  // Global simulator for L4_24 Micro-interactions
+  window.simulateMicroAction = function(action, event) {
+    if (action === 'ripple' && event) {
+      const btn = event.currentTarget;
+      
+      // Visual click effect
+      btn.style.transform = 'scale(0.96)';
+      setTimeout(() => { btn.style.transform = 'scale(1)'; }, 80);
+
+      // Create ripple element
+      const circle = document.createElement('span');
+      circle.classList.add('ripple-circle');
+      
+      const rect = btn.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      
+      const diameter = Math.max(rect.width, rect.height);
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${x - diameter / 2}px`;
+      circle.style.top = `${y - diameter / 2}px`;
+      
+      btn.appendChild(circle);
+      setTimeout(() => circle.remove(), 500);
+      return;
+    }
+
+    if (action === 'toast') {
+      const container = document.getElementById("micro-sandbox-toast-container");
+      if (!container) return;
+
+      const toast = document.createElement("div");
+      toast.classList.add("toast-notification");
+      toast.innerHTML = `
+        <svg width="14" height="14" fill="none" stroke="#34d399" stroke-width="2.5" viewBox="0 0 24 24" style="flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>Успешно сохранено в облако!</span>
+      `;
+
+      container.appendChild(toast);
+      
+      // Max 2 toast items to avoid crowding
+      if (container.children.length > 2) {
+        container.children[0].remove();
+      }
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+  };
+
+  // Simulators for Component Composition
+  window.toggleComposition = function(mode) {
+    const area = document.getElementById("composition-preview-area");
+    const btnMonolith = document.getElementById("comp-btn-monolith");
+    const btnComposed = document.getElementById("comp-btn-composed");
+    if (!area) return;
+
+    if (mode === 'monolith') {
+      if (btnMonolith) {
+        btnMonolith.style.background = "#ef4444";
+        btnMonolith.style.color = "#fff";
+        btnMonolith.style.border = "none";
+        btnMonolith.classList.add("active-toggle-btn");
+      }
+      if (btnComposed) {
+        btnComposed.style.background = "rgba(255,255,255,0.06)";
+        btnComposed.style.border = "1px solid rgba(255,255,255,0.12)";
+        btnComposed.style.color = "#e2e8f0";
+        btnComposed.classList.remove("active-toggle-btn");
+      }
+
+      area.innerHTML = `
+        <div class="comp-monolith-view" style="background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 6px; animation: fadeIn 0.2s ease-in-out;">
+          <div style="font-size: 10px; font-weight: bold; color: #f87171; margin-bottom: 6px; display: flex; justify-content: space-between;">
+            <span>MonolithicCard.jsx (580 строк кода)</span>
+            <span style="background: rgba(239,68,68,0.2); padding: 1px 4px; border-radius: 3px; font-size: 8px;">Тяжелый контекст</span>
+          </div>
+          <div style="font-size: 9px; color: #a1a1aa; line-height: 1.3; font-family: monospace; max-height: 50px; overflow: hidden; mask-image: linear-gradient(to bottom, black 50%, transparent 100%);">
+            function MonolithicCard({ title, desc, user, comments, tags, isLiked, onLike, onShare, onComment, isAuth, isLoading, apiEndpoint }) { ... logic ... API calls ... useEffect ... }
+          </div>
+          <div style="margin-top: 8px; font-size: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="color: #fca5a5;">AI Token Waste / Context Weight:</span>
+            <span style="font-weight: bold; color: #ef4444; font-family: monospace;">92% (CRITICAL)</span>
+          </div>
+          <div style="background: rgba(255,255,255,0.05); height: 5px; border-radius: 3px; margin-top: 4px; overflow: hidden;">
+            <div style="background: #ef4444; width: 92%; height: 100%;"></div>
+          </div>
+        </div>
+      `;
+    } else {
+      if (btnComposed) {
+        btnComposed.style.background = "#8b5cf6";
+        btnComposed.style.color = "#fff";
+        btnComposed.style.border = "none";
+        btnComposed.classList.add("active-toggle-btn");
+      }
+      if (btnMonolith) {
+        btnMonolith.style.background = "rgba(255,255,255,0.06)";
+        btnMonolith.style.border = "1px solid rgba(255,255,255,0.12)";
+        btnMonolith.style.color = "#e2e8f0";
+        btnMonolith.classList.remove("active-toggle-btn");
+      }
+
+      area.innerHTML = `
+        <div class="comp-composed-view" style="background: rgba(139, 92, 246, 0.05); border: 1px dashed rgba(139, 92, 246, 0.3); padding: 10px; border-radius: 6px; display: flex; flex-direction: column; gap: 6px; animation: fadeIn 0.2s ease-in-out;">
+          <div style="font-size: 10px; font-weight: bold; color: #c084fc; display: flex; justify-content: space-between;">
+            <span>Декомпозиция на 3 файла:</span>
+            <span style="background: rgba(139,92,246,0.2); padding: 1px 4px; border-radius: 3px; font-size: 8px;">Легкий контекст</span>
+          </div>
+          <div style="display: flex; gap: 4px;">
+            <span style="font-size: 8px; color: #c084fc; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.25); padding: 2px 4px; border-radius: 4px; font-family: monospace;">Card.jsx (45 l)</span>
+            <span style="font-size: 8px; color: #a78bfa; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.25); padding: 2px 4px; border-radius: 4px; font-family: monospace;">CardHeader.jsx (20 l)</span>
+            <span style="font-size: 8px; color: #c084fc; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.25); padding: 2px 4px; border-radius: 4px; font-family: monospace;">useCardActions.js (30 l)</span>
+          </div>
+          <div style="margin-top: 2px; font-size: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="color: #c084fc;">AI Token Waste / Context Weight:</span>
+            <span style="font-weight: bold; color: #10b981; font-family: monospace;">12% (EXCELLENT)</span>
+          </div>
+          <div style="background: rgba(255,255,255,0.05); height: 5px; border-radius: 3px; margin-top: 4px; overflow: hidden;">
+            <div style="background: #10b981; width: 12%; height: 100%;"></div>
+          </div>
+        </div>
+      `;
+    }
+    adjustStepDetailsHeight();
+  };
+
+  // Simulators for React DevTools
+  let isProfilerOptimized = false;
+  let reRenderWasteCount = 0;
+  window.toggleProfilerOptimization = function(checked) {
+    isProfilerOptimized = checked;
+    const statusVal = document.getElementById("profiler-status-val");
+    const aiOptim = document.getElementById("profiler-ai-optim");
+    if (statusVal) {
+      statusVal.innerText = isProfilerOptimized ? "Optimized" : "Unoptimized";
+      statusVal.style.color = isProfilerOptimized ? "#10b981" : "#f59e0b";
+    }
+    if (aiOptim) {
+      aiOptim.innerText = isProfilerOptimized ? "Мемоизация активна" : "Отсутствует";
+      aiOptim.style.color = isProfilerOptimized ? "#10b981" : "#f87171";
+    }
+  };
+
+  window.triggerProfileRender = function() {
+    const node1 = document.getElementById("prof-node-1");
+    const node2 = document.getElementById("prof-node-2");
+    const wasteCounter = document.getElementById("profiler-waste-counter");
+
+    if (isProfilerOptimized) {
+      if (node1) {
+        node1.style.borderColor = "#10b981";
+        node1.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
+        setTimeout(() => {
+          node1.style.borderColor = "rgba(255,255,255,0.15)";
+          node1.style.backgroundColor = "transparent";
+        }, 300);
+      }
+      if (node2) {
+        node2.style.borderColor = "#10b981";
+        node2.style.backgroundColor = "rgba(16, 185, 129, 0.05)";
+        setTimeout(() => {
+          node2.style.borderColor = "rgba(255,255,255,0.15)";
+          node2.style.backgroundColor = "transparent";
+        }, 300);
+      }
+    } else {
+      reRenderWasteCount += 2;
+      if (wasteCounter) {
+        wasteCounter.innerText = reRenderWasteCount;
+      }
+      if (node1) {
+        node1.style.borderColor = "#ef4444";
+        node1.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+        setTimeout(() => {
+          node1.style.borderColor = "rgba(255,255,255,0.15)";
+          node1.style.backgroundColor = "transparent";
+        }, 300);
+      }
+      if (node2) {
+        node2.style.borderColor = "#ef4444";
+        node2.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+        setTimeout(() => {
+          node2.style.borderColor = "rgba(255,255,255,0.15)";
+          node2.style.backgroundColor = "transparent";
+        }, 300);
+      }
+    }
+  };
+
+  // Simulators for Typography Scale
+  window.updateTypographyScale = function(ratioStr) {
+    const ratio = parseFloat(ratioStr) || 1.25;
+    const base = 12;
+    const captionSz = Math.round(base / ratio);
+    const bodySz = base;
+    const h3Sz = Math.round(base * ratio);
+    const h1Sz = Math.round(base * ratio * ratio);
+    const displaySz = Math.round(base * ratio * ratio * ratio);
+
+    const tsDisplay = document.getElementById("ts-preview-display");
+    const tsH1 = document.getElementById("ts-preview-h1");
+    const tsH3 = document.getElementById("ts-preview-h3");
+    const tsBody = document.getElementById("ts-preview-body");
+    const tsCaption = document.getElementById("ts-preview-caption");
+
+    if (tsDisplay) {
+      tsDisplay.style.fontSize = `${displaySz}px`;
+      tsDisplay.innerText = `Display (${displaySz}px)`;
+    }
+    if (tsH1) {
+      tsH1.style.fontSize = `${h1Sz}px`;
+      tsH1.innerText = `H1 Heading (${h1Sz}px)`;
+    }
+    if (tsH3) {
+      tsH3.style.fontSize = `${h3Sz}px`;
+      tsH3.innerText = `H3 Subtitle (${h3Sz}px)`;
+    }
+    if (tsBody) {
+      tsBody.style.fontSize = `${bodySz}px`;
+      tsBody.innerText = `Body Copy (${bodySz}px)`;
+    }
+    if (tsCaption) {
+      tsCaption.style.fontSize = `${captionSz}px`;
+      tsCaption.innerText = `Caption (${captionSz}px)`;
+    }
+    adjustStepDetailsHeight();
+  };
+
+  // Helper to dynamically adjust expanded step card heights
+  function adjustStepDetailsHeight() {
+    const activeDetails = document.querySelector('.step-card.expanded .step-details');
+    if (activeDetails) {
+      activeDetails.style.maxHeight = '1200px';
+    }
+  }
+
+  // Auto-init sandbox playgrounds when opened in DOM
+  setInterval(() => {
+    const el = document.getElementById("empty-sandbox-content");
+    if (el && el.innerHTML.trim() === "<!-- Будет заполнено через JS при рендере -->") {
+      window.simulateEmptyAction('clear');
+    }
+    const typoSelect = document.getElementById("typo-scale-select");
+    if (typoSelect && !typoSelect.dataset.initialized) {
+      typoSelect.dataset.initialized = "true";
+      window.updateTypographyScale(typoSelect.value);
+    }
+  }, 300);
 
   // Start initialization
   init();

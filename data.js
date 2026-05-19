@@ -1110,6 +1110,171 @@ const toolsDatabase = {
     desc: "Архитектурный паттерн Zustand, избавляющий от необходимости оборачивать компоненты в React Context Provider.",
     setup: "Является фундаментальной особенностью Zustand, работающего напрямую с внешним стором (external store).",
     run: "Импортируйте хук стора в любой файл и используйте его. Нет риска поломки контекста и лишней вложенности."
+  },
+  "React Context": {
+    desc: "Встроенный механизм React для передачи данных по дереву компонентов без проп-дриллинга.",
+    setup: "Доступен в библиотеке React из коробки через createContext и useContext.",
+    run: "Используйте для редких глобальных данных низкой частоты обновлений (тема оформления, локализация)."
+  },
+  "Redux Toolkit": {
+    desc: "Официальный, эффективный инструмент для разработки приложений на Redux с предустановленными настройками.",
+    setup: "Установите в проект: npm install @reduxjs/toolkit react-redux.",
+    run: "Применяйте для больших масштабируемых корпоративных приложений со сложными связями состояний."
+  },
+  "State Scalability": {
+    desc: "Способность архитектуры управления состоянием приложения расти и масштабироваться без потери производительности.",
+    setup: "Определяется разделением сторов, ленивой загрузкой и оптимизацией рендеринга.",
+    run: "Анализируйте граф состояния и выносите локальные формы из глобального хранилища."
+  },
+  "UX Principles": {
+    desc: "Правила проектирования взаимодействия пользователя с системой для создания удобных и понятных интерфейсов.",
+    setup: "Базируется на законах Якоба Нильсена и принципах Human Interface Guidelines.",
+    run: "Применяйте эвристики юзабилити, чтобы уменьшить когнитивную нагрузку на пользователя."
+  },
+  "System Prompt": {
+    desc: "Инструкция высокого уровня, определяющая роль, поведение и ограничения ИИ при генерации кода или текста.",
+    setup: "Передается в API-запросе в параметре `system` или настраивается в файлах конфигурации агента.",
+    run: "Описывайте строгие правила: запрет плейсхолдеров, требования к семантике и стилизации."
+  },
+  "Consistency": {
+    desc: "Единообразие визуального стиля и поведения интерактивных элементов во всем приложении.",
+    setup: "Достигается за счет использования единой дизайн-системы, токенов и переиспользуемых атомов.",
+    run: "Следите за тем, чтобы все кнопки, отступы и шрифты имели одинаковый вид на любых страницах."
+  },
+  "Feedback Loops": {
+    desc: "Циклы обратной связи, информирующие пользователя о результатах его действий в интерфейсе.",
+    setup: "Включают визуальные индикаторы, звуки, тактильный отклик и всплывающие уведомления.",
+    run: "Всегда отображайте изменение статуса (загрузка, успех, ошибка) при отправке асинхронных запросов."
+  },
+  "Skeleton Screens": {
+    desc: "Заглушки, имитирующие структуру контента (блоки, строки, круги) во время его загрузки.",
+    setup: "Создаются с помощью простых CSS/SVG-анимаций мерцания (shimmer effect).",
+    run: "Отображайте скелетоны вместо пустых экранов при загрузке списков и карточек для повышения Perceived Performance."
+  },
+  "Spinners": {
+    desc: "Анимированные вращающиеся индикаторы, показывающие, что в системе происходит фоновый процесс.",
+    setup: "Реализуются через CSS-анимацию `rotate` или готовые SVG-иконки.",
+    run: "Используйте для коротких операций (менее 1 секунды) или внутри кнопок при отправке форм."
+  },
+  "Optimistic UI": {
+    desc: "Паттерн проектирования, при котором интерфейс мгновенно обновляется так, будто операция уже успешно выполнена.",
+    setup: "Требует наличия механизма отката состояния (rollback) в случае, если сервер вернет ошибку.",
+    run: "Мгновенно добавляйте лайк или отправляйте сообщение в чате, а запрос на сервер выполняйте в фоновом режиме."
+  },
+  "Perceived Performance": {
+    desc: "Субъективное восприятие пользователем скорости работы интерфейса, которое может сильно отличаться от реальной.",
+    setup: "Оптимизируется с помощью скелетонов, прогресс-баров, ленивой загрузки изображений и Optimistic UI.",
+    run: "Минимизируйте 'зависания' экрана: лучше показать анимированный скелетон сразу, чем ждать полную отрисовку."
+  },
+  "Error Boundaries": {
+    desc: "Компоненты React, которые перехватывают ошибки JavaScript в любом месте их дочернего дерева компонентов.",
+    setup: "Реализуются через классовые компоненты с методом getDerivedStateFromError или готовые библиотеки вроде react-error-boundary.",
+    run: "Оборачивайте в Error Boundary изолированные виджеты, чтобы падение одного элемента не ломало всё приложение."
+  },
+  "AI Log Dump": {
+    desc: "Паттерн экспорта структурированной технической информации об ошибках в формате, максимально удобном для парсинга ИИ.",
+    setup: "Собирает стэк ошибок, стейт приложения, переменные окружения и системные логи в единый JSON или Markdown-блок.",
+    run: "Предоставьте пользователю кнопку 'Скопировать лог для ИИ' при возникновении критических ошибок для легкого исправления."
+  },
+  "Auto-recovery": {
+    desc: "Механизмы автоматического повторного выполнения упавших сетевых запросов и восстановления состояния без участия пользователя.",
+    setup: "Использует алгоритмы вроде exponential backoff (экспоненциальная задержка перед повторным запросом).",
+    run: "При временных сетевых сбоях запускайте тихий фоновый повтор запроса, показывая пользователю мягкий таймер ожидания."
+  },
+  "Graceful Degradation": {
+    desc: "Принцип проектирования, при котором система продолжает работать в ограниченном режиме при отказе части её функций.",
+    setup: "Отключает тяжелый функционал или заменяет его статическими альтернативами, сохраняя доступ к критически важным элементам.",
+    run: "Если не загрузился аватар, покажите инициалы; если упала карта, покажите текстовый адрес с внешней ссылкой."
+  },
+  "Empty State Design": {
+    desc: "Проектирование экранов приложения для ситуаций, когда контент отсутствует (первый запуск, удаление всех данных, пустой поиск).",
+    setup: "Фокусируется на дружелюбных иллюстрациях, понятных текстах-пояснениях и четком призыве к первому действию.",
+    run: "Никогда не оставляйте белый экран. Напишите, почему здесь пусто, и предложите легкий способ начать."
+  },
+  "Call to Action (CTA)": {
+    desc: "Кнопка или элемент интерфейса, побуждающий пользователя совершить определенное целевое действие.",
+    setup: "Выделяется визуальным весом, контрастным цветом, фокусными эффектами и понятным активным глаголом на кнопке.",
+    run: "В пустых состояниях CTA должен быть ярким и центральным: например, 'Создать первую заметку' или 'Импортировать демо'."
+  },
+  "CSS Transitions": {
+    desc: "Свойство CSS, позволяющее плавно изменять значения стилей в течение заданного времени при смене состояния элемента.",
+    setup: "Использует свойства transition-property, transition-duration, transition-timing-function и transition-delay.",
+    run: "Применяйте transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) для всех кнопок и интерактивных карточек."
+  },
+  "Ripple Effect": {
+    desc: "Эффект расходящейся водяной волны при клике на элемент, дающий мгновенную и очень сочную обратную связь.",
+    setup: "Реализуется динамическим созданием круглого элемента с анимацией масштабирования и затухания на месте клика.",
+    run: "Добавляйте ripple effect на ключевые кнопки действий, чтобы клики ощущались отзывчивыми и 'живыми'."
+  },
+  "Toast Notifications": {
+    desc: "Небольшие всплывающие информационные сообщения, которые автоматически исчезают через несколько секунд.",
+    setup: "Располагаются поверх основного контента, используют анимацию скольжения и поддерживают закрытие свайпом/кликом.",
+    run: "Используйте toasts для подтверждения некритичных фоновых действий (например, 'Изменения сохранены', 'Ссылка скопирована')."
+  },
+  "Micro-interactions": {
+    desc: "Крошечные детали интерфейса, которые сопровождают действия пользователя, превращая рутину в приятный опыт.",
+    setup: "Включают в себя hover-эффекты, тактильную анимацию кнопок, микро-звуки, плавное переключение тем и лоадеры.",
+    run: "Инвестируйте время в плавность ховеров и микродвижения иконок — именно они отличают премиальный продукт от дешевого."
+  },
+  "Component Composition": {
+    desc: "Метод построения интерфейсов путем комбинирования независимых компонентов с использованием свойств children и slot-паттернов.",
+    setup: "Избегает создания гигантских монолитных файлов, разбивая UI на функционально обособленные и изолированные части.",
+    run: "Проектируйте компоненты так, чтобы разметка и стили передавались через children или именованные слоты."
+  },
+  "Slots Pattern": {
+    desc: "Паттерн проектирования, при котором компонент резервирует именованные места (слоты) для передачи произвольной разметки извне.",
+    setup: "Передавайте React-элементы или HTML-блоки как обычные props (например, `leftSlot`, `rightSlot`).",
+    run: "Используйте для создания гибких шапок, сайдбаров или карточек с варьирующимся содержимым."
+  },
+  "Children Prop": {
+    desc: "Механизм для передачи вложенных элементов внутрь компонента, обеспечивающий гибкую композицию.",
+    setup: "Использует стандартный `props.children` в React или `children` слоты в веб-компонентах.",
+    run: "Оборачивайте дочерние элементы родительским контейнером, сохраняя плоскую древовидную структуру."
+  },
+  "AI Decomposability": {
+    desc: "Мера того, насколько легко ИИ может читать, понимать и изолированно изменять структуру компонента.",
+    setup: "Ориентируется на размер файла (<150 строк) и четко выделенные зоны ответственности UI/UX.",
+    run: "Дробите файлы на мелкие составные части — это радикально улучшает качество генерации кода ИИ."
+  },
+  "React Profiler": {
+    desc: "Инструмент React DevTools для измерения частоты рендеринга и времени работы каждого компонента в дереве приложения.",
+    setup: "Доступен во вкладке Profiler в панели разработчика Google Chrome / Firefox при установленном расширении React DevTools.",
+    run: "Запустите запись профилирования во время выполнения интерактивных действий и проанализируйте тяжелые участки дерева."
+  },
+  "Flamegraph": {
+    desc: "Графическое представление дерева компонентов с цветовой подсветкой времени рендеринга.",
+    setup: "Каждая полоса представляет компонент. Оранжевые полосы рендерились дольше всего, серые не рендерились вообще.",
+    run: "Анализируйте оранжевые блоки в React DevTools для обнаружения критических задержек интерфейса."
+  },
+  "React.memo": {
+    desc: "Высший компонент (HOC) для мемоизации результатов рендеринга, предотвращающий повторный рендер при неизменных props.",
+    setup: "Оборачивает функциональный компонент: `const MyComp = React.memo(({ prop }) => { ... })`.",
+    run: "Применяйте для чистых презентационных компонентов, которые часто подвергаются ререндерам от родительского стейта."
+  },
+  "Render Optimization": {
+    desc: "Комплекс мер по исключению избыточной работы браузера и повторных вычислений.",
+    setup: "Использует кэширование тяжелых вычислений через useMemo и сохранение ссылочной идентичности функций через useCallback.",
+    run: "Оптимизируйте функции-обработчики, передаваемые в мемоизированные дочерние компоненты."
+  },
+  "Typography Scale": {
+    desc: "Система пропорциональных размеров текста, создающая приятную визуальную иерархию.",
+    setup: "Определяет размеры шрифтов через относительные единицы (rem, em) на основе фиксированного шага коэффициента.",
+    run: "Задавайте иерархию Display -> H1 -> H2 -> H3 -> H4 -> Body -> Small -> Caption для консистентного дизайна."
+  },
+  "Modular Scale": {
+    desc: "Метод расчета размеров шрифтов путем последовательного умножения базового значения на фиксированный коэффициент (Ratio).",
+    setup: "Использует математические соотношения, такие как золотое сечение (1.618) или чистая кварта (1.333).",
+    run: "Используйте модульные шкалы для автоматического расчета гармоничной сетки типографики вашего проекта."
+  },
+  "Type Scale System": {
+    desc: "Согласованный набор текстовых стилей, определяющих размеры, межстрочные интервалы и начертания.",
+    setup: "Задается в дизайн-системе (например, Tailwind config или глобальные CSS Custom Properties).",
+    run: "Создавайте утилитарные классы для каждого шага шкалы, включая согласованное межстрочное расстояние (line-height)."
+  },
+  "Fluid Sizing": {
+    desc: "Плавное масштабирование размеров шрифта с использованием CSS-функции clamp().",
+    setup: "Формула: `font-size: clamp(minSize, val, maxSize)`, где val рассчитывается в единицах viewport (`vw`).",
+    run: "Используйте для создания резиновых заголовков, которые идеально смотрятся как на смартфонах, так и на UltraWide мониторах."
   }
 };
 
@@ -3875,6 +4040,404 @@ const nodes = [
       }
     ],
     tools: ["Zustand", "Boilerplate Reduction", "TypeScript-first", "State Store", "No Provider"]
+  },
+  {
+    id: "l4_19_state_decision_tree",
+    level: "L4",
+    track: "stack",
+    title: "Когда использовать Context vs Zustand vs Redux",
+    shortDesc: "Интерактивный навигатор для выбора идеального стейт-менеджера в зависимости от масштаба.",
+    steps: [
+      {
+        text: "Понятие масштаба состояния (State Scale).",
+        details: "Правильный выбор архитектуры стейта экономит недели рефакторинга. Выбор инструмента зависит от двух ключевых факторов: размер графа состояния (количество переменных) и частота обновлений (частые ререндеры или редкие изменения)."
+      },
+      {
+        text: "Сравнение трех подходов.",
+        details: "React Context подходит для редких глобальных данных (тема, локализация), но вызывает ререндер всех дочерних компонентов при изменении. Zustand идеален для 90% задач, обеспечивая независимый рендеринг за счет селекторов. Redux Toolkit нужен для огромных распределенных стейтов со множеством параллельных асинхронных потоков."
+      },
+      {
+        text: "Интерактивный Decision Tree опросник.",
+        details: `Пройдите быстрый опрос для выбора оптимального стейт-менеджера под вашу текущую задачу:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(15, 10, 25, 0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 8px; font-family: monospace; text-align: center;">STATE MANAGER NAVIGATOR</div>
+  
+  <div id="dec-step-1" style="display: block;">
+    <p style="margin: 0 0 10px 0; font-size: 13px; color: #e2e8f0; text-align: center;">1. Каков масштаб вашего глобального состояния?</p>
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <button onclick="event.stopPropagation(); window.selectDecisionScale && window.selectDecisionScale('small');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 12px; text-align: left; transition: all 0.2s;">Малый (1-5 глобальных полей: тема, юзер)</button>
+      <button onclick="event.stopPropagation(); window.selectDecisionScale && window.selectDecisionScale('medium');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 12px; text-align: left; transition: all 0.2s;">Средний (10-50 полей: корзина, фильтры, UI)</button>
+      <button onclick="event.stopPropagation(); window.selectDecisionScale && window.selectDecisionScale('large');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 12px; text-align: left; transition: all 0.2s;">Огромный (сложные сущности с связями данных)</button>
+    </div>
+  </div>
+
+  <div id="dec-step-2" style="display: none;">
+    <p style="margin: 0 0 10px 0; font-size: 13px; color: #e2e8f0; text-align: center;">2. Как часто будут обновляться эти данные?</p>
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <button onclick="event.stopPropagation(); window.selectDecisionFrequency && window.selectDecisionFrequency('low');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 12px; text-align: left; transition: all 0.2s;">Редко (раз в минуту: переключение тем)</button>
+      <button onclick="event.stopPropagation(); window.selectDecisionFrequency && window.selectDecisionFrequency('high');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 6px; border-radius: 4px; cursor: pointer; font-size: 12px; text-align: left; transition: all 0.2s;">Часто (каждую секунду: drag-n-drop, таймеры)</button>
+    </div>
+  </div>
+
+  <div id="dec-result" style="display: none; text-align: center; padding: 10px 0;">
+    <div style="font-size: 11px; color: #34d399; text-shadow: 0 0 10px rgba(52,211,153,0.3); font-weight: bold; margin-bottom: 6px;">РЕКОМЕНДОВАННОЕ РЕШЕНИЕ:</div>
+    <div id="dec-recommendation" style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 12px; font-family: monospace;">ZUSTAND</div>
+    <button onclick="event.stopPropagation(); window.resetDecisionTree && window.resetDecisionTree();" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">Сбросить опрос</button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["React Context", "Redux Toolkit", "State Scalability"]
+  },
+  {
+    id: "l4_20_ux_principles",
+    level: "L4",
+    track: "stack",
+    title: "UX принципы для vibecoding",
+    shortDesc: "Базовые законы дизайна интерфейсов, которые ИИ обязан соблюдать.",
+    steps: [
+      {
+        text: "Принцип мгновенной обратной связи (Feedback Loops).",
+        details: "Экран не должен 'зависать' при кликах. Каждое действие пользователя должно немедленно подтверждаться визуально: изменением состояния кнопки, пульсацией, появлением скелетона или лоадера."
+      },
+      {
+        text: "Единообразие и согласованность (Consistency).",
+        details: "Все отступы (padding/margin), скругления углов, размеры и цвета шрифтов должны браться строго из единого файла дизайн-токенов (`index.css` или конфига Tailwind), не допуская хаотичной генерации стилей ИИ."
+      },
+      {
+        text: "Защита от пользовательских ошибок (Error Prevention).",
+        details: "Запрещайте невалидную отправку форм (блокируйте кнопку Submit при пустых полях), используйте интерактивные маски ввода и подсказывайте ИИ добавлять понятные всплывающие подсказки."
+      },
+      {
+        text: "Готовый UX-промпт для вашего ИИ.",
+        details: "Скопируйте эту инструкцию и передайте её в качестве системного промпта вашему ИИ-помощнику при генерации любого нового интерфейса:\n```text\n[UX SYSTEM PROMPT]\n1. Используй только цвета и скругления из CSS-переменных проекта.\n2. Все интерактивные элементы должны иметь hover-эффекты и переходы transition-all.\n3. При асинхронных действиях обязательно блокируй кнопку и показывай spinner.\n4. Никогда не оставляй пустые placeholder-картинки, используй SVG-заглушки.\n```"
+      }
+    ],
+    tools: ["UX Principles", "System Prompt", "Consistency", "Feedback Loops"]
+  },
+  {
+    id: "l4_21_loading_states",
+    level: "L4",
+    track: "stack",
+    title: "Loading States — обязательный минимум",
+    shortDesc: "Спиннеры, Скелетоны и Optimistic UI в интерактивном сравнении.",
+    steps: [
+      {
+        text: "Проблема забытых состояний загрузки.",
+        details: "ИИ-помощники по умолчанию генерируют UI для идеальных условий с мгновенным ответом сервера. В реальном мире сети бывают медленными. Без лоадеров пользователь считает, что приложение сломалось."
+      },
+      {
+        text: "Спиннеры против Скелетонов.",
+        details: "Используйте Spinner для операций, длящихся менее 1 секунды, или внутри кнопок. Используйте Skeleton Screens для загрузки тяжелых контентных структур (сетки, списки, профили), чтобы пользователь видел контур будущего контента."
+      },
+      {
+        text: "Концепция Optimistic UI.",
+        details: "Для частых простых операций (лайки, добавление в избранное) обновляйте UI моментально, предполагая успех, а запрос отправляйте в фоне. Если запрос провалился, плавно откатите изменения назад."
+      },
+      {
+        text: "Интерактивный симулятор состояний загрузки.",
+        details: `Сравните три подхода в действии с реальной замеряемой задержкой сети в 2 секунды:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 10px; font-family: monospace; text-align: center;">LOADING STATES SANDBOX (2 SEC DELAY)</div>
+  
+  <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px;">
+    <button onclick="event.stopPropagation(); window.runLoadingSim && window.runLoadingSim('spinner');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Spinner</button>
+    <button onclick="event.stopPropagation(); window.runLoadingSim && window.runLoadingSim('skeleton');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Skeleton</button>
+    <button onclick="event.stopPropagation(); window.runLoadingSim && window.runLoadingSim('optimistic');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Optimistic UI</button>
+  </div>
+
+  <div id="load-sandbox-content" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; min-height: 80px; display: flex; align-items: center; justify-content: center; padding: 10px;">
+    <div style="color: #64748b; font-size: 12px; font-family: monospace;">Нажмите на любую кнопку симулятора выше</div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Skeleton Screens", "Spinners", "Optimistic UI", "Perceived Performance"]
+  },
+  {
+    id: "l4_22_error_states",
+    level: "L4",
+    track: "stack",
+    title: "Error States — обработка ошибок",
+    shortDesc: "Дизайн понятных ошибок, автоматическое фоновое восстановление и дампы для ИИ.",
+    steps: [
+      {
+        text: "ИИ и отказоустойчивость интерфейса.",
+        details: "ИИ по умолчанию генерирует код для идеальных сетевых условий. Ваша задача как системного инженера — научить его обрабатывать сбои. Оборачивайте изолированные виджеты в React Error Boundaries, чтобы падение одного элемента не ломало все приложение."
+      },
+      {
+        text: "Принцип Graceful Degradation (Мягкая деградация).",
+        details: "Если аватар пользователя не загрузился из-за ошибки сети, покажите его инициалы на красивой градиентной плашке. Если не загрузилась интерактивная карта, подмените ее текстовой строкой с внешней ссылкой."
+      },
+      {
+        text: "Auto-recovery и авто-повтор запросов.",
+        details: "При сетевых сбоях не заставляйте пользователя судорожно обновлять страницу. Запускайте авто-повтор запросов в фоновом режиме с экспоненциальной задержкой (Exponential Backoff), выводя мягкий обратный отсчет."
+      },
+      {
+        text: "Интерактивный симулятор обработки ошибок.",
+        details: `Сэмулируйте сбой сетевого запроса API и посмотрите на механизмы мягкого восстановления и логов для ИИ:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #f87171; margin-bottom: 10px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">ERROR STATES PLAYGROUND</div>
+  
+  <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px;">
+    <button onclick="event.stopPropagation(); window.simulateError && window.simulateError('trigger');" style="background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); color: #fca5a5; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; transition: all 0.2s;">Сгенерировать ошибку API</button>
+    <button onclick="event.stopPropagation(); window.simulateError && window.simulateError('reset');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: all 0.2s;">Сбросить</button>
+  </div>
+
+  <div id="error-sandbox-content" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; min-height: 90px; display: flex; align-items: center; justify-content: center; padding: 10px; transition: all 0.3s ease;">
+    <div style="color: #64748b; font-size: 11px; font-family: monospace; text-align: center;">Нажмите «Сгенерировать ошибку» для симуляции сбоя</div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Error Boundaries", "AI Log Dump", "Auto-recovery", "Graceful Degradation"]
+  },
+  {
+    id: "l4_23_empty_states",
+    level: "L4",
+    track: "stack",
+    title: "Empty States — дизайн пустых состояний",
+    shortDesc: "Вовлекающий дизайн при отсутствии данных, четкие CTA и ИИ-подсказки.",
+    steps: [
+      {
+        text: "Психология пустого экрана.",
+        details: "Первый запуск приложения или пустая выдача поиска — критические точки оттока пользователей. Белый или абсолютно пустой экран создает ощущение пустоты и недоверия. Он должен быть полезным, рассказывая, что это за раздел."
+      },
+      {
+        text: "Яркий призыв к действию (Call to Action).",
+        details: "Каждое пустое состояние обязано давать пользователю очевидный и легкий следующий шаг: кнопку 'Создать первую заметку', 'Начать импорт контактов' или 'Добавить тестовый демо-проект'."
+      },
+      {
+        text: "Сгенерированные ИИ-подсказки (AI Advice Pills).",
+        details: "Чтобы облегчить старт, используйте подсказки-пилюли, сгенерированные ИИ, которые показывают потенциальный формат данных (например: 'Попробовать написать резюме с ИИ')."
+      },
+      {
+        text: "Интерактивная песочница пустых состояний.",
+        details: `Сравните пустое состояние со списком, заполненным полезным контентом в один клик:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 10px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">EMPTY STATES PLAYGROUND</div>
+  
+  <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px;">
+    <button onclick="event.stopPropagation(); window.simulateEmptyAction && window.simulateEmptyAction('clear');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Сделать пустым</button>
+    <button onclick="event.stopPropagation(); window.simulateEmptyAction && window.simulateEmptyAction('fill');" style="background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3); color: #a7f3d0; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">Добавить шаблон (Быстрый старт)</button>
+  </div>
+
+  <div id="empty-sandbox-content" style="background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; min-height: 115px; display: flex; align-items: center; justify-content: center; padding: 10px; transition: all 0.3s ease;">
+    <!-- Будет заполнено через JS при рендере -->
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Empty State Design", "Call to Action (CTA)", "Empty State Copy"]
+  },
+  {
+    id: "l4_24_micro_interactions",
+    level: "L4",
+    track: "stack",
+    title: "Micro-interactions — детали имеют значение",
+    shortDesc: "Анимации переходов, Ripple-эффект нажатия и всплывающие стеклянные Toast-уведомления.",
+    steps: [
+      {
+        text: "Магия мелких деталей интерфейса.",
+        details: "Премиальные интерфейсы отличаются от дешевых проработкой деталей. Плавные hover-эффекты и тактильная обратная связь на клики делают пользовательский опыт приятным и запоминающимся."
+      },
+      {
+        text: "CSS Transitions и Ripple Effect.",
+        details: "Любое изменение цвета, размера или положения элемента должно происходить через плавный transition (0.2s ease). Волновой эффект нажатия (Ripple) дает мгновенный тактильный отклик."
+      },
+      {
+        text: "Всплывающие Toast-уведомления.",
+        details: "Используйте всплывающие в углу экрана плашки-сообщения (Toasts) для подтверждения фоновых действий, которые не мешают пользователю продолжать работу."
+      },
+      {
+        text: "Интерактивный полигон микровзаимодействий.",
+        details: `Попробуйте кликнуть по кнопке с Ripple Effect и запустить всплывающие Glassmorphic Toast-уведомления:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; min-height: 130px;">
+  <div style="font-size: 11px; color: #34d399; margin-bottom: 10px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">MICRO-INTERACTIONS PLAYGROUND</div>
+  
+  <div style="display: flex; flex-direction: column; gap: 8px; align-items: center; margin-bottom: 6px;">
+    <button class="interactive-ripple-btn" onclick="event.stopPropagation(); window.simulateMicroAction && window.simulateMicroAction('ripple', event);" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #8b5cf6, #6366f1); border: none; color: #fff; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; width: 100%; text-align: center; transition: transform 0.1s ease, box-shadow 0.2s ease; box-shadow: 0 4px 12px rgba(139,92,246,0.3);">Кнопка с Ripple Effect (Кликните!)</button>
+    <button onclick="event.stopPropagation(); window.simulateMicroAction && window.simulateMicroAction('toast', event);" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #e2e8f0; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 11px; width: 100%; transition: all 0.2s ease;">Показать Glassmorphic Toast</button>
+  </div>
+  
+  <div id="micro-sandbox-toast-container" style="position: absolute; bottom: 8px; left: 8px; right: 8px; pointer-events: none; display: flex; flex-direction: column; gap: 4px;"></div>
+</div>`
+      }
+    ],
+    tools: ["CSS Transitions", "Ripple Effect", "Toast Notifications", "Micro-interactions"]
+  },
+  {
+    id: "l4_25_component_composition",
+    level: "L4",
+    track: "stack",
+    title: "Component Composition — композиция против наследования",
+    shortDesc: "Правильное разделение крупных компонентов на мелкие переиспользуемые слоты и дочерние элементы для ИИ.",
+    steps: [
+      {
+        text: "Проблема монолитного кода и ИИ.",
+        details: "Огромные компоненты со множеством состояний быстро съедают контекстное окно ИИ-ассистента и приводят к ошибкам при редактировании. Декомпозиция — ключ к успешной совместной разработке с ИИ."
+      },
+      {
+        text: "Композиция через children и слоты.",
+        details: "Вместо передачи десятков пропсов или создания глубоких иерархий наследования используйте паттерн children или слоты (передачу готовых React/HTML узлов как свойств), что позволяет дробить UI на изолированные части."
+      },
+      {
+        text: "Разделение логики и представления.",
+        details: "Выносите тяжелую логику, вызовы API и стейт-менеджмент в кастомные хуки или родительские контейнеры, оставляя дочерние компоненты максимально простыми и декларативными."
+      },
+      {
+        text: "Интерактивный тренажер декомпозиции.",
+        details: `Попробуйте переключить вид между монолитной и композиционной архитектурой компонента, чтобы увидеть разницу в читаемости и потреблении контекста ИИ:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #a78bfa; margin-bottom: 10px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">COMPOSITION SANDBOX</div>
+  
+  <div style="display: flex; gap: 4px; justify-content: center; margin-bottom: 12px;">
+    <button id="comp-btn-monolith" class="active-toggle-btn" onclick="event.stopPropagation(); window.toggleComposition && window.toggleComposition('monolith');" style="background: #ef4444; border: none; color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; transition: all 0.2s;">Монолит (Monolith)</button>
+    <button id="comp-btn-composed" onclick="event.stopPropagation(); window.toggleComposition && window.toggleComposition('composed');" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #e2e8f0; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 10px; transition: all 0.2s;">Композиция (Composed)</button>
+  </div>
+  
+  <div id="composition-preview-area" style="min-height: 120px; transition: all 0.3s ease;">
+    <div class="comp-monolith-view" style="background: rgba(239, 68, 68, 0.05); border: 1px dashed rgba(239, 68, 68, 0.3); padding: 10px; border-radius: 6px;">
+      <div style="font-size: 10px; font-weight: bold; color: #f87171; margin-bottom: 6px; display: flex; justify-content: space-between;">
+        <span>MonolithicCard.jsx (580 строк кода)</span>
+        <span style="background: rgba(239,68,68,0.2); padding: 1px 4px; border-radius: 3px; font-size: 8px;">Тяжелый контекст</span>
+      </div>
+      <div style="font-size: 9px; color: #a1a1aa; line-height: 1.3; font-family: monospace; max-height: 50px; overflow: hidden; mask-image: linear-gradient(to bottom, black 50%, transparent 100%);">
+        function MonolithicCard({ title, desc, user, comments, tags, isLiked, onLike, onShare, onComment, isAuth, isLoading, apiEndpoint }) { ... logic ... API calls ... useEffect ... }
+      </div>
+      <div style="margin-top: 8px; font-size: 10px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="color: #fca5a5;">AI Token Waste / Context Weight:</span>
+        <span style="font-weight: bold; color: #ef4444; font-family: monospace;">92% (CRITICAL)</span>
+      </div>
+      <div style="background: rgba(255,255,255,0.05); height: 5px; border-radius: 3px; margin-top: 4px; overflow: hidden;">
+        <div style="background: #ef4444; width: 92%; height: 100%;"></div>
+      </div>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Component Composition", "Slots Pattern", "Children Prop", "AI Decomposability"]
+  },
+  {
+    id: "l4_26_react_devtools",
+    level: "L4",
+    track: "stack",
+    title: "React DevTools — основы профилирования",
+    shortDesc: "Анализ производительности и предотвращение лишних ререндеров с помощью ИИ.",
+    steps: [
+      {
+        text: "Поиск узких мест в рендеринге.",
+        details: "React DevTools Profiler строит интерактивный Flamegraph (диаграмму пламени), где оранжевым цветом подсвечиваются компоненты, на рендеринг которых ушло больше всего времени."
+      },
+      {
+        text: "Почему происходят лишние ререндеры.",
+        details: "React перерисовывает все дочерние компоненты по умолчанию, если обновляется родительский стейт, даже если их собственные props не изменились. ИИ часто создает неоптимальные замыкания функций."
+      },
+      {
+        text: "Мемоизация компонентов и коллбэков.",
+        details: "Оборачивайте дочерние компоненты в React.memo, а функции-коллбэки в useCallback, чтобы избежать пересоздания ссылок при каждом рендере родителя."
+      },
+      {
+        text: "Симулятор ререндеров и профилировщика.",
+        details: `Попробуйте запустить рендеринг в неоптимизированном и оптимизированном режимах, чтобы увидеть разницу во вспышках компонентов и счетчике лишней работы:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #10b981; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">RENDER PROFILER SIMULATOR</div>
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <label style="font-size: 10px; color: #a1a1aa; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+      <input type="checkbox" id="profiler-opt-checkbox" onchange="event.stopPropagation(); window.toggleProfilerOptimization && window.toggleProfilerOptimization(this.checked);" style="accent-color: #10b981;">
+      Включить React.memo / useCallback
+    </label>
+    <span style="font-size: 9px; color: #a1a1aa; font-family: monospace;">Статус: <strong id="profiler-status-val" style="color: #f59e0b;">Unoptimized</strong></span>
+  </div>
+  
+  <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+    <button onclick="event.stopPropagation(); window.triggerProfileRender && window.triggerProfileRender();" style="flex: 1; background: linear-gradient(135deg, #10b981, #059669); border: none; color: #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 10px; font-weight: bold; transition: all 0.2s;">Изменить стейт родителя</button>
+  </div>
+  
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+    <div id="prof-node-1" class="prof-component-node" style="border: 1px solid rgba(255,255,255,0.15); padding: 6px; border-radius: 4px; text-align: center; font-size: 9px; transition: border-color 0.2s, background-color 0.2s;">
+      <div style="font-weight: bold; color: #fff;">ChildComponentA</div>
+      <div style="color: #a1a1aa; font-size: 8px;">Props: константа</div>
+    </div>
+    <div id="prof-node-2" class="prof-component-node" style="border: 1px solid rgba(255,255,255,0.15); padding: 6px; border-radius: 4px; text-align: center; font-size: 9px; transition: border-color 0.2s, background-color 0.2s;">
+      <div style="font-weight: bold; color: #fff;">ChildComponentB</div>
+      <div style="color: #a1a1aa; font-size: 8px;">Props: константа</div>
+    </div>
+  </div>
+  
+  <div style="margin-top: 8px; font-size: 9px; display: flex; justify-content: space-between; color: #a1a1aa;">
+    <span>Wasteful Re-renders: <strong id="profiler-waste-counter" style="color: #ef4444; font-family: monospace;">0</strong></span>
+    <span>ИИ оптимизация: <strong id="profiler-ai-optim" style="color: #f87171;">Отсутствует</strong></span>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["React Profiler", "Flamegraph", "React.memo", "Render Optimization"]
+  },
+  {
+    id: "l4_27_typography_scale",
+    level: "L4",
+    track: "stack",
+    title: "Typography Scale — правильная иерархия текста",
+    shortDesc: "Построение пропорциональной шкалы размеров шрифтов на основе модульного соотношения.",
+    steps: [
+      {
+        text: "Магия модульной типографики.",
+        details: "В премиальных интерфейсах размеры шрифтов не берутся наугад. Они рассчитываются путем умножения базового размера (например, 16px) на фиксированный коэффициент (Ratio) — создавая золотую пропорцию гармонии."
+      },
+      {
+        text: "Категории размеров шрифтовой шкалы.",
+        details: "Display (сверхкрупный для баннеров), H1-H4 (заголовки разной степени важности), Body (основной читаемый текст), Small (подписи) и Caption (технические метки и мелкие ярлыки)."
+      },
+      {
+        text: "Responsive шрифты и clamp.",
+        details: "Используйте CSS-функцию clamp() для плавного резинового изменения размеров текста между мобильными и десктопными устройствами без резких скачков на медиа-запросах."
+      },
+      {
+        text: "Модульный калькулятор шкалы шрифтов.",
+        details: `Попробуйте выбрать различные коэффициенты пропорций, чтобы мгновенно увидеть, как перестраиваются гармонические соотношения и размеры в превью-сетке:
+<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+  <div style="font-size: 11px; color: #3b82f6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">MODULAR TYPOGRAPHY SYSTEM</div>
+  
+  <div style="margin-bottom: 10px;">
+    <label style="font-size: 9px; color: #a1a1aa; display: block; margin-bottom: 4px;">Модульный коэффициент (Ratio):</label>
+    <select id="typo-scale-select" onchange="event.stopPropagation(); window.updateTypographyScale && window.updateTypographyScale(this.value);" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 10px; width: 100%; outline: none; cursor: pointer;">
+      <option value="1.125">1.125 — Major Second (Вторичный)</option>
+      <option value="1.250" selected>1.250 — Major Third (Мажорная терция)</option>
+      <option value="1.333">1.333 — Perfect Fourth (Чистая кварта)</option>
+      <option value="1.500">1.500 — Perfect Fifth (Чистая квинта)</option>
+      <option value="1.618">1.618 — Golden Ratio (Золотое сечение)</option>
+    </select>
+  </div>
+  
+  <div style="display: flex; flex-direction: column; gap: 6px; max-height: 120px; overflow-y: auto; padding-right: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+      <span style="font-size: 8px; color: #8b5cf6; font-family: monospace;">DISPLAY</span>
+      <span id="ts-preview-display" style="color: #fff; font-weight: bold; font-family: 'Inter', sans-serif;">Display Text</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+      <span style="font-size: 8px; color: #8b5cf6; font-family: monospace;">H1 HEADER</span>
+      <span id="ts-preview-h1" style="color: #fff; font-weight: bold; font-family: 'Inter', sans-serif;">H1 Heading</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+      <span style="font-size: 8px; color: #8b5cf6; font-family: monospace;">H3 HEADER</span>
+      <span id="ts-preview-h3" style="color: #fff; font-weight: bold; font-family: 'Inter', sans-serif;">H3 Subheading</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+      <span style="font-size: 8px; color: #8b5cf6; font-family: monospace;">BODY TEXT</span>
+      <span id="ts-preview-body" style="color: #a1a1aa; font-family: 'Inter', sans-serif;">Body copy text</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 8px; color: #8b5cf6; font-family: monospace;">CAPTION</span>
+      <span id="ts-preview-caption" style="color: #71717a; font-family: 'Inter', sans-serif;">Caption label</span>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Typography Scale", "Modular Scale", "Type Scale System", "Fluid Sizing"]
   },
 
   // ================= LEVEL L5 =================
