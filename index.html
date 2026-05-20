@@ -56,16 +56,23 @@
         
 
 
-        <!-- View Toggle Buttons -->
-        <div class="view-toggle-wrapper">
-          <button id="toggle-bento" class="toggle-btn active" data-view="bento">
-            <i data-lucide="grid"></i>
-            <span>Level-s Vibecoding</span>
-          </button>
-          <button id="toggle-canvas" class="toggle-btn" data-view="canvas">
-            <i data-lucide="network"></i>
-            <span>Roadmap</span>
-          </button>
+        <!-- View Toggle Buttons and UI Sandbox -->
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <a href="showcase.html" class="reset-btn" style="background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.2); color: #c084fc; text-decoration: none; display: flex; align-items: center; gap: 6px;" id="btn-goto-showcase">
+            <i data-lucide="layout-template"></i>
+            <span>UI Sandbox</span>
+          </a>
+          
+          <div class="view-toggle-wrapper">
+            <button id="toggle-bento" class="toggle-btn active" data-view="bento">
+              <i data-lucide="grid"></i>
+              <span>Level-s Vibecoding</span>
+            </button>
+            <button id="toggle-canvas" class="toggle-btn" data-view="canvas">
+              <i data-lucide="network"></i>
+              <span>Roadmap</span>
+            </button>
+          </div>
         </div>
       </div>
 

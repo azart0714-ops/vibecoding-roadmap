@@ -5119,6 +5119,539 @@ const nodes = [
     ],
     tools: ["React Hook Form", "Zod Schemas", "Inline Validation", "UX Patterns"]
   },
+  {
+    id: "l4_43_input_states",
+    level: "L4",
+    track: "engineering",
+    title: "Input States — все состояния полей ввода",
+    shortDesc: "Проектирование и эмуляция полей ввода во всех состояниях (Default, Focus, Filled, Error, Disabled, Loading) для идеального UX.",
+    steps: [
+      {
+        text: "Реализация базовых и интерактивных состояний.",
+        details: "Каждое текстовое поле должно четко отображать состояние по умолчанию, фокус (активное состояние) с контрастным outline, и заполненное состояние (Filled) с читаемым текстом."
+      },
+      {
+        text: "Обработка исключений и статусов.",
+        details: "Индикация ошибок ввода (Error) с красной рамкой и текстом подсказки, неактивное состояние (Disabled) со сниженной непрозрачностью и запретом на клик, а также состояние загрузки (Loading) для асинхронных проверок."
+      },
+      {
+        text: "Интерактивный симулятор состояний.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #3b82f6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">INPUT STATE SIMULATOR</div>
+  
+  <div style="display: flex; flex-direction: column; gap: 8px;">
+    <div style="position: relative;">
+      <label style="color: #a1a1aa; display: block; margin-bottom: 2px; font-size: 9px;">Тестовое поле:</label>
+      <input id="sim-input" type="text" placeholder="Введите имя..." style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px; border-radius: 4px; font-size: 10px; width: 100%; outline: none; transition: all 0.2s ease;">
+      <div id="sim-input-loader" style="display: none; position: absolute; right: 8px; top: 22px; width: 10px; height: 10px; border: 1.5px solid transparent; border-top-color: #3b82f6; border-radius: 50%; animation: spin-fast 1s linear infinite;"></div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+      <button onclick="event.stopPropagation(); window.setSimInputState('default')" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.08); font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;">Default</button>
+      <button onclick="event.stopPropagation(); window.setSimInputState('focus')" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.08); font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;">Focus</button>
+      <button onclick="event.stopPropagation(); window.setSimInputState('filled')" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.08); font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;">Filled</button>
+      <button onclick="event.stopPropagation(); window.setSimInputState('error')" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;">Error</button>
+      <button onclick="event.stopPropagation(); window.setSimInputState('disabled')" style="background: rgba(255,255,255,0.02); color: #6b7280; border: 1px solid rgba(255,255,255,0.04); font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;">Disabled</button>
+      <button onclick="event.stopPropagation(); window.setSimInputState('loading')" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); font-size: 8px; padding: 4px; border-radius: 4px; cursor: pointer;">Loading</button>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["CSS pseudo-classes", "HTML5 Validation", "Accessibility", "A11y outlines"]
+  },
+  {
+    id: "l4_44_autocomplete_autofill",
+    level: "L4",
+    track: "engineering",
+    title: "Autocomplete & Autofill — идеальное автозаполнение",
+    shortDesc: "Настройка семантических атрибутов автозаполнения форм для повышения конверсии и ускорения ввода.",
+    steps: [
+      {
+        text: "Семантическая разметка форм.",
+        details: "Браузеры используют атрибут `autocomplete` для точного сопоставления полей с сохраненными данными пользователя. Это исключает рутинный ручной ввод."
+      },
+      {
+        text: "Поддержка мобильного и десктопного автозаполнения.",
+        details: "Использование стандартных токенов: `name` для ФИО, `email` для почты, `tel` для телефона, `address-line1` для адреса и `cc-number` для карт повышает удобство работы."
+      },
+      {
+        text: "Демонстрация автозаполнения.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #10b981; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">AUTOFILL CHECKER</div>
+  
+  <form onsubmit="event.preventDefault(); window.testAutofillSubmit();" style="display: flex; flex-direction: column; gap: 6px; font-size: 9px;">
+    <div>
+      <input type="text" name="name" autocomplete="name" placeholder="ФИО (autocomplete='name')" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 6px; border-radius: 4px; width: 100%; outline: none; font-size: 9px;">
+    </div>
+    <div>
+      <input type="email" name="email" autocomplete="email" placeholder="Email (autocomplete='email')" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 6px; border-radius: 4px; width: 100%; outline: none; font-size: 9px;">
+    </div>
+    <button type="submit" style="width: 100%; border: none; background: #10b981; color: #fff; font-size: 9px; font-weight: bold; padding: 5px; border-radius: 4px; cursor: pointer; text-align: center; transition: background 0.2s;">
+      Имитировать отправку формы
+    </button>
+    <div id="autofill-status" style="display: none; color: #10b981; text-align: center; font-size: 8px; margin-top: 2px;">Форма успешно валидирована автозаполнением! 🚀</div>
+  </form>
+</div>`
+      }
+    ],
+    tools: ["HTML Autocomplete spec", "Autofill CSS hooks", "Security tokens"]
+  },
+  {
+    id: "l4_45_bottom_navigation",
+    level: "L4",
+    track: "planning",
+    title: "Bottom Navigation — мобильные паттерны меню",
+    shortDesc: "Стильная и эргономичная нижняя навигация для адаптивных веб-приложений и PWA.",
+    steps: [
+      {
+        text: "Эргономика интерфейса мобильных устройств.",
+        details: "Нижнее меню находится в зоне непосредственной доступности большого пальца руки. Это повышает скорость перемещения между разделами сайта."
+      },
+      {
+        text: "Микро-анимации и индикация состояний.",
+        details: "Плавное выделение активного раздела и мягкое масштабирование иконки повышает интерактивный отклик интерфейса."
+      },
+      {
+        text: "Интерактивная панель мобильной навигации.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: #000; padding: 20px 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); position: relative; max-width: 280px; margin-left: auto; margin-right: auto; text-align: center;">
+  <div style="font-size: 8px; color: #6b7280; margin-bottom: 12px;">МОДЕЛЬ СМАРТФОНА (ЭМУЛЯТОР)</div>
+  <div id="bottom-nav-screen" style="height: 60px; background: rgba(255,255,255,0.02); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #a1a1aa; margin-bottom: 12px; font-weight: bold; transition: all 0.3s ease;">
+    Раздел: Главная 🏠
+  </div>
+  
+  <!-- Tab Bar -->
+  <div style="display: flex; justify-content: space-around; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);">
+    <div id="bn-tab-home" onclick="event.stopPropagation(); window.switchBottomNavTab('home')" style="display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s ease;">
+      <span style="font-size: 14px; filter: grayscale(0);">🏠</span>
+      <span style="font-size: 7px; color: #10b981; font-weight: bold; margin-top: 2px;">Главная</span>
+    </div>
+    <div id="bn-tab-search" onclick="event.stopPropagation(); window.switchBottomNavTab('search')" style="display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s ease; opacity: 0.6;">
+      <span style="font-size: 14px; filter: grayscale(1);">🔍</span>
+      <span style="font-size: 7px; color: #a1a1aa; margin-top: 2px;">Поиск</span>
+    </div>
+    <div id="bn-tab-cart" onclick="event.stopPropagation(); window.switchBottomNavTab('cart')" style="display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s ease; opacity: 0.6;">
+      <span style="font-size: 14px; filter: grayscale(1);">🛒</span>
+      <span style="font-size: 7px; color: #a1a1aa; margin-top: 2px;">Корзина</span>
+    </div>
+    <div id="bn-tab-profile" onclick="event.stopPropagation(); window.switchBottomNavTab('profile')" style="display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s ease; opacity: 0.6;">
+      <span style="font-size: 14px; filter: grayscale(1);">👤</span>
+      <span style="font-size: 7px; color: #a1a1aa; margin-top: 2px;">Профиль</span>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Mobile Ergonomics", "PWA Navigation", "CSS Flexbox/Grid layouts", "Tabbar patterns"]
+  },
+  {
+    id: "l4_46_pull_to_refresh",
+    level: "L4",
+    track: "planning",
+    title: "Pull to Refresh — мобильный паттерн обновления жестом",
+    shortDesc: "Разработка интуитивного жеста оттягивания экрана для перезагрузки и обновления контента.",
+    steps: [
+      {
+        text: "Тактильный отклик и удобство управления.",
+        details: "Движение пальцем сверху вниз запускает анимацию оттягивания, давая ощущение физического взаимодействия с интерфейсом приложения."
+      },
+      {
+        text: "Интерактивный симулятор обновления.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #f59e0b; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">PULL TO REFRESH DEMO</div>
+  
+  <div id="ptr-container" style="position: relative; height: 120px; background: rgba(0,0,0,0.4); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: grab;">
+    <div id="ptr-spinner" style="position: absolute; top: 8px; opacity: 0; transform: translateY(-20px); transition: all 0.2s ease; width: 14px; height: 14px; border: 2px solid transparent; border-top-color: #f59e0b; border-radius: 50%;"></div>
+    <div id="ptr-arrow" style="font-size: 12px; position: absolute; top: 8px; opacity: 0; transform: translateY(-20px) rotate(0deg); transition: all 0.2s ease;">👇</div>
+    
+    <div id="ptr-feed-text" style="font-size: 10px; color: #a1a1aa; text-align: center; padding: 0 10px;">
+      Зажмите область мышкой и потяните вниз, чтобы обновить ленту новостей
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Touch Events", "CSS Transform", "Swipe mechanics", "Haptic response"]
+  },
+  {
+    id: "l4_47_swipe_gestures",
+    level: "L4",
+    track: "planning",
+    title: "Swipe Gestures — мобильные жесты свайпа",
+    shortDesc: "Свайп-жесты для быстрого удаления, перелистывания и интерактивных переходов на мобильных устройствах.",
+    steps: [
+      {
+        text: "Физика и кинетика свайпа.",
+        details: "Качественные свайпы должны иметь плавность скольжения, физический возврат элемента на место при слабом свайпе и пороговый триггер действия при сильном."
+      },
+      {
+        text: "Интерактивный симулятор свайп-удаления.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #ec4899; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">SWIPE TO DELETE ITEM</div>
+  
+  <div style="position: relative; height: 38px; background: #ef4444; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px;">
+    <span style="font-size: 12px; font-weight: bold; color: #fff;">Удалить 🗑️</span>
+    
+    <div id="swipe-item" onmousedown="window.startSwipeWidget(event)" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1e1b4b; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; display: flex; align-items: center; padding: 0 10px; cursor: grab; transition: transform 0.2s ease-out; box-sizing: border-box; justify-content: space-between;">
+      <span style="font-size: 10px; color: #fff; font-weight: bold;">💳 Оплата подписки за май</span>
+      <span style="font-size: 8px; color: #a1a1aa;">Свайп влево ←</span>
+    </div>
+  </div>
+  <div id="swipe-status-msg" style="display: none; font-size: 9px; color: #10b981; font-weight: bold; text-align: center; margin-top: 6px;">Элемент успешно удален из базы данных! 🎉</div>
+</div>`
+      }
+    ],
+    tools: ["Pointer Events", "CSS Transition physics", "Swipe to delete pattern"]
+  },
+  {
+    id: "l4_48_pwa_integration",
+    level: "L4",
+    track: "stack",
+    title: "PWA — интеграция Progressive Web App",
+    shortDesc: "Трансформация сайта в полноценное мобильное/десктопное приложение с поддержкой офлайна.",
+    steps: [
+      {
+        text: "Спецификация manifest.json.",
+        details: "Создание конфигурации манифеста приложения с описанием иконок, цвета темы, стартового URL и режимов отображения (`standalone`) для нативного запуска."
+      },
+      {
+        text: "Сервис-воркеры и кэширование.",
+        details: "Развертывание Service Worker для фонового перехвата сетевых запросов и обслуживания страниц из кэша Cache Storage при отсутствии интернета."
+      },
+      {
+        text: "Интерактивная панель PWA статуса.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #8b5cf6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">PWA CONTROL STATUS</div>
+  
+  <div style="display: flex; flex-direction: column; gap: 6px; font-size: 9px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+      <span style="color: #a1a1aa;">Режим подключения:</span>
+      <span id="pwa-network-status" style="color: #10b981; font-weight: bold;">ONLINE 📶</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+      <span style="color: #a1a1aa;">Service Worker:</span>
+      <span style="color: #10b981; font-weight: bold;">АКТИВЕН 🟢</span>
+    </div>
+    
+    <button onclick="event.stopPropagation(); window.togglePwaOfflineSim();" id="pwa-offline-btn" style="width: 100%; border: none; background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); color: #a78bfa; font-size: 9px; font-weight: bold; padding: 6px; border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.2s;">
+      Имитировать Offline режим 🔌
+    </button>
+    <button onclick="event.stopPropagation(); window.simulatePwaInstall();" id="pwa-install-btn" style="width: 100%; border: none; background: #8b5cf6; color: #fff; font-size: 9px; font-weight: bold; padding: 6px; border-radius: 6px; cursor: pointer; text-align: center; transition: all 0.2s;">
+      Установить как приложение 📲
+    </button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Service Workers API", "manifest.json", "standalone mode", "Cache Storage API"]
+  },
+  {
+    id: "l4_49_colocation_actions",
+    level: "L4",
+    track: "engineering",
+    title: "Co-location & Server Actions в Next.js",
+    shortDesc: "Ограничение ИИ от создания лишних API-эндпоинтов путем локализации всей логики мутаций и запросов к БД непосредственно в компонентах.",
+    steps: [
+      {
+        text: "Принцип Co-location логики.",
+        details: "Запрет ИИ плодить отдельные эндпоинты в pages/api или app/api для простых форм и мутаций данных. Все мутации, отправки форм и запросы к БД должны быть локализованы в файле компонента или в файле actions.ts в папке с компонентом."
+      },
+      {
+        text: "Интерактивный симулятор Server Actions.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #6366f1; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">SERVER ACTIONS CO-LOCATION VS API</div>
+  
+  <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+    <button onclick="event.stopPropagation(); window.toggleColocationView('api')" id="btn-coloc-api" style="flex: 1; border: none; background: rgba(255,255,255,0.05); color: #a1a1aa; font-size: 8px; font-weight: bold; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;">Bloated API Route</button>
+    <button onclick="event.stopPropagation(); window.toggleColocationView('action')" id="btn-coloc-action" style="flex: 1; border: none; background: rgba(99, 102, 241, 0.2); color: #a5b4fc; font-size: 8px; font-weight: bold; padding: 4px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.3); cursor: pointer; transition: all 0.2s;">Co-located Action</button>
+  </div>
+  
+  <div id="colocation-code-view" style="font-family: monospace; font-size: 8px; background: #000; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); color: #34d399; height: 75px; overflow-y: auto; margin-bottom: 8px;">
+// components/FeedbackForm.tsx
+export default function Form() {
+  async function submit(data: FormData) {
+    "use server";
+    await db.insert(feedback).values(data);
+  }
+  return <form action={submit}>...</form>;
+}
+  </div>
+  
+  <form id="colocation-sim-form" onsubmit="event.preventDefault(); event.stopPropagation(); window.submitColocationSim(this);" style="display: flex; gap: 4px;">
+    <input type="text" placeholder="Введите ваш отзыв..." required style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-size: 9px; color: #fff; padding: 4px; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor='rgba(99, 102, 241, 0.5)';" onblur="this.style.borderColor='rgba(255,255,255,0.1)';">
+    <button type="submit" style="border: none; background: #6366f1; color: #fff; font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: background 0.2s;">Отправить</button>
+  </form>
+  <div id="colocation-status" style="display: none; font-size: 8px; color: #10b981; font-weight: bold; text-align: center; margin-top: 4px;"></div>
+</div>`
+      }
+    ],
+    tools: ["Server Actions", "Next.js App Router", "Drizzle ORM co-location", "Co-location layout rules"]
+  },
+  {
+    id: "l4_50_tailwind_standard",
+    level: "L4",
+    track: "engineering",
+    title: "Стандартизация стилизации через Tailwind CSS",
+    shortDesc: "Запрет на использование классического CSS, CSS Modules или SASS. 100% декларативная инлайн-верстка для ускорения работы ИИ-агентов.",
+    steps: [
+      {
+        text: "Принципы декларативного Tailwind.",
+        details: "Запретить ИИ использовать глобальные файлы стилей или кастомные стили. Все элементы должны стилизоваться исключительно инлайн-классами. Это устраняет каскадные конфликты и значительно снижает вероятность слома верстки."
+      },
+      {
+        text: "Интерактивный визуальный Tailwind кастомизатор.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #06b6d4; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">TAILWIND UTILITY CUSTOMIZER</div>
+  
+  <div style="display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 10px;">
+    <div id="tailwind-preview-box" class="transition-all duration-300 shadow-md" style="width: 50px; height: 50px; background: #06b6d4; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-weight: bold;">⚡</div>
+    
+    <div style="flex: 1; text-align: left;">
+      <div style="font-size: 8px; color: #a1a1aa; margin-bottom: 2px;">Tailwind CSS классы:</div>
+      <input type="text" id="tailwind-classes-input" value="bg-cyan-500 rounded-xl shadow-lg animate-pulse" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: #06b6d4; font-family: monospace; font-size: 8px; padding: 4px; box-sizing: border-box;" oninput="window.applyTailwindClassesSim(this.value)">
+    </div>
+  </div>
+  
+  <div style="display: flex; gap: 4px; justify-content: center;">
+    <button onclick="event.stopPropagation(); window.setTailwindPreset('pulse')" style="border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 8px; padding: 3px 6px; border-radius: 4px; cursor: pointer;">Pulse 🌀</button>
+    <button onclick="event.stopPropagation(); window.setTailwindPreset('rotate')" style="border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 8px; padding: 3px 6px; border-radius: 4px; cursor: pointer;">Success Green ✅</button>
+    <button onclick="event.stopPropagation(); window.setTailwindPreset('warning')" style="border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 8px; padding: 3px 6px; border-radius: 4px; cursor: pointer;">Alert Yellow ⚠️</button>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Tailwind Utility Classes", "Dark variant selectors", "Tailwind Config tokens", "AI Layout design rules"]
+  },
+  {
+    id: "l4_51_shadcn_components",
+    level: "L4",
+    track: "planning",
+    title: "Копипаст-архитектура компонентов Shadcn/ui",
+    shortDesc: "Отказ от тяжелых и закрытых NPM UI-библиотек. ИИ устанавливает чистый исходный код компонентов в локальную папку проекта для легкой кастомизации.",
+    steps: [
+      {
+        text: "Достоинства copy-paste подхода.",
+        details: "Shadcn/ui предоставляет сырые Tailwind/React-компоненты напрямую в папку components/ui вашего проекта. Это исключает оверхед и ограничения на дизайн, позволяя ИИ кастомизировать TSX код без костылей."
+      },
+      {
+        text: "Симулятор CLI установки компонентов.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #ec4899; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">SHADCN/UI CLI SIMULATOR</div>
+  
+  <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+    <button onclick="event.stopPropagation(); window.runShadcnInstallSim('button')" style="flex: 1; border: none; background: #ec4899; color: #fff; font-size: 8px; font-weight: bold; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;">npx add button 🔘</button>
+    <button onclick="event.stopPropagation(); window.runShadcnInstallSim('dialog')" style="flex: 1; border: none; background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); font-size: 8px; font-weight: bold; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s;">npx add dialog 📄</button>
+  </div>
+  
+  <div id="shadcn-terminal" style="font-family: monospace; font-size: 8px; background: #000; padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); color: #fff; height: 65px; overflow-y: auto;">
+$ npx shadcn@latest add dialog
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Shadcn CLI", "Radix UI Primitives", "Tailwind theme config", "AI-driven component overrides"]
+  },
+  {
+    id: "l4_52_zustand_state",
+    level: "L4",
+    track: "stack",
+    title: "Сокращение стейт-boilerplate через Zustand",
+    shortDesc: "Применение сверхлегкого Zustand вместо перегруженного Redux Toolkit для лаконичного описания глобального состояния в один файл.",
+    steps: [
+      {
+        text: "Сравнение Zustand и Redux.",
+        details: "Zustand не требует создания акшенов, редюсеров и провайдеров. Стор является простым хуком, который ИИ может создать и использовать мгновенно, сокращая размер кодовой базы на 70%."
+      },
+      {
+        text: "Интерактивный Zustand инспектор состояния.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
+  <div style="font-size: 11px; color: #f59e0b; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">ZUSTAND LIVE STORE INSPECTOR</div>
+  
+  <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center; justify-content: space-between;">
+    <div style="display: flex; gap: 4px; align-items: center;">
+      <button onclick="event.stopPropagation(); window.updateZustandStoreSim('dec')" style="border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; font-weight: bold; width: 22px; height: 22px; border-radius: 4px; cursor: pointer;">-</button>
+      <span id="zustand-count-display" style="font-size: 12px; color: #fff; font-weight: bold; width: 20px; text-align: center;">0</span>
+      <button onclick="event.stopPropagation(); window.updateZustandStoreSim('inc')" style="border: none; background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; font-weight: bold; width: 22px; height: 22px; border-radius: 4px; cursor: pointer;">+</button>
+    </div>
+    
+    <button onclick="event.stopPropagation(); window.updateZustandStoreSim('theme')" style="border: none; background: #f59e0b; color: #000; font-size: 8px; font-weight: bold; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Переключить Тему</button>
+  </div>
+  
+  <div style="font-size: 7px; color: #a1a1aa; margin-bottom: 2px;">Состояние Стора:</div>
+  <pre id="zustand-store-object" style="font-family: monospace; font-size: 8px; background: #000; padding: 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); color: #f59e0b; margin: 0; overflow-x: auto;">
+{
+  count: 0,
+  theme: "dark",
+  user: "Guest"
+}</pre>
+</div>`
+      }
+    ],
+    tools: ["Zustand hook API", "Redux boilerplate elimination", "React state hooks", "Zustand DevTools"]
+  },
+  {
+    id: "l4_53_skeleton_screens",
+    level: "L4",
+    track: "planning",
+    title: "Обязательные Skeleton Screens во фронтенд-шаблонах",
+    shortDesc: "Полный запрет на простые спиннеры загрузки. Использование пульсирующих блоков-скелетонов для субъективного ускорения отклика UI.",
+    steps: [
+      {
+        text: "Воспринимаемая производительность (Perceived Performance).",
+        details: "Пользователь воспринимает время загрузки субъективно. Скелетоны имитируют структуру реальных данных, из-за чего интерфейс кажется значительно более быстрым, чем при использовании колеса загрузки."
+      },
+      {
+        text: "Сравнение Скелетона и Спиннера.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #ec4899; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">SKELETON VS SPINNER</div>
+  
+  <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+    <button onclick="event.stopPropagation(); window.runSkeletonDemo('spinner')" id="btn-demo-spinner" style="flex: 1; border: none; background: rgba(255,255,255,0.05); color: #a1a1aa; font-size: 8px; font-weight: bold; padding: 4px; border-radius: 4px; cursor: pointer;">Spinner Loading</button>
+    <button onclick="event.stopPropagation(); window.runSkeletonDemo('skeleton')" id="btn-demo-skeleton" style="flex: 1; border: none; background: rgba(236,72,153,0.2); color: #f472b6; border: 1px solid rgba(236,72,153,0.3); font-size: 8px; font-weight: bold; padding: 4px; border-radius: 4px; cursor: pointer;">Skeleton Screens</button>
+  </div>
+  
+  <div id="loading-container-demo" style="height: 60px; background: rgba(0,0,0,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+    <span style="font-size: 10px; color: #6b7280;">Выберите режим загрузки выше</span>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Skeleton layout templates", "Tailwind animate-pulse CSS", "Perceived Performance metrics", "Lazy loading components"]
+  },
+  {
+    id: "l4_54_use_optimistic",
+    level: "L4",
+    track: "engineering",
+    title: "Оптимистичный интерфейс через useOptimistic",
+    shortDesc: "Внедрение паттерна мгновенного интерфейсного отклика на интерактивные действия (лайки, чекбоксы, удаление) с автоматическим откатом при ошибке.",
+    steps: [
+      {
+        text: "Суть Optimistic UI.",
+        details: "Приложение изменяет состояние локально до подтверждения сервером. В случае успеха пользователь видит мгновенный отклик, а при ошибке выполняется автоматический откат к исходному значению."
+      },
+      {
+        text: "Интерактивный Optimistic симулятор лайков.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #10b981; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">REACT 19 USEOPTIMISTIC DEMO</div>
+  
+  <div style="display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 10px;">
+    <div onclick="event.stopPropagation(); window.triggerOptimisticLike();" id="optimistic-like-btn" style="cursor: pointer; width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s;">
+      <span id="optimistic-heart" style="font-size: 14px; filter: grayscale(1); transition: transform 0.2s;">❤️</span>
+      <span id="optimistic-likes-count" style="font-size: 8px; color: #a1a1aa; font-weight: bold; margin-top: 1px;">42</span>
+    </div>
+    
+    <div style="flex: 1; text-align: left;">
+      <div style="font-size: 8px; color: #a1a1aa; margin-bottom: 2px;">Задержка сети (fake):</div>
+      <input type="range" id="optimistic-latency-slider" min="500" max="3000" value="1500" style="width: 100%; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; cursor: pointer; accent-color: #10b981;">
+      
+      <label style="display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 8px; color: #ef4444; cursor: pointer;">
+        <input type="checkbox" id="optimistic-fail-checkbox" style="accent-color: #ef4444;"> Имитировать ошибку сети
+      </label>
+    </div>
+  </div>
+  
+  <div id="optimistic-status" style="font-size: 9px; font-family: monospace; color: #a1a1aa; min-height: 12px;">Готов к тестированию</div>
+</div>`
+      }
+    ],
+    tools: ["React 19 useOptimistic hook", "Optimistic rollbacks", "Network state management", "UI latency compensation"]
+  },
+  {
+    id: "l4_55_focus_traps",
+    level: "L4",
+    track: "engineering",
+    title: "Зацикливание фокуса (Focus Traps) в модальных окнах",
+    shortDesc: "Обязательное удержание фокуса клавиатуры внутри активных модальных окон, блокировка взаимодействия с остальным интерфейсом, циклическая Tab-навигация и закрытие по кнопке Escape.",
+    steps: [
+      {
+        text: "Суть паттерна Focus Trap.",
+        details: "Когда модальное окно открыто, фокус ввода не должен выходить за его пределы. Нажатие Tab на последнем элементе должно перемещать фокус на первый элемент, а Escape должен закрывать окно. Это критический стандарт доступности (A11y)."
+      },
+      {
+        text: "Интерактивный симулятор Focus Trap.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #3b82f6; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">FOCUS TRAP SIMULATOR</div>
+  <button id="focustrap-open-btn" onclick="event.stopPropagation(); window.openFocusTrapModal && window.openFocusTrapModal();" style="background: #3b82f6; border: none; color: #fff; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: all 0.2s;">Открыть модалку</button>
+  
+  <div id="focustrap-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 260px; background: #111827; border: 2px solid #3b82f6; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 10000; padding: 16px; text-align: left; box-sizing: border-box;">
+    <div style="font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 8px;">Модальное окно ИИ</div>
+    <p style="font-size: 10px; color: #9ca3af; margin: 0 0 12px 0;">Попробуйте пожимать Tab для перемещения фокуса. Он зациклен!</p>
+    <input type="text" id="focustrap-input-1" placeholder="Первое поле ввода..." style="width: 100%; padding: 6px; font-size: 10px; background: #1f2937; border: 1px solid #374151; color: #fff; border-radius: 4px; margin-bottom: 8px; box-sizing: border-box;">
+    <input type="text" id="focustrap-input-2" placeholder="Второе поле ввода..." style="width: 100%; padding: 6px; font-size: 10px; background: #1f2937; border: 1px solid #374151; color: #fff; border-radius: 4px; margin-bottom: 12px; box-sizing: border-box;">
+    <div style="display: flex; gap: 8px; justify-content: flex-end;">
+      <button id="focustrap-submit-btn" onclick="event.stopPropagation(); window.submitFocusTrapModal && window.submitFocusTrapModal();" style="background: #10b981; border: none; color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 600;">Отправить</button>
+      <button id="focustrap-close-btn" onclick="event.stopPropagation(); window.closeFocusTrapModal && window.closeFocusTrapModal();" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: 600;">Закрыть</button>
+    </div>
+  </div>
+  
+  <div id="focustrap-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 9999;"></div>
+</div>`
+      }
+    ],
+    tools: ["Focus Traps", "A11y Standards", "Keyboard Event Handlers", "Modal dialog management"]
+  },
+  {
+    id: "l4_56_framer_motion",
+    level: "L4",
+    track: "engineering",
+    title: "Стандартизация декларативной анимации Framer Motion",
+    shortDesc: "Стандартизация анимации интерфейса ИИ-разработчиком. Применение простых декларативных параметров (scale, opacity, x, y) взамен сложного императивного JS или громоздкого CSS.",
+    steps: [
+      {
+        text: "Декларативный подход к анимациям.",
+        details: "Использование декларативных фреймворков для плавных интерфейсов. Код становится чистым, понятным ИИ-агентам и избавляет от конфликтов анимаций."
+      },
+      {
+        text: "Интерактивный симулятор анимаций.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #ec4899; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">MICRO-INTERACTIONS PLAYGROUND</div>
+  <div style="display: flex; gap: 4px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+    <button onclick="event.stopPropagation(); window.runFramerAnimation && window.runFramerAnimation('bounce');" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 9px;">Bounce</button>
+    <button onclick="event.stopPropagation(); window.runFramerAnimation && window.runFramerAnimation('rotate');" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 9px;">Rotate</button>
+    <button onclick="event.stopPropagation(); window.runFramerAnimation && window.runFramerAnimation('shake');" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 9px;">Shake</button>
+    <button onclick="event.stopPropagation(); window.runFramerAnimation && window.runFramerAnimation('pulse');" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 9px;">Pulse</button>
+  </div>
+  
+  <div style="display: flex; align-items: center; justify-content: center; height: 60px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+    <div id="framer-anim-box" style="width: 32px; height: 32px; background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 8px; box-shadow: 0 0 15px rgba(236, 72, 153, 0.4); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["Framer Motion", "AnimatePresence", "Declarative Micro-animations", "Spring physics animations"]
+  },
+  {
+    id: "l4_57_error_recovery",
+    level: "L4",
+    track: "engineering",
+    title: "Паттерн семантического восстановления после ошибок (Error Recovery)",
+    shortDesc: "Обязательное использование React Error Boundaries для оборачивания изолированных компонентов. Это предотвращает падение всего приложения и предлагает пользователю кнопку автоматического перезапуска компонента (Retry).",
+    steps: [
+      {
+        text: "Паттерн Graceful Degradation.",
+        details: "Ошибки в API или рендеринге одного блока не должны ломать остальной интерфейс. Каждый сетевой элемент должен иметь локальный обработчик."
+      },
+      {
+        text: "Интерактивный Error Boundary симулятор.",
+        details: `<div class="showcase-widget" style="margin-top: 10px; background: rgba(10, 5, 20, 0.4); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+  <div style="font-size: 11px; color: #f59e0b; margin-bottom: 8px; font-family: monospace; text-align: center; font-weight: bold; letter-spacing: 1px;">ERROR RECOVERY SIMULATOR</div>
+  
+  <div id="error-boundary-view" style="min-height: 70px; background: rgba(0,0,0,0.2); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <div id="error-boundary-content" style="width: 100%;">
+      <div style="font-size: 10px; color: #fff; margin-bottom: 8px;">Компонент загрузки данных с API</div>
+      <button onclick="event.stopPropagation(); window.triggerComponentError && window.triggerComponentError();" style="background: #ef4444; border: none; color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 9px; font-weight: 600;">Имитировать сбой JS/API</button>
+    </div>
+    <div id="error-boundary-fallback" style="display: none; width: 100%; text-align: center;">
+      <div style="font-size: 10px; color: #f87171; font-weight: bold; margin-bottom: 4px;">⚠️ Сбой при рендеринге компонента</div>
+      <div style="font-size: 8px; color: #a1a1aa; margin-bottom: 8px;">Error: API request failed (500 Internal Server Error)</div>
+      <button id="error-recovery-retry-btn" onclick="event.stopPropagation(); window.recoverComponent && window.recoverComponent();" style="background: #f59e0b; border: none; color: #000; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 9px; font-weight: 700; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);">Повторить попытку (Retry)</button>
+    </div>
+  </div>
+</div>`
+      }
+    ],
+    tools: ["React Error Boundaries", "Graceful Degradation", "Component Recovery State", "Fallback UI Design"]
+  },
 
   // ================= LEVEL L5 =================
   {
@@ -5696,6 +6229,62 @@ const nodes = [
     ],
     tools: ["Clerk SDK", "JWT Session Security", "MFA", "OAuth Integrations"]
   },
+  {
+    id: "l6_10_supabase_auth",
+    level: "L6",
+    track: "stack",
+    title: "Supabase Auth",
+    shortDesc: "Мощная open-source альтернатива коммерческим провайдерам аутентификации.",
+    steps: [
+      {
+        text: "Вход по Email/Password и Magic Links.",
+        details: "Настройте стандартный вход по почте и паролю или беспарольный доступ (Magic Links) через встроенный сервис отправки писем Supabase."
+      },
+      {
+        text: "Интеграция Social Logins OAuth.",
+        details: "Подключите внешние провайдеры авторизации (Google, GitHub, Apple) в панели Supabase и настройте редиректы в вашем приложении."
+      },
+      {
+        text: "Безопасность таблиц через Row Level Security (RLS).",
+        details: "Активируйте RLS для ваших таблиц PostgreSQL. Напишите политики доступа на основе JWT-токена пользователя: `auth.uid() = user_id`."
+      },
+      {
+        text: "Работа с сессиями на базе JWT токенов.",
+        details: "Используйте официальный Supabase JS SDK для подписки на изменения состояния сессии: `supabase.auth.onAuthStateChange((event, session) => ...)`."
+      }
+    ],
+    tools: ["Supabase Auth SDK", "OAuth Providers", "Row Level Security (RLS)", "JWT Session"]
+  },
+  {
+    id: "l6_11_stripe_saas",
+    level: "L6",
+    track: "engineering",
+    title: "Stripe SaaS Интеграция",
+    shortDesc: "Приём платежей, управление подписками и вебхуки для монетизации SaaS.",
+    steps: [
+      {
+        text: "Использование Stripe Checkout и Elements.",
+        details: "Внедрите Stripe Checkout для готовой формы оплаты на стороне Stripe или Stripe Elements для полностью кастомного UI формы ввода карты прямо на вашем сайте."
+      },
+      {
+        text: "Управление подписками (Subscriptions).",
+        details: "Спроектируйте тарифную сетку в Stripe Dashboard, создавайте подписки пользователей через API и управляйте их жизненным циклом."
+      },
+      {
+        text: "Безопасная обработка Webhooks.",
+        details: "Создайте роут для обработки вебхуков Stripe (например, `invoice.payment_succeeded`). Обязательно валидируйте подпись вебхука (`stripe.webhooks.constructEvent`)."
+      },
+      {
+        text: "Личный кабинет клиента (Customer Portal).",
+        details: "Предоставьте пользователям возможность управлять тарифами, скачивать инвойсы и обновлять платежные методы через готовый Stripe Customer Portal."
+      },
+      {
+        text: "Соблюдение лучших практик безопасности и надежности.",
+        details: "Всегда используйте Test Mode для разработки. Применяйте ключи idempotency (`Idempotency-Key`) для предотвращения двойных списаний при повторных запросах."
+      }
+    ],
+    tools: ["Stripe Elements", "Stripe Checkout", "Customer Portal", "Stripe Webhooks", "Idempotency Keys"]
+  },
 
   // ================= LEVEL L7 =================
   {
@@ -6054,6 +6643,84 @@ const nodes = [
     ],
     tools: ["Review Gate Protocol", "Defensive Prompting"]
   },
+  {
+    id: "l7_15_smart_testing",
+    level: "L7",
+    track: "engineering",
+    title: "Умная система тестирования",
+    shortDesc: "Использование ИИ для анализа изменений в кодовой базе и избирательного запуска только пострадавших тестов.",
+    steps: [
+      {
+        text: "Определение измененных файлов через Git.",
+        details: "Используйте команды `git diff --name-only` для получения точного списка измененных файлов в текущей сессии или коммите."
+      },
+      {
+        text: "Построение графа зависимостей (Dependency Graph).",
+        details: "ИИ анализирует импорты (`import`, `require`) в коде, чтобы понять, какие компоненты и модули зависят от измененных файлов."
+      },
+      {
+        text: "Избирательный запуск тестов (Selective Run).",
+        details: "Вместо запуска всей тестовой базы (что долго и дорого) запускаются только те файлы тестов, которые покрывают измененную логику."
+      },
+      {
+        text: "AI DX Эффект: Мгновенная обратная связь.",
+        details: "Благодаря экономии времени разработчик получает отчет о прохождении тестов за секунды, снижая нагрузку на систему сборки и CI/CD пайплайны."
+      }
+    ],
+    tools: ["Git Diff", "Dependency Graph", "Selective Testing", "AI DX Verification"]
+  },
+  {
+    id: "l7_16_nightly_tests",
+    level: "L7",
+    track: "engineering",
+    title: "Ночные тесты - автоматизация",
+    shortDesc: "Настройка регулярного полного автоматического тестирования в ночное время для выявления скрытых багов.",
+    steps: [
+      {
+        text: "Автопрогон всех тестов в нерабочее время (ночью).",
+        details: "Настройте планировщик (Cron-задачи) для запуска глубоких и ресурсоемких E2E-сценариев в период минимальной активности, чтобы не блокировать текущую разработку."
+      },
+      {
+        text: "Экономия ресурсов CI/CD (GitHub Actions vs Свой сервер).",
+        details: "Учитывайте, что запуск тяжелых Playwright-тестов в облаке GitHub Actions обходится дорого. Разверните недорогой локальный сервер или контейнер на сторонней хостинг-платформе."
+      },
+      {
+        text: "Автоматические уведомления о сбоях.",
+        details: "Настройте интеграцию, чтобы результаты ночных прогонов отправлялись в рабочий чат (Slack, Telegram) или на почту команды разработки только в случае обнаружения ошибок."
+      },
+      {
+        text: "Мониторинг инфраструктуры на Railway.",
+        details: "Используйте возможности Railway для автоматического управления контейнерами тестирования и логирования ночных запусков."
+      }
+    ],
+    tools: ["Cron Jobs", "Railway.app", "Slack/Telegram Webhooks", "E2E Nightly Builds"]
+  },
+  {
+    id: "l7_17_test_dashboard",
+    level: "L7",
+    track: "engineering",
+    title: "Дашборд для тестов",
+    shortDesc: "Создание защищенной веб-панели для мониторинга результатов тестов и их ручного запуска в реальном времени.",
+    steps: [
+      {
+        text: "Развертывание веб-панели на Railway.",
+        details: "Создайте легкое веб-приложение, которое служит единой точкой контроля качества проекта и отображает статус последней сборки."
+      },
+      {
+        text: "Ограничение доступа (Security Gate).",
+        details: "Обязательно защитите дашборд авторизацией или ограничением по IP-адресам, чтобы посторонние лица не могли просматривать отчеты и запускать нагрузочные тесты."
+      },
+      {
+        text: "Кнопка ручного запуска тестов (Run On-Demand).",
+        details: "Добавьте в интерфейс интерактивную кнопку для мгновенного запуска E2E/интеграционных тестов прямо из браузера без доступа к терминалу."
+      },
+      {
+        text: "История прогонов и логирование в реальном времени.",
+        details: "Настройте отображение логов и результатов каждого теста в реальном времени через WebSockets, а также ведение истории для отслеживания стабильности (flakiness) тестов."
+      }
+    ],
+    tools: ["Railway.app", "WebSockets Logs", "Basic Auth", "Test History UI"]
+  },
 
   // ================= LEVEL L8 =================
   {
@@ -6359,6 +7026,930 @@ const nodes = [
       }
     ],
     tools: ["Swarm Orchestration", "Multi-agent patterns"]
+  },
+  {
+    id: "l7_18_cli_automation",
+    level: "L7",
+    track: "engineering",
+    title: "CLI Автоматизация развертывания",
+    shortDesc: "Использование gh, vercel и railway CLI для безопасного автоматического управления окружениями и релизами силами ИИ.",
+    steps: [
+      {
+        text: "Интеграция GitHub CLI (gh).",
+        details: "Настройте ИИ-агенту доступ к `gh` CLI для автоматического создания коммитов, открытия Pull Requests, проверки статуса CI/CD прогонов и ведения дискуссий в репозитории."
+      },
+      {
+        text: "Мгновенные превью-окружения через Vercel CLI.",
+        details: "Используйте `vercel deploy` для создания изолированных Preview Deployments прямо в процессе генерации UI-кода, обеспечивая мгновенную визуальную обратную связь."
+      },
+      {
+        text: "Инфраструктурные превью через Railway CLI.",
+        details: "Применяйте `railway run` и `railway up` для создания временных баз данных и бэкенд-сервисов в рамках изолированного тестирования новых фич."
+      }
+    ],
+    tools: ["GitHub CLI (gh)", "Vercel CLI", "Railway CLI", "Preview Deployments"]
+  },
+  {
+    id: "l7_19_mobile_target_sizes",
+    level: "L7",
+    track: "engineering",
+    title: "Оптимизация Touch Target зон",
+    shortDesc: "Минимальный touch-target 44x44px и гармоничные скругления интерактивных элементов для мобильных пользователей.",
+    steps: [
+      {
+        text: "Минимальный физический размер клика.",
+        details: "Убедитесь, что все интерактивные кнопки, ссылки и элементы ввода имеют минимальный размер области нажатия 44x44px для исключения случайных кликов на смартфонах."
+      },
+      {
+        text: "Стандартизация скруглений кнопок.",
+        details: "Внедрите в правила генерации стилей гармоничные радиусы скругления (Border Radius) кнопок и форм, соответствующие общей дизайн-системе роадмапа."
+      },
+      {
+        text: "Визуальная эргономика интерфейсов.",
+        details: "Обеспечьте ИИ-генерацию с соблюдением достаточных внешних отступов (padding/margin) для исключения слипания интерактивных зон на мобильных экранах."
+      }
+    ],
+    tools: ["Touch Target (44x44px)", "Border Radius Modifiers", "A11y Touch Guidelines"]
+  },
+  {
+    id: "l7_20_ai_playwright_e2e",
+    level: "L7",
+    track: "engineering",
+    title: "Автоматическое E2E Playwright QA",
+    shortDesc: "Сквозное автоматическое тестирование сгенерированных интерфейсов силами ИИ с валидацией пользовательских сценариев.",
+    steps: [
+      {
+        text: "Эмуляция пользовательских действий.",
+        details: "ИИ-QA автоматически пишет Playwright-сценарии, имитирующие клики, заполнение форм, переходы по страницам и проверку исчезновения лоадеров."
+      },
+      {
+        text: "Контроль ошибок в JS-консоли.",
+        details: "Скрипты тестов слушают событие `pageerror` и сообщения в консоли браузера, прерывая сборку при обнаружении любых необработанных исключений."
+      },
+      {
+        text: "Скриншот-тестирование (Visual Regression).",
+        details: "Автоматическое попиксельное сравнение снимков экрана (Visual Diffing) до и после генерации интерфейсов для мгновенного обнаружения визуального регресса."
+      }
+    ],
+    tools: ["Playwright E2E", "Visual Regression Testing", "Console Error Listening", "Automated QA"]
+  },
+  {
+    id: "l7_21_ci_cd_quality_gates",
+    level: "L7",
+    track: "engineering",
+    title: "Внедрение Quality Gates в CI/CD",
+    shortDesc: "Строгие правила Branch Protection и автоматические проверки пул-реквестов перед слиянием с main веткой.",
+    steps: [
+      {
+        text: "Автоматические воркфлоу проверки.",
+        details: "Запуск линтеров (`eslint`), статического анализа кода, тестов компиляции (`build`) и Playwright-сценариев на каждое событие создания Pull Request."
+      },
+      {
+        text: "Правила защиты веток (Branch Protection).",
+        details: "Жесткий запрет прямого пуша в ветку `main`. Блокировка слияния PR, если хотя бы одна из автоматических проверок завершилась сбоем."
+      },
+      {
+        text: "AI & Lead Engineer Review Gate.",
+        details: "Требование об обязательном наличии аппрува от ИИ-QA или ведущего разработчика перед возможностью слияния автономно сгенерированного кода."
+      }
+    ],
+    tools: ["GitHub Actions", "Branch Protection", "Quality Gates", "CI/CD Workflows"]
+  },
+  {
+    id: "l8_13_swarm_orchestration",
+    level: "L8",
+    track: "workflow",
+    title: "Координация AI-агентов (Swarm Orchestration)",
+    shortDesc: "Архитектура взаимодействия распределенной группы ИИ-агентов (Swarm Mesh) для комплексных инженерных проектов.",
+    steps: [
+      {
+        text: "Swarm Mesh: сеть агентов.",
+        details: "Организация безопасной коммуникационной среды, в которой несколько агентов обмениваются сообщениями и выполняют задачи в параллельном режиме."
+      },
+      {
+        text: "Протокол передачи задач (Handoff Protocol).",
+        details: "Определение чётких стандартов и триггеров для автоматической передачи активной задачи и контекста от одного специализированного агента к другому."
+      },
+      {
+        text: "Параллельное распределение задач.",
+        details: "Разделение масштабного проекта на независимые подзадачи, выполняемые параллельно узкими специалистами с последующей агрегацией результатов."
+      }
+    ],
+    tools: ["Swarm Mesh", "Handoff Protocol", "Parallel Task Execution", "Context Handoff"]
+  },
+  {
+    id: "l8_14_hive_mind",
+    level: "L8",
+    track: "workflow",
+    title: "Hive Mind - коллективный разум ИИ",
+    shortDesc: "Общая база знаний, паттерн распределенного контекста и единый ReasonBank для группы разработчиков.",
+    steps: [
+      {
+        text: "Глобальная база знаний (Global Knowledge Base).",
+        details: "Создание централизованного хранилища `.gemini/antigravity/knowledge`, обновляемого агентами по мере изучения особенностей кодовой базы."
+      },
+      {
+        text: "Синхронизация контекста перед задачами.",
+        details: "Обязательное сканирование базы знаний каждым агентом при старте нового сеанса работы для исключения дублирования кода и конфликтов архитектуры."
+      },
+      {
+        text: "ReasoningBank и паттерн консультанта.",
+        details: "Документирование сложных цепочек рассуждений (Reasoning Chains) и переключение агентов в 'Consultant Mode' для поиска оптимальных архитектурных паттернов."
+      }
+    ],
+    tools: ["Global Knowledge Base", "Context Synchronization", "ReasoningBank", "Consultant Mode"]
+  },
+  {
+    id: "l8_15_handoff_protocol",
+    level: "L8",
+    track: "workflow",
+    title: "Handoff Protocol - передача контекста",
+    shortDesc: "Протокол автоматической и ручной передачи состояния и контекста между сессиями ИИ-разработчиков.",
+    steps: [
+      {
+        text: "Глобальный статус (Global Handoff).",
+        details: "Ведение файла `handoff.md` в корне проекта для фиксации глобального статуса системы, решенных проблем и текущих блокировок."
+      },
+      {
+        text: "Статус проекта (Project Handoff).",
+        details: "Создание и поддержка `project_handoff.md` для каждого отдельного микросервиса или компонента с описанием его архитектурного здоровья."
+      },
+      {
+        text: "Context Bootstrapping & 10-Step Rule.",
+        details: "Обязательное чтение файлов handoff при старте новой сессии для быстрого погружения в контекст, а также его обновление каждые 10 действий."
+      }
+    ],
+    tools: ["handoff.md", "project_handoff.md", "Context Bootstrapping", "10-Step Rule"]
+  },
+  {
+    id: "l8_16_specialized_roles",
+    level: "L8",
+    track: "workflow",
+    title: "Специализированные роли агентов",
+    shortDesc: "Разделение обязанностей и специализация ИИ-разработчиков для повышения эффективности и снижения context-footprint.",
+    steps: [
+      {
+        text: "Роль Tech Lead / CTO.",
+        details: "Агент отвечает за проектирование архитектуры, выбор технологического стека, ревью кода и составление мелкосегментированных планов."
+      },
+      {
+        text: "Роли Frontend & Backend разработчиков.",
+        details: "Frontend-специалист работает с Tailwind и React компонентами, а Backend-специалист управляет базами данных, бизнес-логикой и API-маршрутами."
+      },
+      {
+        text: "Роли QA, DevOps & Design.",
+        details: "QA-агент отвечает за автоматические тесты (Playwright), DevOps управляет сборками и инфраструктурой (CI/CD), а Design-инженер создает UI/UX."
+      }
+    ],
+    tools: ["Tech Lead", "Frontend Specialist", "Backend Specialist", "QA & DevOps Engineers", "Design Engineer"]
+  },
+  {
+    id: "l8_17_superpowered_planning",
+    level: "L8",
+    track: "workflow",
+    title: "Superpowered Planning - планирование задач",
+    shortDesc: "Фреймворк для детального планирования и декомпозиции сложных инженерных задач силами ИИ перед написанием кода.",
+    steps: [
+      {
+        text: "Шаблон проектирования и планов.",
+        details: "Создание структурированных планов в `docs/plans/` с четким описанием целей, архитектурного подхода и точных путей к файлам."
+      },
+      {
+        text: "Мелкосегментированные задачи.",
+        details: "Декомпозиция крупных задач на ультра-мелкие шаги (длительностью по 2-5 минут каждый) для исключения логических ошибок и зависаний."
+      },
+      {
+        text: "Обязательный TDD-воркфлоу.",
+        details: "Реализация строго по схеме: написание падающего теста -> написание минимального кода для его прохождения -> рефакторинг -> коммит."
+      }
+    ],
+    tools: ["docs/plans/", "Task Segmentation", "TDD Workflow", "Micro-commit Pattern"]
+  },
+  {
+    id: "l8_18_agent_memory",
+    level: "L8",
+    track: "workflow",
+    title: "Agent Memory - система памяти",
+    shortDesc: "Организация долгосрочной и краткосрочной памяти ИИ-агентов для непрерывного накопления знаний о проекте.",
+    steps: [
+      {
+        text: "Поведенческая база данных (agent_db.json).",
+        details: "Хранилище выученных навыков, Reasoning Bank, успешных паттернов и защитных инструкций, исключающих повторение ошибок."
+      },
+      {
+        text: "Проектный граф знаний (long_term_kg.md).",
+        details: "Документирование связей между компонентами, внешних зависимостей и архитектурных особенностей проекта в виде долгосрочного графа знаний."
+      },
+      {
+        text: "Оперативная память (short-term & handoff).",
+        details: "Ведение сессионного файла `short_term.md` для текущего контекста и `handoff.md` для передачи состояния между сессиями."
+      }
+    ],
+    tools: ["agent_db.json", "long_term_kg.md", "short_term.md", "Reasoning Bank"]
+  },
+  {
+    id: "l8_19_pattern_recognition",
+    level: "L8",
+    track: "workflow",
+    title: "Pattern Recognition - распознавание паттернов",
+    shortDesc: "Автоматический анализ истории выполнения задач для выявления повторяющихся ошибок и выработки защитных мер.",
+    steps: [
+      {
+        text: "Анализ ошибок и сбоев.",
+        details: "Регулярное сканирование журнала выполнения задач в `agent_db.json` для автоматического обнаружения повторяющихся паттернов неудачных действий."
+      },
+      {
+        text: "Создание защитных правил (Guards).",
+        details: "Формулирование жестких инструкций-ограничений (Guards) для предотвращения повторного совершения критических ошибок."
+      },
+      {
+        text: "Эволюция системных промптов.",
+        details: "Динамическое добавление выработанных защитных правил в системные промпты (System Prompts) для автоматического обучения агентов."
+      }
+    ],
+    tools: ["Error Database", "Guards & Prompts", "System Prompt Evolution", "Error Mitigation"]
+  },
+  {
+    id: "l8_20_recursive_skill",
+    level: "L8",
+    track: "workflow",
+    title: "Recursive Skill Improvement - самообучение",
+    shortDesc: "Процесс непрерывного повышения квалификации ИИ-агентов через аудит, патчинг утилит и кросс-обучение.",
+    steps: [
+      {
+        text: "Аудит завершенных задач.",
+        details: "Проведение глубокого анализа (Post-Mortem) после выполнения каждой крупной задачи с оценкой чистоты кода и расхода токенов."
+      },
+      {
+        text: "Автоматический патчинг утилит.",
+        details: "Агенты самостоятельно оптимизируют и обновляют скрипты автоматизации в директории `skills/` на основе результатов аудита."
+      },
+      {
+        text: "Кросс-агентское обучение (Cross-Agent Training).",
+        details: "Организация обмена лучшими практиками, шаблонами и выученными паттернами между различными специализированными агентами."
+      }
+    ],
+    tools: ["Skill Audit", "Self-patching", "Cross-agent training", "Post-Mortem Analysis"]
+  },
+  {
+    id: "l8_21_subagent_development",
+    level: "L8",
+    track: "workflow",
+    title: "Subagent-Driven Development",
+    shortDesc: "Методология делегирования сложных инженерных подзадач специализированным субагентам.",
+    steps: [
+      {
+        text: "Передача контекста и ограничений.",
+        details: "Формирование изолированного окружения для субагента с четко определенным списком разрешенных файлов и архитектурных рамок."
+      },
+      {
+        text: "Текст задачи и Acceptance Criteria.",
+        details: "Составление однозначного и измеримого описания задачи с детализированными критериями приемки результата."
+      },
+      {
+        text: "Параллельное выполнение и итерации.",
+        details: "Запуск нескольких независимых субагентов для параллельной работы над компонентами с последующей сборкой."
+      }
+    ],
+    tools: ["Subagent Spawn", "Context Isolation", "Acceptance Criteria", "Parallel Runs"]
+  },
+  {
+    id: "l8_22_subagent_stall_timeout",
+    level: "L8",
+    track: "workflow",
+    title: "Subagent Stall Timeout - таймауты",
+    shortDesc: "Автоматическое управление жизненным циклом и предотвращение зависаний субагентов.",
+    steps: [
+      {
+        text: "Мониторинг активности ИИ.",
+        details: "Непрерывное отслеживание активности и времени выполнения операций запущенными субагентами."
+      },
+      {
+        text: "Автоматический таймаут (Stall Guard).",
+        details: "Принудительная остановка процессов субагентов при отсутствии прогресса для минимизации расхода токенов."
+      },
+      {
+        text: "Обработка прерываний и логов.",
+        details: "Автоматический сбор диагностических логов при таймауте и генерация планов восстановления работоспособности."
+      }
+    ],
+    tools: ["Stall Guard", "Process Monitor", "Token Economy", "Auto-Recovery"]
+  },
+  {
+    id: "l8_23_swarm_review",
+    level: "L8",
+    track: "workflow",
+    title: "Swarm Review - многоуровневое ревью",
+    shortDesc: "Процедура всестороннего код-ревью с использованием специализированных инспекционных ролей.",
+    steps: [
+      {
+        text: "Пять уровней инспекции.",
+        details: "Последовательная проверка кода на уровнях: Security, Performance, Architecture, Style, Accessibility."
+      },
+      {
+        text: "Коллективное согласование изменений.",
+        details: "Сбор отзывов от всех виртуальных рецензентов и генерация консолидированного списка необходимых правок."
+      },
+      {
+        text: "Автоматический допуск к ветке (Quality Gates).",
+        details: "Блокировка слияния до тех пор, пока все 5 инспекций не завершатся успешным прохождением."
+      }
+    ],
+    tools: ["Swarm Inspection", "Consolidated Feedback", "A11y & Security Audit", "Quality Gates"]
+  },
+  {
+    id: "l8_24_ai_code_review_agent",
+    level: "L8",
+    track: "workflow",
+    title: "AI Code Review Agent - специализированный агент",
+    shortDesc: "Автономный ИИ-агент, сфокусированный исключительно на оценке качества и безопасности исходного кода.",
+    steps: [
+      {
+        text: "Поиск архитектурных костылей.",
+        details: "Автоматическое обнаружение технического долга, временных решений, hardcoded-значений и nullable-конфликтов."
+      },
+      {
+        text: "Проверка тестового покрытия.",
+        details: "Контроль наличия и полноты автоматических тестов для всех модифицируемых или создаваемых функций."
+      },
+      {
+        text: "Интерактивные триггеры вызова.",
+        details: "Запуск процесса ревью по ключевым фразам ('code review', 'проверь код') с генерацией отчета прямо в чате."
+      }
+    ],
+    tools: ["Review Agent", "Technical Debt Finder", "Nullable Field Validator", "Trigger Integration"]
+  },
+  {
+    id: "l8_25_claude_hooks",
+    level: "L8",
+    track: "workflow",
+    title: "Claude Hooks - автоматизация проверок",
+    shortDesc: "Система автоматического запуска ИИ-проверок на ключевых этапах жизненного цикла разработки.",
+    steps: [
+      {
+        text: "Pre-commit и Pre-push хуки.",
+        details: "Интеграция легковесных скриптов тестирования и линтинга перед фиксацией и отправкой изменений."
+      },
+      {
+        text: "Post-merge автоматизация.",
+        details: "Запуск процессов обновления графа знаний, документации и очистки окружения после слияния веток."
+      },
+      {
+        text: "Pre-deploy валидация.",
+        details: "Финальная автоматическая проверка стабильности сборки и прохождения критических путей перед деплоем."
+      }
+    ],
+    tools: ["Pre-commit hooks", "Pre-push automation", "Post-merge cleanup", "Pre-deploy validation"]
+  },
+  {
+    id: "l8_26_security_hook",
+    level: "L8",
+    track: "workflow",
+    title: "Security Hook - автоматическая проверка безопасности",
+    shortDesc: "Автоматизированный аудит безопасности кода на этапе коммита для предотвращения уязвимостей.",
+    steps: [
+      {
+        text: "Поиск hardcoded secrets.",
+        details: "Мгновенное сканирование изменений на наличие забытых API-ключей, токенов, паролей и приватных ключей."
+      },
+      {
+        text: "Контроль SQL injection и XSS.",
+        details: "Статический анализ путей прохождения данных для обнаружения потенциальных уязвимостей внедрения кода."
+      },
+      {
+        text: "Анализ зависимостей.",
+        details: "Проверка подключаемых внешних библиотек по известным базам данных уязвимостей (CVE)."
+      }
+    ],
+    tools: ["Security Audit Hook", "Secrets Detection", "SQLi/XSS Guard", "Dependency Scanner"]
+  },
+  {
+    id: "l8_27_chain_of_thought",
+    level: "L8",
+    track: "workflow",
+    title: "Chain of Thought (CoT) - размышления перед действием",
+    shortDesc: "Обоснование выбора инструмента, планирование, выполнение и валидация результатов перед каждым действием.",
+    steps: [
+      {
+        text: "Размышление и обоснование выбора инструмента.",
+        details: "Перед вызовом любого инструмента ИИ-агент должен явно обосновать свое решение: почему именно этот инструмент подходит для данной задачи и какие параметры будут переданы."
+      },
+      {
+        text: "Микро-планирование перед запуском.",
+        details: "Составление краткого локального плана действий перед сложным вызовом для исключения побочных эффектов."
+      },
+      {
+        text: "Выполнение и валидация результатов.",
+        details: "Обязательная проверка вывода инструмента на соответствие ожиданиям. В случае сбоя — немедленный переход к анализу причин."
+      }
+    ],
+    tools: ["Chain of Thought", "Reasoning Budget", "Tool Validation"]
+  },
+  {
+    id: "l8_28_context7_first",
+    level: "L8",
+    track: "workflow",
+    title: "Context7 First - приоритет документации",
+    shortDesc: "Обязательное использование документации Context7 перед написанием кода для исключения галлюцинаций.",
+    steps: [
+      {
+        text: "Приоритет официальных спецификаций.",
+        details: "ИИ-разработчик обязан начинать изучение новых библиотек или API со сканирования файлов документации через Context7."
+      },
+      {
+        text: "Исключение галлюцинаций API.",
+        details: "Запрет на использование устаревших или выдуманных параметров функций. Проверка сигнатур методов по свежим файлам справки."
+      },
+      {
+        text: "Настройка окружения по золотым стандартам.",
+        details: "Создание конфигурационных файлов и развертывание сервисов строго по официальным гайдлайнам, зафиксированным в базе знаний."
+      }
+    ],
+    tools: ["Context7", "API Documentation", "Hallucination Mitigation"]
+  },
+  {
+    id: "l8_29_zero_error_tolerance",
+    level: "L8",
+    track: "workflow",
+    title: "Zero-Error Tolerance - нулевая толерантность к ошибкам",
+    shortDesc: "Строгое правило немедленной остановки и анализа причин при возникновении любых ошибок сборки или тестов.",
+    steps: [
+      {
+        text: "Мгновенная остановка при сбое (Stop the Line).",
+        details: "Если любая консольная команда, сборка или тест завершается с ошибкой — ИИ-разработчик обязан немедленно прекратить выполнение и перейти к диагностике."
+      },
+      {
+        text: "Глубокий анализ причин сбоя.",
+        details: "Поиск первопричины (Root Cause) вместо применения временных 'костылей'. Изучение логов и контекста ошибки."
+      },
+      {
+        text: "Исправление и повторная верификация.",
+        details: "Внесение качественных изменений, гарантирующих устранение проблемы, и полный перезапуск проверок до достижения 100% успеха."
+      }
+    ],
+    tools: ["Stop-the-Line", "Root Cause Analysis", "Automated Verification", "Zero-Error Policy"]
+  },
+  {
+    id: "l8_30_red_flags",
+    level: "L8",
+    track: "workflow",
+    title: "Red Flags - контроль качества",
+    shortDesc: "Критические индикаторы низкого качества работы ИИ, требующие немедленного вмешательства.",
+    steps: [
+      {
+        text: "Мониторинг критических ошибок (Red Flags).",
+        details: "Постоянный контроль выполнения задач на наличие запрещенных паттернов: пропуск падающих тестов, игнорирование вопросов субагентов, принятие некачественного результата."
+      },
+      {
+        text: "Запрет на коммиты без ревью.",
+        details: "Любые изменения кода должны быть верифицированы специализированным рецензентом перед фиксацией. Коммиты в обход ревью — строгий Red Flag."
+      },
+      {
+        text: "Блокировка деплоя без тестов.",
+        details: "Полный запрет на перенос изменений в продакшн без 100% покрытия критических путей автотестами."
+      }
+    ],
+    tools: ["Red Flags Check", "Strict Quality Gates", "Anti-Slop Measures", "Deployment Guard"]
+  },
+  {
+    id: "l8_31_multi_persona_testing",
+    level: "L8",
+    track: "workflow",
+    title: "Multi-Persona Testing - тестирование с разных точек зрения",
+    shortDesc: "Всесторонняя проверка интерфейсов от лица трех виртуальных пользователей с разным опытом и целями.",
+    steps: [
+      {
+        text: "Тестирование от лица Core User.",
+        details: "Проверка стандартных пользовательских сценариев опытным пользователем, который хорошо знает продукт и ожидает максимальной эффективности."
+      },
+      {
+        text: "Тестирование от лица Критика (Hater).",
+        details: "Инспекция интерфейса придирчивым критиком, который целенаправленно ищет баги, неудобства, медленные анимации и уязвимости."
+      },
+      {
+        text: "Тестирование от лица Случайного наблюдателя (Casual Observer).",
+        details: "Оценка понятности, доступности (A11y) и удобства первого входа (Onboarding) для абсолютно нового пользователя."
+      }
+    ],
+    tools: ["Multi-Persona Testing", "User Experience Auditing", "A11y & Usability Review"]
+  },
+  {
+    id: "l8_32_consultant_mode",
+    level: "L8",
+    track: "workflow",
+    title: "Consultant Mode - виртуальный консультант",
+    shortDesc: "Режим структурированного технического дебата для поиска оптимальных архитектурных решений.",
+    steps: [
+      {
+        text: "Активация режима при высоких рисках.",
+        details: "Переход в Consultant Mode при риске нарушения архитектуры, высокой неопределенности или сложности задачи."
+      },
+      {
+        text: "Разработка трех технических альтернатив.",
+        details: "Формулирование не менее трех различных подходов к решению задачи с детальным описанием плюсов и минусов каждого."
+      },
+      {
+        text: "Выбор оптимального компромисса (Trade-off Analysis).",
+        details: "Совместный анализ компромиссов с пользователем или ведущим агентом и выбор наиболее сбалансированного архитектурного решения."
+      }
+    ],
+    tools: ["Consultant Mode", "Technical Debates", "Architecture Trade-offs", "Decision Trees"]
+  },
+  {
+    id: "l8_33_batch_execution",
+    level: "L8",
+    track: "workflow",
+    title: "Batch Execution vs Subagent-Driven",
+    shortDesc: "Выбор оптимальной стратегии выполнения задач между параллельной работой субагентов и последовательным пакетным контролем.",
+    steps: [
+      {
+        text: "Анализ сложности и критичности задачи.",
+        details: "Оценка рисков и определение необходимости параллельного ускорения (Subagent-Driven) или последовательной строгой проверки (Batch)."
+      },
+      {
+        text: "Параллельное распределение подзадач.",
+        details: "Использование субагентов для независимых, непересекающихся частей проекта для ускорения разработки."
+      },
+      {
+        text: "Пакетное последовательное выполнение.",
+        details: "Пошаговое последовательное выполнение критических задач одним агентом с полной верификацией на каждом шаге."
+      }
+    ],
+    tools: ["Batch Execution", "Subagent Orchestration", "Parallel Workflows", "Task Distribution"]
+  },
+  {
+    id: "l8_34_skills",
+    level: "L8",
+    track: "workflow",
+    title: "Skills - расширение возможностей агентов",
+    shortDesc: "Создание и интеграция декларативно описанных навыков с двуязычной активацией и проверками безопасности.",
+    steps: [
+      {
+        text: "Регистрация двуязычных триггеров (RU/EN).",
+        details: "Обеспечение безошибочного вызова навыка с помощью ключевых фраз как на русском, так и на английском языках."
+      },
+      {
+        text: "Статический анализ безопасности навыка.",
+        details: "Обязательная автоматическая проверка исполняемых скриптов на отсутствие деструктивных команд перед их запуском."
+      },
+      {
+        text: "Внедрение модульного взаимовызова.",
+        details: "Проектирование навыков с возможностью цепочечного вызова одного навыка другим для выполнения сложных workflow."
+      }
+    ],
+    tools: ["Agent Skills", "Dual-Language Triggers", "Security Sandboxing", "Cross-Skill Orchestration"]
+  },
+  {
+    id: "l8_35_superpowers_discipline",
+    level: "L8",
+    track: "workflow",
+    title: "Superpowers Discipline - дисциплина навыков",
+    shortDesc: "Строгая дисциплина использования и генерации навыков через единый реестр skill_superpowers.md.",
+    steps: [
+      {
+        text: "Проверка реестра перед любым действием.",
+        details: "Обязательный поиск готового навыка в файле skill_superpowers.md при получении любой задачи автоматизации."
+      },
+      {
+        text: "Исключение дублирования скриптов.",
+        details: "Запрет на написание ad-hoc Bash-скриптов в обход уже существующих зарегистрированных навыков."
+      },
+      {
+        text: "Создание и регистрация новых навыков.",
+        details: "Автоматическая генерация нового файла SKILL.md при отсутствии подходящего навыка с последующим внесением в реестр."
+      }
+    ],
+    tools: ["Superpowers Discipline", "Skill Registries", "Automation Standards", "Workflow Security"]
+  },
+  {
+    id: "l8_36_claude_projects",
+    level: "L8",
+    track: "workflow",
+    title: "Claude Projects - организация проектов",
+    shortDesc: "Изоляция контекстов разработки, внедрение системных правил, баз знаний и кастомных инструкций по доменам.",
+    steps: [
+      {
+        text: "Изоляция рабочих контекстов по доменам.",
+        details: "Организация разработки путем создания отдельных Claude Projects (до 5 на бесплатном плане) для разделения кодовой базы."
+      },
+      {
+        text: "Конфигурирование системных правил и знаний.",
+        details: "Добавление Custom Instructions, API спецификаций и архитектурных гайдлайнов в проект для устранения галлюцинаций."
+      },
+      {
+        text: "Интеграция иерархии памяти.",
+        details: "Связывание локального проекта с долгосрочным графом знаний и глобальным реестром паттернов."
+      }
+    ],
+    tools: ["Claude Projects", "Context Isolation", "Knowledge Bases", "Custom Instructions"]
+  },
+  {
+    id: "l8_37_lite_mode",
+    level: "L8",
+    track: "workflow",
+    title: "LITE MODE - упрощённый режим",
+    shortDesc: "Автоматическое облегчение процессов проектирования, минимум документации и быстрый деплой для создания MVP.",
+    steps: [
+      {
+        text: "Анализ необходимости ускоренного режима.",
+        details: "Переход в LITE MODE при создании простых прототипов, личных проектов или изолированных UI-компонентов."
+      },
+      {
+        text: "Сокращение проектного оверхеда.",
+        details: "Пропуск создания промежуточных планов реализации (implementation plan) и избыточных чек-листов."
+      },
+      {
+        text: "Мгновенное развертывание (Rapid Deploy).",
+        details: "Прямой деплой изменений в Staging с упрощенным прохождением Quality Gates для ускорения обратной связи."
+      }
+    ],
+    tools: ["LITE MODE", "Rapid Prototyping", "Minimalist Design", "Frictionless Deployment"]
+  },
+  {
+    id: "l8_38_pattern_learning",
+    level: "L8",
+    track: "workflow",
+    title: "Pattern Learning - обучение на паттернах",
+    shortDesc: "Анализ handoff-файлов с помощью skill_manage_evolution.md, оценка успешности сессий и обновление agent_db.json.",
+    steps: [
+      {
+        text: "Автоматический анализ handoff-файлов.",
+        details: "Использование специализированного навыка skill_manage_evolution.md для разбора итогов завершенных рабочих сессий."
+      },
+      {
+        text: "Оценка эффективности и выявление узких мест.",
+        details: "Обнаружение повторяющихся ошибок, зависаний (stall) и неоптимальных циклов выполнения команд."
+      },
+      {
+        text: "Дистилляция опыта в глобальную память.",
+        details: "Формирование новых файлов навыков SKILL.md и обновление глобального реестра паттернов agent_db.json."
+      }
+    ],
+    tools: ["Pattern Learning", "Handoff Auditing", "Self-Evolution Loops", "Global Agent DB"]
+  },
+  {
+    id: "l8_39_instruction_distillation",
+    level: "L8",
+    track: "workflow",
+    title: "Instruction Distillation - дистилляция инструкций",
+    shortDesc: "Извлечение успешных паттернов из логов сессий, создание новых файлов навыков (SKILL.md) и эволюция глобальных инструкций.",
+    steps: [
+      {
+        text: "Анализ успешных сессий.",
+        details: "Ретроспективный анализ логов и шагов, приведших к безошибочному решению сложных задач."
+      },
+      {
+        text: "Выявление эффективных паттернов.",
+        details: "Поиск повторяющихся цепочек команд и подходов для экономии токенов и времени."
+      },
+      {
+        text: "Создание новых файлов навыков (SKILL.md).",
+        details: "Формализация лучших практик в виде повторно используемых рецептов и модульных инструкций."
+      }
+    ],
+    tools: ["Log Analysis", "Pattern Identification", "Skill Distillation", "Instruction Distillation"]
+  },
+  {
+    id: "l8_40_rag",
+    level: "L8",
+    track: "workflow",
+    title: "RAG - контекстный поиск по базе знаний",
+    shortDesc: "Динамическое расширение контекстного окна ИИ путем семантического поиска, векторизации и гибридного поиска документов.",
+    steps: [
+      {
+        text: "Динамическое извлечение (Retrieval).",
+        details: "Поиск наиболее релевантных документов в локальной базе знаний по семантическому сходству."
+      },
+      {
+        text: "Векторизация и индексация (Embeddings).",
+        details: "Преобразование текстов спецификаций, API и документации в векторные представления."
+      },
+      {
+        text: "Гибридный поиск (Hybrid Search).",
+        details: "Сочетание ключевых слов и векторного сходства для нахождения точных ответов на сложные вопросы."
+      }
+    ],
+    tools: ["Vector Database", "Semantic Embeddings", "Hybrid Search", "Retrieval-Augmented Generation"]
+  },
+  {
+    id: "l8_41_cline",
+    level: "L8",
+    track: "workflow",
+    title: "Cline - семантический поиск по коду",
+    shortDesc: "Ускорение и оптимизация работы ИИ за счет глубокой семантической индексации файлов проекта и минимизации расхода токенов.",
+    steps: [
+      {
+        text: "Быстрое нахождение контекста.",
+        details: "Семантический поиск по коду для моментального обнаружения нужных функций без сканирования всей ФС."
+      },
+      {
+        text: "Глубокая индексация файлов.",
+        details: "Создание и регулярное обновление локального индекса всей кодовой базы проекта."
+      },
+      {
+        text: "Минимизация расхода токенов.",
+        details: "Экономия ресурсов за счет точечного чтения только тех файлов, которые действительно важны для текущего запроса."
+      }
+    ],
+    tools: ["Codebase Indexing", "Semantic Queries", "Context Optimization", "Cline Search"]
+  },
+  {
+    id: "l8_42_superflow_workflow",
+    level: "L8",
+    track: "workflow",
+    title: "Superflow Workflow - 4-фазный цикл разработки",
+    shortDesc: "Жесткое структурирование жизненного цикла выполнения любой инженерной задачи: Onboarding, Discovery, Execution и Merge.",
+    steps: [
+      {
+        text: "Onboarding и Discovery.",
+        details: "Глубокое погружение в проект, аудит окружения, составление implementation plan и согласование архитектуры."
+      },
+      {
+        text: "Execution (Реализация).",
+        details: "Написание кода с непрерывной верификацией через TDD (Test-Driven Development) и запуск промежуточных проверок."
+      },
+      {
+        text: "Merge и Интеграция.",
+        details: "Code review, прохождение Quality Gates, обновление документации и составление итогового handoff.md."
+      }
+    ],
+    tools: ["Structured Workflow", "Phase Gates", "TDD Practice", "Superflow Framework"]
+  },
+  {
+    id: "l8_43_minimize_tool_calls",
+    level: "L8",
+    track: "workflow",
+    title: "Минимизация вызовов инструментов",
+    shortDesc: "Бережное и эффективное использование доступных API-вызовов: группировка операций, пакетные цепочки команд и кэширование.",
+    steps: [
+      {
+        text: "Группировка файловых операций.",
+        details: "Одновременное чтение нескольких связанных файлов в рамках одного вызова вместо последовательных запросов."
+      },
+      {
+        text: "Пакетное выполнение команд.",
+        details: "Объединение нескольких терминальных команд в цепочки для сокращения сетевых задержек."
+      },
+      {
+        text: "Кэширование промежуточных результатов.",
+        details: "Сохранение часто запрашиваемых данных во временных переменных для исключения повторных вызовов."
+      }
+    ],
+    tools: ["Tool Efficiency", "Request Grouping", "API Caching", "Call Optimization"]
+  },
+  {
+    id: "l8_44_dev_qa_cycle",
+    level: "L8",
+    track: "workflow",
+    title: "Автоматический цикл «Разработчик -> QA -> Фикс»",
+    shortDesc: "Замкнутый автономный цикл контроля качества кода: авто-запуск тестов, сбор логов ошибок и самокоррекция (Self-Repair).",
+    steps: [
+      {
+        text: "Автономный запуск тестировщика (QA).",
+        details: "Передача сгенерированного кода специализированному QA-агенту для проведения сквозного тестирования (Playwright/E2E)."
+      },
+      {
+        text: "Авто-генерация логов ошибок.",
+        details: "При обнаружении падений тестов или сбоев сборки автоматическое формирование структурированного отчета об ошибках."
+      },
+      {
+        text: "Самокоррекция (Self-Repair).",
+        details: "Чтение логов сбоев и внесение исправлений с ограничением числа попыток во избежание бесконечных зацикливаний."
+      }
+    ],
+    tools: ["Self-Repair Loops", "QA Automation", "Error Log Parsing", "Quality Gates"]
+  },
+  {
+    id: "l8_45_role_systems",
+    level: "L8",
+    track: "workflow",
+    title: "Ролевые ИИ-команды и разделение прав",
+    shortDesc: "Настройка ролевых систем и разграничения прав для снижения когнитивной нагрузки и минимизации оверхеда контекста.",
+    steps: [
+      {
+        text: "Инициализация ролей.",
+        details: "Разделение ИИ-команды на роли Tech Lead, Frontend, Backend, QA с узкими системными промптами."
+      },
+      {
+        text: "Распределение прав.",
+        details: "Ограничение доступа к файлам и инструментам (чтение/запись) в соответствии с ролью для минимизации ошибок."
+      },
+      {
+        text: "Минимизация оверхеда.",
+        details: "Ограничение зоны ответственности модели для снижения расхода токенов и галлюцинаций."
+      }
+    ],
+    tools: ["Specialized Prompts", "Tech Lead Prompts", "Agent Roles", "Cognitive Load"]
+  },
+  {
+    id: "l8_46_agent_db_json",
+    level: "L8",
+    track: "workflow",
+    title: "База долговременной памяти agent_db.json",
+    shortDesc: "Локальный реестр усвоенных уроков, технологических профилей и решенных критических багов для исключения повторных ошибок.",
+    steps: [
+      {
+        text: "Логирование уроков.",
+        details: "Сохранение результатов сложных рефакторингов и найденных обходных путей в структурированном виде."
+      },
+      {
+        text: "Профиль технологий.",
+        details: "Фиксация версий библиотек, стилей и ограничений в локальной базе данных для контекста ИИ."
+      },
+      {
+        text: "Исключение повторных багов.",
+        details: "Автоматическое сканирование БД в начале каждой сессии для предотвращения возврата старых ошибок."
+      }
+    ],
+    tools: ["AI Memory DB", "agent_db.json", "Knowledge Retention", "Bug Journals"]
+  },
+  {
+    id: "l8_47_long_term_kg",
+    level: "L8",
+    track: "workflow",
+    title: "Хронологический граф знаний long_term_kg.md",
+    shortDesc: "Динамическая индексация зависимостей и истории изменений для быстрого онбординга агентов и экономии контекста.",
+    steps: [
+      {
+        text: "Индексация зависимостей.",
+        details: "Построение карты связей между базами данных, серверным API и клиентскими компонентами."
+      },
+      {
+        text: "Анализ изменений.",
+        details: "Отслеживание хронологии рефакторингов с привязкой к коммитам для быстрого выявления причин багов."
+      },
+      {
+        text: "Экономия контекста.",
+        details: "Точечное извлечение нужных связей вместо полного сканирования проекта для сбережения до 80% токенов."
+      }
+    ],
+    tools: ["Dependency Graphs", "Knowledge Graphs", "Context Optimization", "Change Impact"]
+  },
+  {
+    id: "l8_48_parallel_subagents",
+    level: "L8",
+    track: "workflow",
+    title: "Параллельные ИИ-субагенты",
+    shortDesc: "Распараллеливание рутинных задач между изолированными субагентами в автономных ветках с последующим авто-слиянием PR.",
+    steps: [
+      {
+        text: "Распараллеливание ветвлений.",
+        details: "Декомпозиция большой задачи на изолированные подзадачи, выполняемые субагентами параллельно."
+      },
+      {
+        text: "Автономные Git-ветки.",
+        details: "Создание изолированных веток под каждую подзадачу для независимого написания и тестирования кода."
+      },
+      {
+        text: "Авто-слияние PR.",
+        details: "Проведение автоматического ревью, сбор результатов работы субагентов и мерж в основную ветку."
+      }
+    ],
+    tools: ["Multi-Agent Parallelism", "Git Branching", "PR Merges", "Swarm Dispatchers"]
+  },
+  {
+    id: "l8_49_optimized_triggers",
+    level: "L8",
+    track: "workflow",
+    title: "Оптимизированные триггеры вызова",
+    shortDesc: "Автоматизация оркестрации ИИ-команды: условия вызова субагентов, форматирование вывода и авто-сбор логов выполнения.",
+    steps: [
+      {
+        text: "Условия вызова.",
+        details: "Определение паттернов и регулярных выражений для автоматического запуска специализированных субагентов."
+      },
+      {
+        text: "Авто-сбор логов.",
+        details: "Перехват консольного вывода и трассировки стека субагентов для мгновенного логирования результатов."
+      },
+      {
+        text: "Анализ результатов.",
+        details: "Агрегация ошибок выполнения, принятие решения о перезапуске или эскалации сбоев пользователю."
+      }
+    ],
+    tools: ["Dispatch Triggers", "Execution Logs", "Error Aggregation", "Swarm Monitoring"]
+  },
+  {
+    id: "l8_50_qa_validation_prompt",
+    level: "L8",
+    track: "workflow",
+    title: "Шаблон промпта Агента Валидации",
+    shortDesc: "Специализированный Quality Gate: автоматическая проверка DoD, сквозное тестирование и визуальный аудит верстки.",
+    steps: [
+      {
+        text: "Проверка DoD критериев.",
+        details: "Автоматическое сопоставление выполненного функционала со списком требований плана реализации."
+      },
+      {
+        text: "Сбор E2E логов.",
+        details: "Автономный прогон интеграционных тестов с сохранением и детальным разбором логов браузера."
+      },
+      {
+        text: "Визуальный аудит верстки.",
+        details: "Проверка отсутствия наложения слоев, доступности интерактивных элементов и контрастности интерфейса."
+      }
+    ],
+    tools: ["QA Prompts", "Definition of Done", "Validation Logs", "Visual Regression"]
   }
 ];
 

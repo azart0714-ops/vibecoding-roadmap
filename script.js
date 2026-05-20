@@ -314,9 +314,23 @@ document.addEventListener("DOMContentLoaded", () => {
     { from: "l4_31_core_web_vitals", to: "l4_32_perceived_performance" },
     { from: "l4_32_perceived_performance", to: "l4_33_image_optimization" },
     { from: "l4_33_image_optimization", to: "l4_34_wcag_standards" },
-    { from: "l4_34_wcag_standards", to: "l4_35_keyboard_navigation" },
     { from: "l4_35_keyboard_navigation", to: "l4_36_screen_readers" },
-    { from: "l4_36_screen_readers", to: "l5_1_autonomous_planning" }
+    { from: "l4_36_screen_readers", to: "l4_43_input_states" },
+    { from: "l4_43_input_states", to: "l4_44_autocomplete_autofill" },
+    { from: "l4_44_autocomplete_autofill", to: "l4_45_bottom_navigation" },
+    { from: "l4_45_bottom_navigation", to: "l4_46_pull_to_refresh" },
+    { from: "l4_46_pull_to_refresh", to: "l4_47_swipe_gestures" },
+    { from: "l4_47_swipe_gestures", to: "l4_48_pwa_integration" },
+    { from: "l4_48_pwa_integration", to: "l4_49_colocation_actions" },
+    { from: "l4_49_colocation_actions", to: "l4_50_tailwind_standard" },
+    { from: "l4_50_tailwind_standard", to: "l4_51_shadcn_components" },
+    { from: "l4_51_shadcn_components", to: "l4_52_zustand_state" },
+    { from: "l4_52_zustand_state", to: "l4_53_skeleton_screens" },
+    { from: "l4_53_skeleton_screens", to: "l4_54_use_optimistic" },
+    { from: "l4_54_use_optimistic", to: "l4_55_focus_traps" },
+    { from: "l4_55_focus_traps", to: "l4_56_framer_motion" },
+    { from: "l4_56_framer_motion", to: "l4_57_error_recovery" },
+    { from: "l4_57_error_recovery", to: "l5_1_autonomous_planning" }
   ];
 
   // Specific visual weights for Bento cards
@@ -427,8 +441,23 @@ document.addEventListener("DOMContentLoaded", () => {
     l3_16_new_features_v2: "weight-medium",
     l3_17_config_hierarchy: "weight-medium",
     l3_18_env_vars: "weight-medium",
-    l3_19_rules_files: "weight-large",
-    l3_20_reusable_skills: "weight-medium"
+    l3_20_reusable_skills: "weight-medium",
+
+    // Level 4 new interactive nodes bento weights
+    l4_43_input_states: "weight-medium",
+    l4_44_autocomplete_autofill: "weight-medium",
+    l4_45_bottom_navigation: "weight-medium",
+    l4_46_pull_to_refresh: "weight-medium",
+    l4_47_swipe_gestures: "weight-medium",
+    l4_48_pwa_integration: "weight-large",
+    l4_49_colocation_actions: "weight-medium",
+    l4_50_tailwind_standard: "weight-medium",
+    l4_51_shadcn_components: "weight-medium",
+    l4_53_skeleton_screens: "weight-medium",
+    l4_54_use_optimistic: "weight-large",
+    l4_55_focus_traps: "weight-medium",
+    l4_56_framer_motion: "weight-medium",
+    l4_57_error_recovery: "weight-large"
   };
 
   // 2. Initialize Renders
@@ -3039,8 +3068,652 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // ================= NEW LEVEL 4 WIDGETS =================
+  window.setSimInputState = function(state) {
+    const input = document.getElementById("sim-input");
+    const loader = document.getElementById("sim-input-loader");
+    if (!input) return;
+    
+    // Reset defaults
+    input.disabled = false;
+    input.value = "";
+    input.style.opacity = "1";
+    input.style.borderColor = "rgba(255,255,255,0.1)";
+    input.style.boxShadow = "none";
+    input.style.color = "#fff";
+    if (loader) loader.style.display = "none";
+    
+    if (state === "focus") {
+      input.focus();
+      input.style.borderColor = "#3b82f6";
+      input.style.boxShadow = "0 0 10px rgba(59, 130, 246, 0.4)";
+    } else if (state === "filled") {
+      input.value = "Алексей Иванов";
+      input.style.borderColor = "#10b981";
+    } else if (state === "error") {
+      input.value = "invalid-email@";
+      input.style.borderColor = "#ef4444";
+      input.style.boxShadow = "0 0 10px rgba(239, 68, 68, 0.4)";
+    } else if (state === "disabled") {
+      input.disabled = true;
+      input.style.opacity = "0.5";
+      input.style.borderColor = "rgba(255,255,255,0.05)";
+    } else if (state === "loading") {
+      input.disabled = true;
+      input.value = "Проверка занятости имени...";
+      input.style.borderColor = "#3b82f6";
+      if (loader) loader.style.display = "block";
+    }
+  };
+
+  window.testAutofillSubmit = function() {
+    const status = document.getElementById("autofill-status");
+    if (status) {
+      status.style.display = "block";
+      status.style.opacity = "0";
+      setTimeout(() => {
+        status.style.transition = "opacity 0.3s ease";
+        status.style.opacity = "1";
+      }, 50);
+    }
+  };
+
+  window.switchBottomNavTab = function(tabId) {
+    const tabs = ["home", "search", "cart", "profile"];
+    const emojis = { home: "🏠", search: "🔍", cart: "🛒", profile: "👤" };
+    const titles = { home: "Главная", search: "Поиск", cart: "Корзина", profile: "Профиль" };
+    const screen = document.getElementById("bottom-nav-screen");
+    
+    tabs.forEach(t => {
+      const el = document.getElementById(`bn-tab-${t}`);
+      if (el) {
+        el.style.opacity = "0.6";
+        el.style.transform = "scale(1)";
+        const iconSpan = el.querySelector("span:first-child");
+        if (iconSpan) iconSpan.style.filter = "grayscale(1)";
+        const txtSpan = el.querySelector("span:last-child");
+        if (txtSpan) {
+          txtSpan.style.color = "#a1a1aa";
+          txtSpan.style.fontWeight = "normal";
+        }
+      }
+    });
+
+    const activeTab = document.getElementById(`bn-tab-${tabId}`);
+    if (activeTab) {
+      activeTab.style.opacity = "1";
+      activeTab.style.transform = "scale(1.15)";
+      const iconSpan = activeTab.querySelector("span:first-child");
+      if (iconSpan) iconSpan.style.filter = "grayscale(0)";
+      const txtSpan = activeTab.querySelector("span:last-child");
+      if (txtSpan) {
+        txtSpan.style.color = "#10b981";
+        txtSpan.style.fontWeight = "bold";
+      }
+    }
+
+    if (screen) {
+      screen.style.transform = "scale(0.95)";
+      screen.style.opacity = "0.5";
+      setTimeout(() => {
+        screen.innerText = `Раздел: ${titles[tabId]} ${emojis[tabId]}`;
+        screen.style.transform = "scale(1)";
+        screen.style.opacity = "1";
+      }, 150);
+    }
+  };
+
+  window.startSwipeWidget = function(e) {
+    const swipeItem = document.getElementById("swipe-item");
+    const statusMsg = document.getElementById("swipe-status-msg");
+    if (!swipeItem) return;
+    
+    let startX = e.clientX || (e.touches && e.touches[0].clientX);
+    let currentX = 0;
+    let isSwiping = true;
+    swipeItem.style.transition = "none";
+    
+    function onMove(moveEvent) {
+      if (!isSwiping) return;
+      const x = moveEvent.clientX || (moveEvent.touches && moveEvent.touches[0].clientX);
+      const diffX = x - startX;
+      if (diffX < 0) {
+        currentX = Math.max(diffX, -100);
+        swipeItem.style.transform = `translateX(${currentX}px)`;
+      }
+    }
+    
+    function onEnd() {
+      if (!isSwiping) return;
+      isSwiping = false;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onEnd);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+      
+      swipeItem.style.transition = "transform 0.2s ease-out";
+      if (currentX <= -65) {
+        swipeItem.style.transform = "translateX(-100%)";
+        setTimeout(() => {
+          const parent = swipeItem.parentElement;
+          if (parent) {
+            parent.style.transition = "all 0.3s ease";
+            parent.style.height = "0";
+            parent.style.marginTop = "0";
+            parent.style.opacity = "0";
+            parent.style.padding = "0";
+            parent.style.border = "none";
+          }
+          if (statusMsg) {
+            statusMsg.style.display = "block";
+            statusMsg.style.opacity = "0";
+            setTimeout(() => {
+              statusMsg.style.transition = "opacity 0.3s ease";
+              statusMsg.style.opacity = "1";
+            }, 50);
+          }
+        }, 200);
+      } else {
+        swipeItem.style.transform = "translateX(0)";
+      }
+    }
+    
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onEnd);
+    window.addEventListener("touchmove", onMove);
+    window.addEventListener("touchend", onEnd);
+  };
+
+  window.togglePwaOfflineSim = function() {
+    const status = document.getElementById("pwa-network-status");
+    const btn = document.getElementById("pwa-offline-btn");
+    if (!status || !btn) return;
+    
+    if (status.innerText.includes("ONLINE")) {
+      status.innerText = "OFFLINE 🔌";
+      status.style.color = "#ef4444";
+      btn.innerText = "Вернуться в Online режим 🔌";
+      btn.style.background = "rgba(239, 68, 68, 0.15)";
+      btn.style.borderColor = "rgba(239, 68, 68, 0.3)";
+      btn.style.color = "#f87171";
+    } else {
+      status.innerText = "ONLINE 📶";
+      status.style.color = "#10b981";
+      btn.innerText = "Имитировать Offline режим 🔌";
+      btn.style.background = "rgba(139, 92, 246, 0.15)";
+      btn.style.borderColor = "rgba(139, 92, 246, 0.3)";
+      btn.style.color = "#a78bfa";
+    }
+  };
+
+  window.simulatePwaInstall = function() {
+    const btn = document.getElementById("pwa-install-btn");
+    if (!btn) return;
+    btn.disabled = true;
+    btn.innerText = "Установка...";
+    btn.style.background = "rgba(255,255,255,0.05)";
+    btn.style.color = "#6b7280";
+    setTimeout(() => {
+      btn.innerText = "Успешно установлено! 🎉";
+      btn.style.background = "rgba(16, 185, 129, 0.2)";
+      btn.style.color = "#10b981";
+    }, 1200);
+  };
+
+  // ================= 6 NEW LEVEL 4 ARCHITECTURAL WIDGETS =================
+
+  // 1. Co-location & Server Actions
+  window.toggleColocationView = function(mode) {
+    const btnApi = document.getElementById("btn-coloc-api");
+    const btnAction = document.getElementById("btn-coloc-action");
+    const codeView = document.getElementById("colocation-code-view");
+    if (!codeView) return;
+
+    if (btnApi) btnApi.classList.toggle("active", mode === "api");
+    if (btnAction) btnAction.classList.toggle("active", mode === "action");
+
+    if (mode === "api") {
+      codeView.innerHTML = `<span style="color: #6b7280;">// app/api/feedback/route.js</span>
+<span style="color: #f43f5e;">export async function</span> <span style="color: #3b82f6;">POST</span>(req) {
+  <span style="color: #f59e0b;">const</span> data = <span style="color: #f43f5e;">await</span> req.json();
+  <span style="color: #f43f5e;">await</span> db.feedback.create({ data });
+  <span style="color: #f43f5e;">return</span> Response.json({ success: <span style="color: #10b981;">true</span> });
+}
+
+<span style="color: #6b7280;">// app/components/Feedback.js (Separate bloated frontend file)</span>
+<span style="color: #f43f5e;">export default function</span> <span style="color: #3b82f6;">Feedback</span>() {
+  <span style="color: #f59e0b;">const</span> handleSubmit = <span style="color: #f43f5e;">async</span> (e) => {
+    e.preventDefault();
+    <span style="color: #f43f5e;">await</span> fetch(<span style="color: #10b981;">'/api/feedback'</span>, {
+      method: <span style="color: #10b981;">'POST'</span>,
+      body: JSON.stringify({ text })
+    });
+  };
+  <span style="color: #f43f5e;">return</span> &lt;<span style="color: #ef4444;">form</span> onSubmit={handleSubmit}&gt;...&lt;/<span style="color: #ef4444;">form</span>&gt;;
+}`;
+    } else {
+      codeView.innerHTML = `<span style="color: #6b7280;">// app/components/FeedbackForm.js (Single File Co-location)</span>
+<span style="color: #10b981;">'use client'</span>;
+
+<span style="color: #6b7280;">// Server Action co-located in the same component file!</span>
+<span style="color: #f43f5e;">async function</span> <span style="color: #3b82f6;">submitFeedback</span>(formData) {
+  <span style="color: #10b981;">'use server'</span>;
+  <span style="color: #f59e0b;">const</span> text = formData.get(<span style="color: #10b981;">'text'</span>);
+  <span style="color: #f43f5e;">await</span> db.feedback.create({ data: { text } });
+}
+
+<span style="color: #f43f5e;">export default function</span> <span style="color: #3b82f6;">FeedbackForm</span>() {
+  <span style="color: #f43f5e;">return</span> (
+    &lt;<span style="color: #ef4444;">form</span> action={<span style="color: #3b82f6;">submitFeedback</span>}&gt;
+      &lt;<span style="color: #ef4444;">textarea</span> name=<span style="color: #10b981;">"text"</span> required /&gt;
+      &lt;<span style="color: #ef4444;">button</span> type=<span style="color: #10b981;">"submit"</span>&gt;Отправить&lt;/<span style="color: #ef4444;">button</span>&gt;
+    &lt;/<span style="color: #ef4444;">form</span>&gt;
+  );
+}`;
+    }
+  };
+
+  window.submitColocationSim = function(e) {
+    if (e) e.preventDefault();
+    const input = document.getElementById("coloc-input");
+    const status = document.getElementById("colocation-status");
+    if (!status || !input || !input.value.trim()) return;
+
+    status.style.display = "block";
+    status.innerHTML = `<span style="color: #f59e0b;">⏳ Отправка Server Action...</span>`;
+    
+    setTimeout(() => {
+      status.innerHTML = `<span style="color: #10b981; font-weight: bold;">🎉 Server Action успешно выполнен напрямую в БД! Введенный текст: "${input.value.trim()}"</span>`;
+      input.value = "";
+    }, 1000);
+  };
+
+  // 2. Tailwind CSS
+  window.applyTailwindClassesSim = function(classesVal) {
+    const previewBox = document.getElementById("tailwind-preview-box");
+    const codeOutput = document.getElementById("tailwind-code-output");
+    if (!previewBox) return;
+
+    // Reset styles
+    previewBox.style.background = "rgba(255,255,255,0.05)";
+    previewBox.style.borderRadius = "4px";
+    previewBox.style.boxShadow = "none";
+    previewBox.style.animation = "none";
+    previewBox.style.transform = "none";
+
+    const classes = (classesVal || "").split(" ");
+    let bg = "#475569";
+    let radius = "4px";
+    let shadow = "none";
+    let animate = "none";
+
+    classes.forEach(cls => {
+      cls = cls.trim();
+      if (cls === "bg-cyan-500") bg = "#06b6d4";
+      if (cls === "bg-emerald-500") bg = "#10b981";
+      if (cls === "bg-amber-500") bg = "#f59e0b";
+      if (cls === "rounded-xl") radius = "12px";
+      if (cls === "rounded-full") radius = "50%";
+      if (cls === "rounded-lg") radius = "8px";
+      if (cls === "shadow-lg") shadow = "0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05)";
+      if (cls === "shadow-xl") shadow = "0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04)";
+      if (cls === "shadow-md") shadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
+      if (cls === "animate-pulse") animate = "pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite";
+    });
+
+    previewBox.style.background = bg;
+    previewBox.style.borderRadius = radius;
+    previewBox.style.boxShadow = shadow;
+    if (animate !== "none") {
+      previewBox.style.animation = animate;
+    }
+
+    if (codeOutput) {
+      codeOutput.innerText = `<div class="${classes.join(" ")}"></div>`;
+    }
+  };
+
+  window.setTailwindPreset = function(preset) {
+    const input = document.getElementById("tailwind-classes-input");
+    if (!input) return;
+
+    let text = "";
+    if (preset === "pulse") text = "bg-cyan-500 rounded-xl shadow-lg animate-pulse";
+    if (preset === "rotate") text = "bg-emerald-500 rounded-full shadow-md";
+    if (preset === "warning") text = "bg-amber-500 rounded-lg shadow-xl";
+
+    input.value = text;
+    window.applyTailwindClassesSim(text);
+  };
+
+  // 3. Shadcn UI
+  window.runShadcnInstallSim = function(comp) {
+    const term = document.getElementById("shadcn-terminal");
+    if (!term) return;
+
+    term.innerHTML = `<span style="color: #6b7280;">$ npx shadcn@latest add ${comp}</span>\n`;
+    let lines = [
+      `⏳ Чтение конфигурации components.json...`,
+      `✓ Найдено: TypeScript, Tailwind, Lucide React`,
+      `⏳ Загрузка исходного кода для '${comp}' с реестра shadcn/ui...`,
+      `✓ Скопировано в: components/ui/${comp}.tsx`,
+      `🎉 Компонент '${comp}' успешно установлен и готов к кастомизации!`
+    ];
+
+    let currentLine = 0;
+    function printNext() {
+      if (currentLine < lines.length) {
+        term.innerHTML += `<span style="color: ${currentLine === lines.length - 1 ? '#10b981' : '#a1a1aa'}">${lines[currentLine]}</span>\n`;
+        term.scrollTop = term.scrollHeight;
+        currentLine++;
+        setTimeout(printNext, 400);
+      }
+    }
+    setTimeout(printNext, 300);
+  };
+
+  // 4. Zustand Store
+  window.zustandCount = 0;
+  window.zustandTheme = "dark";
+  window.updateZustandStoreSim = function(action) {
+    const storeVal = document.getElementById("zustand-store-val");
+    if (!storeVal) return;
+
+    if (action === "inc") window.zustandCount++;
+    if (action === "dec") window.zustandCount--;
+    if (action === "theme") window.zustandTheme = window.zustandTheme === "dark" ? "light" : "dark";
+
+    storeVal.innerHTML = `{
+  <span style="color: #60a5fa;">count</span>: <span style="color: #f59e0b; font-weight: bold;">${window.zustandCount}</span>,
+  <span style="color: #60a5fa;">theme</span>: <span style="color: #10b981;">"${window.zustandTheme}"</span>,
+  <span style="color: #34d399;">actions</span>: {
+    <span style="color: #a78bfa;">increment</span>: <span style="color: #ec4899;">[Function]</span>,
+    <span style="color: #a78bfa;">toggleTheme</span>: <span style="color: #ec4899;">[Function]</span>
+  }
+}`;
+  };
+
+  // 5. Skeleton Screens
+  window.runSkeletonDemo = function(mode) {
+    const container = document.getElementById("loading-container-demo");
+    const btnSpinner = document.getElementById("btn-skel-spinner");
+    const btnSkel = document.getElementById("btn-skel-skeleton");
+    if (!container) return;
+
+    if (btnSpinner) btnSpinner.classList.toggle("active", mode === "spinner");
+    if (btnSkel) btnSkel.classList.toggle("active", mode === "skeleton");
+
+    container.innerHTML = "";
+    if (mode === "spinner") {
+      container.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 80px;">
+          <div class="spinner-demo" style="width: 24px; height: 24px; border: 2.5px solid rgba(255,255,255,0.1); border-top-color: #3b82f6; border-radius: 50%; animation: spin-fast 0.8s linear infinite; margin-bottom: 8px;"></div>
+          <span style="font-size: 8.5px; color: #a1a1aa;">Загрузка данных...</span>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div style="display: flex; gap: 8px; width: 100%;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); animation: pulse-slow 1.5s ease-in-out infinite;"></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+            <div style="width: 60%; height: 10px; border-radius: 2px; background: rgba(255,255,255,0.08); animation: pulse-slow 1.5s ease-in-out infinite;"></div>
+            <div style="width: 90%; height: 8px; border-radius: 2px; background: rgba(255,255,255,0.05); animation: pulse-slow 1.5s ease-in-out infinite;"></div>
+          </div>
+        </div>
+      `;
+    }
+  };
+
+  // 6. Optimistic UI
+  window.optimisticLikes = 10;
+  window.triggerOptimisticLike = function() {
+    const isFail = document.getElementById("chk-opt-fail")?.checked;
+    const latency = parseInt(document.getElementById("opt-latency-slider")?.value || "1000");
+    const countEl = document.getElementById("optimistic-count");
+    const status = document.getElementById("optimistic-status");
+    if (!countEl || !status) return;
+
+    // Immediately increment (Optimistic update!)
+    window.optimisticLikes++;
+    countEl.innerText = window.optimisticLikes;
+    countEl.style.transform = "scale(1.3)";
+    setTimeout(() => { countEl.style.transform = "scale(1)"; }, 150);
+
+    status.style.display = "block";
+    status.innerHTML = `<span style="color: #3b82f6;">⚡ Оптимистичное обновление: +1 Лайк! Отправка сетевого запроса (${latency}мс)...</span>`;
+
+    setTimeout(() => {
+      if (isFail) {
+        // Rollback!
+        window.optimisticLikes--;
+        countEl.innerText = window.optimisticLikes;
+        countEl.style.transform = "scale(0.8)";
+        setTimeout(() => { countEl.style.transform = "scale(1)"; }, 150);
+        status.innerHTML = `<span style="color: #ef4444; font-weight: bold;">❌ Запрос отклонен! Откатываем лайк назад к ${window.optimisticLikes}</span>`;
+      } else {
+        status.innerHTML = `<span style="color: #10b981; font-weight: bold;">✓ Запрос подтвержден сервером! Лайк зафиксирован.</span>`;
+      }
+    }, latency);
+  };
+
+  // 7. Focus Traps
+  window.openFocusTrapModal = function() {
+    const modal = document.getElementById("focustrap-modal");
+    const overlay = document.getElementById("focustrap-overlay");
+    if (!modal || !overlay) return;
+    modal.style.display = "block";
+    overlay.style.display = "block";
+
+    // Focus first input
+    const firstInput = document.getElementById("focustrap-input-1");
+    if (firstInput) firstInput.focus();
+
+    // Attach keyboard event listener
+    const handleKeyDown = function(e) {
+      if (e.key === "Escape") {
+        window.closeFocusTrapModal();
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusables = [
+          document.getElementById("focustrap-input-1"),
+          document.getElementById("focustrap-input-2"),
+          document.getElementById("focustrap-submit-btn"),
+          document.getElementById("focustrap-close-btn")
+        ].filter(Boolean);
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+    window._focustrap_handler = handleKeyDown;
+    window.addEventListener("keydown", handleKeyDown);
+  };
+
+  window.closeFocusTrapModal = function() {
+    const modal = document.getElementById("focustrap-modal");
+    const overlay = document.getElementById("focustrap-overlay");
+    if (modal) modal.style.display = "none";
+    if (overlay) overlay.style.display = "none";
+    if (window._focustrap_handler) {
+      window.removeEventListener("keydown", window._focustrap_handler);
+      window._focustrap_handler = null;
+    }
+    // Return focus to open button
+    const openBtn = document.getElementById("focustrap-open-btn");
+    if (openBtn) openBtn.focus();
+  };
+
+  window.submitFocusTrapModal = function() {
+    alert("Данные успешно отправлены внутри закрытого контура фокуса!");
+    window.closeFocusTrapModal();
+  };
+
+  // 8. Framer Motion Anim
+  window.runFramerAnimation = function(type) {
+    const box = document.getElementById("framer-anim-box");
+    if (!box) return;
+
+    box.style.animation = "none";
+    box.style.transform = "none";
+    box.offsetHeight; // trigger reflow
+
+    if (type === 'bounce') {
+      box.style.transform = "translateY(-20px)";
+      setTimeout(() => {
+        box.style.transform = "translateY(0) scaleY(0.9)";
+        setTimeout(() => {
+          box.style.transform = "translateY(0) scaleY(1)";
+        }, 100);
+      }, 200);
+    } else if (type === 'rotate') {
+      box.style.transform = "rotate(360deg) scale(1.1)";
+      setTimeout(() => {
+        box.style.transform = "rotate(360deg) scale(1)";
+      }, 300);
+    } else if (type === 'shake') {
+      box.style.animation = "shake-anim 0.3s ease-in-out";
+    } else if (type === 'pulse') {
+      box.style.transform = "scale(1.3)";
+      setTimeout(() => {
+        box.style.transform = "scale(1)";
+      }, 200);
+    }
+  };
+
+  // 9. Error Recovery
+  window.triggerComponentError = function() {
+    const content = document.getElementById("error-boundary-content");
+    const fallback = document.getElementById("error-boundary-fallback");
+    const view = document.getElementById("error-boundary-view");
+    if (!content || !fallback || !view) return;
+
+    content.style.display = "none";
+    fallback.style.display = "block";
+    view.style.border = "1px solid #ef4444";
+    view.style.background = "rgba(239, 68, 68, 0.05)";
+  };
+
+  window.recoverComponent = function() {
+    const content = document.getElementById("error-boundary-content");
+    const fallback = document.getElementById("error-boundary-fallback");
+    const view = document.getElementById("error-boundary-view");
+    if (!content || !fallback || !view) return;
+
+    fallback.innerHTML = `
+      <div class="spinner-demo" style="width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #f59e0b; border-radius: 50%; animation: spin-fast 0.8s linear infinite; margin-bottom: 6px;"></div>
+      <span style="font-size: 8.5px; color: #a1a1aa;">Семантическое восстановление и переподключение к API...</span>
+    `;
+
+    setTimeout(() => {
+      fallback.style.display = "none";
+      content.style.display = "block";
+      view.style.border = "none";
+      view.style.background = "rgba(0,0,0,0.2)";
+      
+      fallback.innerHTML = `
+        <div style="font-size: 10px; color: #f87171; font-weight: bold; margin-bottom: 4px;">⚠️ Сбой при рендеринге компонента</div>
+        <div style="font-size: 8px; color: #a1a1aa; margin-bottom: 8px;">Error: API request failed (500 Internal Server Error)</div>
+        <button id="error-recovery-retry-btn" onclick="event.stopPropagation(); window.recoverComponent && window.recoverComponent();" style="background: #f59e0b; border: none; color: #000; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 9px; font-weight: 700; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);">Повторить попытку (Retry)</button>
+      `;
+    }, 1000);
+  };
+
   // Auto-init sandbox playgrounds when opened in DOM
   setInterval(() => {
+    // Pull To Refresh setup
+    const ptr = document.getElementById("ptr-container");
+    if (ptr && !ptr.dataset.initialized) {
+      ptr.dataset.initialized = "true";
+      let isDragging = false;
+      let startY = 0;
+      let currentPull = 0;
+      const spinner = document.getElementById("ptr-spinner");
+      const arrow = document.getElementById("ptr-arrow");
+      const feedText = document.getElementById("ptr-feed-text");
+      
+      ptr.addEventListener("pointerdown", (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        ptr.style.cursor = "grabbing";
+        ptr.style.transition = "none";
+        if (spinner) spinner.style.transition = "none";
+        if (arrow) arrow.style.transition = "none";
+      });
+      
+      window.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        const diffY = e.clientY - startY;
+        if (diffY > 0) {
+          currentPull = Math.min(diffY * 0.4, 50);
+          if (spinner) {
+            spinner.style.opacity = currentPull / 50;
+            spinner.style.transform = `translateY(${currentPull - 20}px) rotate(${currentPull * 6}deg)`;
+          }
+          if (arrow) {
+            arrow.style.opacity = currentPull / 50;
+            arrow.style.transform = `translateY(${currentPull - 20}px) rotate(${Math.min(currentPull * 4, 180)}deg)`;
+          }
+        }
+      });
+      
+      window.addEventListener("pointerup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        ptr.style.cursor = "grab";
+        
+        if (currentPull >= 35) {
+          if (spinner) {
+            spinner.style.opacity = "1";
+            spinner.style.transform = "translateY(8px)";
+            spinner.style.animation = "spin-fast 1s linear infinite";
+          }
+          if (arrow) arrow.style.opacity = "0";
+          if (feedText) feedText.innerHTML = `<span style="color:#f59e0b; font-weight:bold;">Загрузка свежих данных...</span>`;
+          
+          setTimeout(() => {
+            if (spinner) {
+              spinner.style.animation = "none";
+              spinner.style.opacity = "0";
+              spinner.style.transform = "translateY(-20px)";
+            }
+            if (feedText) {
+              feedText.innerHTML = `
+                <div style="color:#10b981; font-weight:bold; font-size:10px; margin-bottom:4px;">Лента обновлена! ⚡</div>
+                <div style="font-size:8.5px; color:#fff; background:rgba(255,255,255,0.05); padding:4px; border-radius:4px;">
+                  🔥 ИИ-агенты завершили 95% задач на сегодня!
+                </div>
+              `;
+            }
+          }, 1500);
+        } else {
+          if (spinner) {
+            spinner.style.transition = "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)";
+            spinner.style.opacity = "0";
+            spinner.style.transform = "translateY(-20px)";
+          }
+          if (arrow) {
+            arrow.style.transition = "all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)";
+            arrow.style.opacity = "0";
+            arrow.style.transform = "translateY(-20px)";
+          }
+        }
+        currentPull = 0;
+      });
+    }
+
     const el = document.getElementById("empty-sandbox-content");
     if (el && el.innerHTML.trim() === "<!-- Будет заполнено через JS при рендере -->") {
       window.simulateEmptyAction('clear');
@@ -3141,6 +3814,38 @@ document.addEventListener("DOMContentLoaded", () => {
       srNarratorText.dataset.initialized = "true";
       srNarratorText.innerText = "📢 Нажмите кнопку выше для озвучки...";
       srNarratorText.style.color = "#a1a1aa";
+    }
+
+    // 6 New Level 4 Architectural Sandboxes Auto-Init
+    const colocView = document.getElementById("colocation-code-view");
+    if (colocView && !colocView.dataset.initialized) {
+      colocView.dataset.initialized = "true";
+      window.toggleColocationView("action");
+    }
+    const tailwindInput = document.getElementById("tailwind-classes-input");
+    if (tailwindInput && !tailwindInput.dataset.initialized) {
+      tailwindInput.dataset.initialized = "true";
+      window.setTailwindPreset("pulse");
+    }
+    const shadcnTerm = document.getElementById("shadcn-terminal");
+    if (shadcnTerm && !shadcnTerm.dataset.initialized) {
+      shadcnTerm.dataset.initialized = "true";
+      shadcnTerm.innerHTML = `<span style="color: #6b7280;">// Выберите компонент выше для начала установки...</span>`;
+    }
+    const zustandStore = document.getElementById("zustand-store-val");
+    if (zustandStore && !zustandStore.dataset.initialized) {
+      zustandStore.dataset.initialized = "true";
+      window.updateZustandStoreSim();
+    }
+    const loadingDemo = document.getElementById("loading-container-demo");
+    if (loadingDemo && !loadingDemo.dataset.initialized) {
+      loadingDemo.dataset.initialized = "true";
+      window.runSkeletonDemo("skeleton");
+    }
+    const optCount = document.getElementById("optimistic-count");
+    if (optCount && !optCount.dataset.initialized) {
+      optCount.dataset.initialized = "true";
+      optCount.innerText = window.optimisticLikes;
     }
   }, 300);
 

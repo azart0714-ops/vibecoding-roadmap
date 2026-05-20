@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Песочница UI-компонентов — Вайбкодинг</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Additional Sandbox Specific Styles */
+    .sandbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    @media (max-width: 900px) {
+      .sandbox-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .sandbox-section {
+      background: rgba(13, 13, 20, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-premium);
+    }
+    
+    .sandbox-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--accent-color, #7c3aed), transparent);
+    }
+    
+    .sandbox-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .sandbox-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .demo-container {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .widget-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .widget-row:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* Custom inputs with clean outline and states */
+    .sb-input {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s ease-out, background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+    }
+    
+    .sb-input:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .sb-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+    
+    .sb-input.filled {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.05);
+    }
+    
+    .sb-input.error {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.05);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    }
+    
+    .sb-input:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    /* Touch target overlay helper */
+    .touch-target-helper {
+      position: relative;
+    }
+    
+    .touch-target-helper::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border: 1px dashed rgba(236, 72, 153, 0.5);
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .show-touch-targets .touch-target-helper::after {
+      opacity: 1;
+    }
+    
+    /* Spring box physics simulation */
+    #spring-box {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #a855f7, #d946ef);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
+      margin: 15px auto;
+    }
+    
+    /* Focus Trap overlay */
+    .trap-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .trap-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .trap-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 90%;
+      max-width: 400px;
+      background: #0b0b10;
+      border: 2px solid #7c3aed;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(124, 58, 237, 0.2);
+      padding: 24px;
+      z-index: 1001;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .trap-modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    .trap-modal.active * {
+      visibility: visible !important;
+    }
+    
+    .sb-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .widget-row .reset-btn {
+      transition: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Grainy Noise Background Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-orb orb-1" style="background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, rgba(0, 0, 0, 0) 70%);"></div>
+  <div class="ambient-orb orb-2" style="background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(0, 0, 0, 0) 70%);"></div>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-main">
+        <div class="logo-area">
+          <div class="logo-icon" style="background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);">S</div>
+          <div class="logo-text">
+            <h1>UI Sandbox</h1>
+            <span class="logo-sub">Изолированная среда тестирования дизайн-системы</span>
+          </div>
+        </div>
+        
+        <div>
+          <a href="index.html" class="reset-btn" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: 6px;" id="btn-back-to-home">
+            <i data-lucide="arrow-left"></i>
+            <span>Назад на Карту</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Bento Grid Section -->
+    <section class="sandbox-section" style="--accent-color: #d946ef; margin-bottom: 30px;">
+      <div class="sandbox-title"><i data-lucide="grid"></i> Bento Grid & Cards Sandbox</div>
+      <p class="sandbox-desc">Проверка весов Bento Grid, состояний скруглений, градиентных рамок и анимаций карточек.</p>
+      
+      <div class="bento-grid" style="margin-top: 15px;">
+        <!-- Card 1: Default -->
+        <div class="bento-card" style="grid-column: span 3; --card-accent: #7c3aed; --card-accent-rgb: 124, 58, 237;">
+          <div class="card-top">
+            <div class="card-meta">
+              <span class="card-level">Level L4</span>
+              <span class="card-track-badge" style="background: #7c3aed; --track-color: #7c3aed;"></span>
+            </div>
+            <h3>Default Bento</h3>
+            <p class="card-desc">Стандартный вес карточки. Плавное наведение, микро-подсветка краев.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-track-title">🛠 Стек</span>
+            <span class="card-action-icon"><i data-lucide="arrow-right"></i></span>
+          </div>
+        </div>
+
+        <!-- Card 2: Partially Completed -->
+        <div class="bento-card partially-completed" style="grid-column: span 3;">
+          <div class="card-top">
+            <div class="card-meta">
+              <span class="card-level">Level L4</span>
+              <span class="card-track-badge" style="background: #dfa82c; --track-color: #dfa82c;"></span>
+            </div>
+            <h3>Partially Active</h3>
+            <p class="card-desc">Частично выполненный этап. Оранжево-желтые акценты.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-track-title">📋 Планирование</span>
+            <span class="card-action-icon"><i data-lucide="arrow-right"></i></span>
+          </div>
+        </div>
+
+        <!-- Card 3: Completed Weight-Medium -->
+        <div class="bento-card completed weight-medium" style="--card-accent: #10b981; --card-accent-rgb: 16, 185, 129;">
+          <div class="card-top">
+            <div class="card-meta">
+              <span class="card-level">Level L4</span>
+              <span class="card-track-badge" style="background: #10b981; --track-color: #10b981;"></span>
+            </div>
+            <h3>Completed Medium Card</h3>
+            <p class="card-desc">Средний вес (span 4). Изумрудный светящийся контур выполненного шага.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-track-title">🚀 Инженерия</span>
+            <span class="finger-tap-icon">👍</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Interactive Weight-Large -->
+        <div class="bento-card weight-large" style="--card-accent: #d946ef; --card-accent-rgb: 217, 70, 239;">
+          <div class="card-top">
+            <div class="card-meta">
+              <span class="card-level">Level L4</span>
+              <span class="card-track-badge" style="background: #d946ef; --track-color: #d946ef;"></span>
+            </div>
+            <h3>Large Weight Bento Container</h3>
+            <p class="card-desc">Большой вес (span 6). Идеален для размещения интерактивных инспекторов и сложных SOP инструкций.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-track-title">🧠 Продукт</span>
+            <span class="card-action-icon"><i data-lucide="arrow-right"></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Split Grid for controls and inputs -->
+    <div class="sandbox-grid">
+      
+      <!-- Section: Buttons & Sizing -->
+      <section class="sandbox-section" style="--accent-color: #3b82f6;">
+        <div class="sandbox-title"><i data-lucide="mouse-pointer"></i> Buttons & Touch Targets</div>
+        <p class="sandbox-desc">Контроль скруглений, кольца фокуса при навигации с клавиатуры и проверка минимальных touch-зон.</p>
+        
+        <div class="demo-container" id="buttons-sandbox-container">
+          <div class="widget-row">
+            <button class="reset-btn touch-target-helper" style="background: #7c3aed; color: #fff; border-color: #8b5cf6;" id="sb-btn-primary">Primary Action</button>
+            <button class="reset-btn touch-target-helper" style="background: rgba(255,255,255,0.05); color: #fff; border-color: rgba(255,255,255,0.1);" id="sb-btn-secondary">Glassmorphic</button>
+            <button class="reset-btn touch-target-helper" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2);" id="sb-btn-danger">Danger / Reset</button>
+          </div>
+          
+          <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: 15px;">
+            <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px; font-weight: bold;">ИНСТРУМЕНТЫ АУДИТА:</div>
+            
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-primary); cursor: pointer; margin-bottom: 8px;">
+              <input type="checkbox" id="toggle-touch-helper" style="accent-color: #ec4899;">
+              Показать минимальные touch-зоны (44x44px)
+            </label>
+            
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+              <span style="font-size: 12px; color: var(--text-secondary);">Скругления:</span>
+              <button onclick="setSandboxRadius('8px')" class="filter-btn active" id="rad-8">8px</button>
+              <button onclick="setSandboxRadius('12px')" class="filter-btn" id="rad-12">12px</button>
+              <button onclick="setSandboxRadius('16px')" class="filter-btn" id="rad-16">16px</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Input States Simulator -->
+      <section class="sandbox-section" style="--accent-color: #10b981;">
+        <div class="sandbox-title"><i data-lucide="text-cursor-input"></i> Input States Simulator</div>
+        <p class="sandbox-desc">Эмуляция всех состояний полей ввода для обеспечения превосходного UX.</p>
+        
+        <div class="demo-container">
+          <div style="margin-bottom: 15px; position: relative;">
+            <label style="display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;" id="sim-input-label">Тестируемое поле ввода (Default):</label>
+            <div style="position: relative;">
+              <input type="text" id="sandbox-sim-input" placeholder="Введите электронную почту..." class="sb-input">
+              <div id="sandbox-input-spinner" style="display: none; position: absolute; right: 12px; top: 12px; width: 14px; height: 14px; border: 2px solid transparent; border-top-color: #10b981; border-radius: 50%; animation: spin-fast 0.8s linear infinite;"></div>
+            </div>
+            <div id="sandbox-error-msg" style="display: none; color: #ef4444; font-size: 11px; font-weight: bold; margin-top: 6px;">⚠️ Неверный формат почты! Пожалуйста, укажите валидный адрес.</div>
+          </div>
+          
+          <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+            <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; font-weight: bold;">ПЕРЕКЛЮЧАТЕЛЬ СОСТОЯНИЙ:</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+              <button onclick="triggerInputState('default')" class="filter-btn active" id="state-btn-default">Default</button>
+              <button onclick="triggerInputState('focus')" class="filter-btn" id="state-btn-focus">Focus</button>
+              <button onclick="triggerInputState('filled')" class="filter-btn" id="state-btn-filled">Filled</button>
+              <button onclick="triggerInputState('error')" class="filter-btn" id="state-btn-error">Error</button>
+              <button onclick="triggerInputState('disabled')" class="filter-btn" id="state-btn-disabled">Disabled</button>
+              <button onclick="triggerInputState('loading')" class="filter-btn" id="state-btn-loading">Loading</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Focus Trap & Accessible Modals -->
+      <section class="sandbox-section" style="--accent-color: #7c3aed;">
+        <div class="sandbox-title"><i data-lucide="shield-alert"></i> Focus Trap & A11y Sandbox</div>
+        <p class="sandbox-desc">Удержание фокуса внутри модальных элементов, циклическая навигация на Tab и закрытие по Escape.</p>
+        
+        <div class="demo-container">
+          <div class="widget-row">
+            <button class="reset-btn" style="background: #7c3aed; color: #fff; border-color: #8b5cf6;" onclick="toggleModal(true)" id="btn-open-modal">Открыть модальное окно</button>
+            <button class="reset-btn" style="background: rgba(255, 255, 255, 0.05); color: #fff; border-color: rgba(255, 255, 255, 0.1);" onclick="toggleDrawer(true)" id="btn-open-drawer">Открыть Drawer (Sidebar)</button>
+          </div>
+          
+          <div id="a11y-audit-console" style="margin-top: 15px; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.6); border-radius: 6px; padding: 10px; border: 1px solid rgba(255,255,255,0.05); color: #8b5cf6; min-height: 40px;">
+            > Ожидание открытия модальных элементов для аудита фокуса...
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Micro-interactions and Spring Physics -->
+      <section class="sandbox-section" style="--accent-color: #ec4899;">
+        <div class="sandbox-title"><i data-lucide="activity"></i> Micro-interactions (Spring Mocks)</div>
+        <p class="sandbox-desc">Эмуляция плавности Framer Motion пружин. Подберите идеальные параметры stiffness и damping.</p>
+        
+        <div class="demo-container">
+          <div style="display: flex; align-items: center; justify-content: center; height: 100px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 15px;">
+            <div id="spring-box"></div>
+          </div>
+          
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 15px;">
+            <button onclick="runSpringAnim('bounce')" class="filter-btn" id="anim-bounce">Bounce</button>
+            <button onclick="runSpringAnim('rotate')" class="filter-btn" id="anim-rotate">Rotate</button>
+            <button onclick="runSpringAnim('shake')" class="filter-btn" id="anim-shake">Shake</button>
+            <button onclick="runSpringAnim('pulse')" class="filter-btn" id="anim-pulse">Pulse</button>
+          </div>
+
+          <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; font-size: 12px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="color: var(--text-secondary);">Stiffness (Жесткость):</span>
+              <input type="range" id="slider-stiffness" min="100" max="800" value="300" style="accent-color: #ec4899;">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--text-secondary);">Damping (Затухание):</span>
+              <input type="range" id="slider-damping" min="5" max="50" value="15" style="accent-color: #ec4899;">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Error Recovery (Graceful Degradation) -->
+      <section class="sandbox-section" style="--accent-color: #f59e0b; grid-column: span 2;">
+        <div class="sandbox-title"><i data-lucide="refresh-cw"></i> Error Recovery (Graceful Degradation)</div>
+        <p class="sandbox-desc">React Error Boundaries & Semantic Recovery. Изолированный компонент не роняет всё приложение в случае падения JS/API.</p>
+        
+        <div class="demo-container">
+          <div id="sandbox-error-boundary-view" style="min-height: 120px; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s ease;">
+            
+            <div id="sb-boundary-active-state" style="width: 100%; text-align: center;">
+              <div style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 6px;">🎛️ Интерактивный виджет аналитики продаж</div>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Статус: Подключение к API стабильно. Данные обновляются в реальном времени.</p>
+              
+              <button onclick="crashBoundaryComponent()" class="reset-btn" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #f87171; margin: 0 auto;" id="btn-crash-boundary">
+                <i data-lucide="skull"></i>
+                <span>Спровоцировать критический сбой API</span>
+              </button>
+            </div>
+
+            <div id="sb-boundary-fallback-state" style="display: none; width: 100%; text-align: center;">
+              <div style="font-size: 15px; font-weight: bold; color: #f87171; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i data-lucide="alert-triangle" style="color: #f59e0b;"></i>
+                <span>Сбой при рендеринге компонента аналитики</span>
+              </div>
+              <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 15px; font-family: monospace; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                Error: 500 Internal Server Error (Failed to chunk stream reader: connection closed by server peer)
+              </p>
+              
+              <button onclick="recoverBoundaryComponent()" class="reset-btn" style="background: #f59e0b; border-color: #fbbf24; color: #000; font-weight: 700; margin: 0 auto; box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);" id="btn-recover-boundary">
+                <i data-lucide="refresh-cw"></i>
+                <span>Запустить семантическое восстановление (Retry)</span>
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Focus Trap Modal Element -->
+  <div class="trap-overlay" id="sandbox-modal-overlay" onclick="toggleModal(false)"></div>
+  <div class="trap-modal" id="sandbox-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <h3 id="modal-title" style="font-family: var(--font-heading); color: #fff; font-size: 18px;">Изолированный Focus Trap</h3>
+      <button onclick="toggleModal(false)" style="background: none; border: none; color: var(--text-muted); cursor: pointer;" id="modal-close-icon"><i data-lucide="x"></i></button>
+    </div>
+    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">Попробуйте использовать клавишу <strong>Tab</strong> для циклического перехода по элементам. Фокус не сможет выйти наружу.</p>
+    
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+      <input type="text" id="modal-field-1" placeholder="Первое поле..." class="sb-input">
+      <input type="text" id="modal-field-2" placeholder="Второе поле..." class="sb-input">
+    </div>
+    
+    <div class="sb-btn-group" style="justify-content: flex-end;">
+      <button onclick="submitModalData()" class="reset-btn" style="background: #10b981; border-color: #34d399; color: #fff;" id="modal-submit-btn">Отправить</button>
+      <button onclick="toggleModal(false)" class="reset-btn" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff;" id="modal-cancel-btn">Закрыть</button>
+    </div>
+  </div>
+
+  <!-- Focus Trap Drawer (Sidebar Drawer) -->
+  <aside class="side-drawer" id="sandbox-drawer" style="z-index: 1002;">
+    <div class="drawer-header">
+      <div class="drawer-track-tag">A11y Drawer Sandbox</div>
+      <button class="close-drawer-btn" onclick="toggleDrawer(false)" id="drawer-close-btn">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="drawer-content" style="padding-top: 15px;">
+      <h3 style="font-family: var(--font-heading); color: #fff; font-size: 18px; margin-bottom: 10px;">Боковая панель (Drawer)</h3>
+      <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 15px;">Циклическая навигация Tab также поддерживается и здесь.</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+        <input type="text" id="drawer-field-1" placeholder="Поле в Drawer 1..." class="sb-input">
+        <input type="text" id="drawer-field-2" placeholder="Поле в Drawer 2..." class="sb-input">
+      </div>
+      
+      <div class="sb-btn-group">
+        <button onclick="toggleDrawer(false)" class="reset-btn" style="background: #7c3aed; color: #fff; width: 100%; justify-content: center;" id="drawer-confirm-btn">Подтвердить</button>
+      </div>
+    </div>
+  </aside>
+  <div class="drawer-overlay" id="sandbox-drawer-overlay" onclick="toggleDrawer(false)" style="z-index: 1001;"></div>
+
+  <script>
+    // 1. Initialize Lucide Icons
+    lucide.createIcons();
+
+    // 2. Touch Target Visualizer
+    const touchCheckbox = document.getElementById('toggle-touch-helper');
+    const container = document.getElementById('buttons-sandbox-container');
+    touchCheckbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        container.classList.add('show-touch-targets');
+      } else {
+        container.classList.remove('show-touch-targets');
+      }
+    });
+
+    // 3. Border Radius Modifier
+    function setSandboxRadius(radius) {
+      console.log('setSandboxRadius called with:', radius);
+      const buttons = ['sb-btn-primary', 'sb-btn-secondary', 'sb-btn-danger'];
+      buttons.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.borderRadius = radius;
+          console.log(`Updated ${id} style.borderRadius to ${radius}. Computed is:`, window.getComputedStyle(el).borderRadius);
+        } else {
+          console.error(`Element not found: ${id}`);
+        }
+      });
+      
+      // Update filter buttons styling
+      document.querySelectorAll('[id^="rad-"]').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      if (radius === '8px') document.getElementById('rad-8').classList.add('active');
+      if (radius === '12px') document.getElementById('rad-12').classList.add('active');
+      if (radius === '16px') document.getElementById('rad-16').classList.add('active');
+    }
+
+    // 4. Input States Simulator Logic
+    function triggerInputState(state) {
+      const input = document.getElementById('sandbox-sim-input');
+      const label = document.getElementById('sim-input-label');
+      const spinner = document.getElementById('sandbox-input-spinner');
+      const errorMsg = document.getElementById('sandbox-error-msg');
+      
+      // Clean up previous states
+      input.className = 'sb-input';
+      input.disabled = false;
+      spinner.style.display = 'none';
+      errorMsg.style.display = 'none';
+      
+      // Remove active class from state buttons
+      document.querySelectorAll('[id^="state-btn-"]').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById('state-btn-' + state).classList.add('active');
+      
+      switch(state) {
+        case 'default':
+          input.value = '';
+          label.textContent = 'Тестируемое поле ввода (Default):';
+          break;
+        case 'focus':
+          input.value = '';
+          label.textContent = 'Тестируемое поле ввода (Focus):';
+          input.focus();
+          break;
+        case 'filled':
+          input.value = 'dev@vibecoding.com';
+          input.classList.add('filled');
+          label.textContent = 'Тестируемое поле ввода (Filled):';
+          break;
+        case 'error':
+          input.value = 'invalid-email-format';
+          input.classList.add('error');
+          label.textContent = 'Тестируемое поле ввода (Error):';
+          errorMsg.style.display = 'block';
+          break;
+        case 'disabled':
+          input.value = 'Недоступно для ввода';
+          input.disabled = true;
+          label.textContent = 'Тестируемое поле ввода (Disabled):';
+          break;
+        case 'loading':
+          input.value = 'Проверка доступности почты...';
+          spinner.style.display = 'block';
+          label.textContent = 'Тестируемое поле ввода (Loading):';
+          break;
+      }
+    }
+
+    // 5. Spring Physics Simulator Animation Mock
+    function runSpringAnim(type) {
+      const box = document.getElementById('spring-box');
+      const stiffness = document.getElementById('slider-stiffness').value;
+      const damping = document.getElementById('slider-damping').value;
+      
+      // Calculate dynamic transition time based on stiffness/damping
+      // T = 2 * PI * sqrt(M / K) - simplified representation
+      const duration = Math.max(0.2, (100 / stiffness) + (damping / 30));
+      box.style.transition = `all ${duration}s cubic-bezier(0.175, 0.885, 0.32, 1.275)`;
+      
+      // Reset
+      box.style.transform = 'none';
+      box.style.boxShadow = '0 0 20px rgba(217, 70, 239, 0.4)';
+      
+      // Apply active state class from filter buttons
+      document.querySelectorAll('[id^="anim-"]').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById('anim-' + type).classList.add('active');
+
+      setTimeout(() => {
+        switch(type) {
+          case 'bounce':
+            box.style.transform = 'translateY(-30px) scale(1.1)';
+            setTimeout(() => { box.style.transform = 'translateY(0) scale(1)'; }, duration * 600);
+            break;
+          case 'rotate':
+            box.style.transform = 'rotate(180deg) scale(0.9)';
+            setTimeout(() => { box.style.transform = 'rotate(360deg) scale(1)'; }, duration * 600);
+            break;
+          case 'shake':
+            box.style.transition = `all 0.08s ease-in-out`;
+            let shakes = [-8, 8, -6, 6, -3, 3, 0];
+            shakes.forEach((val, idx) => {
+              setTimeout(() => {
+                box.style.transform = `translateX(${val}px)`;
+                if (val !== 0) box.style.boxShadow = '0 0 25px rgba(239, 68, 68, 0.6)';
+                else box.style.boxShadow = '0 0 20px rgba(217, 70, 239, 0.4)';
+              }, idx * 80);
+            });
+            break;
+          case 'pulse':
+            box.style.transform = 'scale(1.25)';
+            box.style.boxShadow = '0 0 35px rgba(217, 70, 239, 0.8)';
+            setTimeout(() => { 
+              box.style.transform = 'scale(1)'; 
+              box.style.boxShadow = '0 0 20px rgba(217, 70, 239, 0.4)';
+            }, duration * 600);
+            break;
+        }
+      }, 50);
+    }
+
+    // 6. Focus Trap Keyboard Orchestrator (A11y)
+    let lastFocusedElement = null;
+    
+    function logA11y(msg) {
+      document.getElementById('a11y-audit-console').innerHTML = `> ${msg}`;
+    }
+
+    function toggleModal(open) {
+      const modal = document.getElementById('sandbox-modal');
+      const overlay = document.getElementById('sandbox-modal-overlay');
+      
+      if (open) {
+        lastFocusedElement = document.activeElement;
+        modal.classList.add('active');
+        overlay.classList.add('active');
+        logA11y("Модальное окно открыто. Фокус переведен на первое поле ввода.");
+        
+        // Force reflow
+        modal.offsetWidth;
+        
+        // Auto focus first input
+        setTimeout(() => {
+          const el = document.getElementById('modal-field-1');
+          if (el) {
+            el.offsetWidth; // Force child reflow
+            el.focus();
+          } else {
+            console.error("modal-field-1 element not found!");
+          }
+        }, 100);
+        
+        // Add global key handler for Focus Trap
+        document.addEventListener('keydown', handleModalKeys);
+      } else {
+        modal.classList.remove('active');
+        overlay.classList.remove('active');
+        logA11y("Модальное окно закрыто. Фокус возвращен на кнопку-триггер.");
+        
+        // Return focus
+        if (lastFocusedElement) {
+          lastFocusedElement.focus();
+        }
+        
+        document.removeEventListener('keydown', handleModalKeys);
+      }
+    }
+
+    function handleModalKeys(e) {
+      const modal = document.getElementById('sandbox-modal');
+      if (!modal.classList.contains('active')) return;
+      
+      // Close on Escape
+      if (e.key === 'Escape') {
+        toggleModal(false);
+        return;
+      }
+      
+      if (e.key === 'Tab') {
+        const focusableElements = [
+          document.getElementById('modal-close-icon'),
+          document.getElementById('modal-field-1'),
+          document.getElementById('modal-field-2'),
+          document.getElementById('modal-submit-btn'),
+          document.getElementById('modal-cancel-btn')
+        ];
+        
+        const first = focusableElements[0];
+        const last = focusableElements[focusableElements.length - 1];
+        
+        if (e.shiftKey) { // Shift + Tab
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+            logA11y("Shift+Tab: зацикливание фокуса на ПОСЛЕДНИЙ элемент.");
+          } else {
+            logA11y(`Фокусировка на элементе: ${document.activeElement.id || document.activeElement.tagName}`);
+          }
+        } else { // Tab
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+            logA11y("Tab: зацикливание фокуса на ПЕРВЫЙ элемент.");
+          } else {
+            logA11y(`Фокусировка на элементе: ${document.activeElement.id || document.activeElement.tagName}`);
+          }
+        }
+      }
+    }
+
+    function submitModalData() {
+      const f1 = document.getElementById('modal-field-1').value;
+      logA11y(`Данные отправлены! Значение 1: "${f1}". Закрываем модалку.`);
+      toggleModal(false);
+    }
+
+    // 7. Drawer Focus Trap
+    function toggleDrawer(open) {
+      const drawer = document.getElementById('sandbox-drawer');
+      const overlay = document.getElementById('sandbox-drawer-overlay');
+      
+      if (open) {
+        lastFocusedElement = document.activeElement;
+        drawer.classList.add('active');
+        overlay.classList.add('active');
+        logA11y("Drawer открыт. Фокус переведен на поле Drawer.");
+        
+        setTimeout(() => {
+          document.getElementById('drawer-field-1').focus();
+        }, 100);
+        
+        document.addEventListener('keydown', handleDrawerKeys);
+      } else {
+        drawer.classList.remove('active');
+        overlay.classList.remove('active');
+        logA11y("Drawer закрыт. Фокус возвращен на кнопку-триггер.");
+        
+        if (lastFocusedElement) {
+          lastFocusedElement.focus();
+        }
+        
+        document.removeEventListener('keydown', handleDrawerKeys);
+      }
+    }
+
+    function handleDrawerKeys(e) {
+      const drawer = document.getElementById('sandbox-drawer');
+      if (!drawer.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') {
+        toggleDrawer(false);
+        return;
+      }
+      
+      if (e.key === 'Tab') {
+        const focusable = [
+          document.getElementById('drawer-close-btn'),
+          document.getElementById('drawer-field-1'),
+          document.getElementById('drawer-field-2'),
+          document.getElementById('drawer-confirm-btn')
+        ];
+        
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    }
+
+    // 8. Error Recovery (Graceful Degradation) Logic
+    function crashBoundaryComponent() {
+      const active = document.getElementById('sb-boundary-active-state');
+      const fallback = document.getElementById('sb-boundary-fallback-state');
+      const container = document.getElementById('sandbox-error-boundary-view');
+      
+      // Crash UI transition
+      container.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+      container.style.background = 'rgba(239, 68, 68, 0.03)';
+      
+      active.style.display = 'none';
+      fallback.style.display = 'block';
+    }
+
+    function recoverBoundaryComponent() {
+      const active = document.getElementById('sb-boundary-active-state');
+      const fallback = document.getElementById('sb-boundary-fallback-state');
+      const container = document.getElementById('sandbox-error-boundary-view');
+      const retryBtn = document.getElementById('btn-recover-boundary');
+      
+      // Disable retry button and simulate network delay for semantic recovery
+      retryBtn.disabled = true;
+      retryBtn.innerHTML = `<i class="animate-spin" style="display:inline-block; animation: spin-fast 1s linear infinite;">🔄</i> Восстановление...`;
+      
+      setTimeout(() => {
+        container.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+        container.style.background = 'rgba(255, 255, 255, 0.01)';
+        
+        // Restore elements
+        retryBtn.disabled = false;
+        retryBtn.innerHTML = `<i data-lucide="refresh-cw"></i> <span>Запустить семантическое восстановление (Retry)</span>`;
+        
+        fallback.style.display = 'none';
+        active.style.display = 'block';
+        
+        lucide.createIcons();
+      }, 1200);
+    }
+  </script>
+
+  <!-- Fast spin keyframe for loaders -->
+  <style>
+    @keyframes spin-fast {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-spin {
+      animation: spin-fast 0.8s linear infinite;
+    }
+  </style>
+</body>
+</html>
