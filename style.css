@@ -868,6 +868,7 @@ body {
   position: absolute;
   z-index: 15;
   transition: opacity 0.3s ease;
+  width: max-content;
 }
 
 .column-header-content {
