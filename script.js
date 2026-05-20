@@ -82,22 +82,33 @@ document.addEventListener("DOMContentLoaded", () => {
     workflow: 680,      // Lower-mid area
     product: 800        // Bottom area
   };
-
-  // Horizontal offsets based on levels
-  // Single-column levels (L_Insights, L0, L1, L5, L6) step = 430px (240px card + 190px gap)
-  // Two-column levels (L2, L3, L4, L7, L8) occupy 500px (240+20+240), step to next = 690px (500+190)
-  const levelXOffsets = {
-    L_Insights: 150,
-    L0: 580,
-    L1: 1010,
-    L2: 1440,   // 2-col: ends at 1440+500=1940, +190 gap → L3 starts at 2130
-    L3: 2130,   // 2-col: ends at 2130+500=2630, +190 gap → L4 starts at 2820
-    L4: 2820,   // 2-col: ends at 2820+500=3320, +190 gap → L5 starts at 3510
-    L5: 3510,   // 1-col: ends at 3510+240=3750, +190 gap → L6 starts at 3940
-    L6: 3940,   // 1-col: ends at 3940+240=4180, +190 gap → L7 starts at 4370
-    L7: 4370,   // 2-col: ends at 4370+500=4870, +190 gap → L8 starts at 5060
-    L8: 5060    // 2-col
+  // Horizontal offsets based on levels - calculated dynamically based on level layouts
+  const CARD_W = 240;
+  const COL_GAP = 40;
+  const LEVEL_GAP = 190;
+  
+  const levelLayouts = {
+    L_Insights: { cols: 1 },
+    L0: { cols: 1 },
+    L1: { cols: 1 },
+    L2: { cols: 2 },
+    L3: { cols: 2 },
+    L4: { cols: 4 },
+    L5: { cols: 1 },
+    L6: { cols: 1 },
+    L7: { cols: 2 },
+    L8: { cols: 4 }
   };
+
+  const levelXOffsets = {};
+  let currentX = 150;
+  const levelOrder = ["L_Insights", "L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8"];
+  levelOrder.forEach(lvl => {
+    levelXOffsets[lvl] = currentX;
+    const layout = levelLayouts[lvl] || { cols: 1 };
+    const width = layout.cols * CARD_W + (layout.cols - 1) * COL_GAP;
+    currentX += width + LEVEL_GAP;
+  });
 
   // Define connection paths (relationships)
   const connectionsList = [
@@ -595,20 +606,21 @@ document.addEventListener("DOMContentLoaded", () => {
       levelNodesMap[lvl].sort((a, b) => trackOrder.indexOf(a.track) - trackOrder.indexOf(b.track));
     });
 
-    // Levels that use 2-column card layout in canvas view
-    const twoColumnLevels = new Set(["L2", "L3", "L4", "L7", "L8"]);
     // Card width and column gap constants
     const CARD_W = 240;
-    const COL_GAP = 20; // gap between the two columns
+    const COL_GAP = 40; // gap between columns
 
     Object.keys(levels).forEach(lvl => {
       const levelNodes = levelNodesMap[lvl];
       const count = levelNodes.length;
       
-      // Calculate vertical spacing with a clean, compact gap to keep vertical distances small
+      const layout = levelLayouts[lvl] || { cols: 1 };
+      const numCols = layout.cols;
       const startY = 55;
-      const gap = 160;
-      const isTwoCol = twoColumnLevels.has(lvl);
+      
+      // Vertical distance between cards inside columns
+      // Using 180px for multi-column layouts to prevent them from looking squished/слеплены
+      const gap = numCols > 1 ? 180 : 160;
 
       // Add column header above the column
       if (count > 0) {
@@ -616,20 +628,10 @@ document.addEventListener("DOMContentLoaded", () => {
         headerEl.className = "canvas-column-header";
         headerEl.dataset.level = lvl;
 
-        // For 1-col levels: center over single card (CARD_W/2 = 120px from left edge)
-        // For 2-col levels: center over both columns combined width = CARD_W*2 + COL_GAP
         const baseX = levelXOffsets[lvl];
-        let headerLeft;
-        if (isTwoCol) {
-          // Center of (col0_left + col1_right) / 2 - header_half_width
-          // col0 starts at baseX, col1 ends at baseX + CARD_W + COL_GAP + CARD_W
-          // center point = baseX + CARD_W + COL_GAP/2
-          headerLeft = baseX + CARD_W + COL_GAP / 2;
-        } else {
-          // Center of single card
-          headerLeft = baseX + CARD_W / 2;
-        }
-        // The header element itself uses transform: translateX(-50%) to center on this point
+        const width = numCols * CARD_W + (numCols - 1) * COL_GAP;
+        const headerLeft = baseX + width / 2;
+        
         headerEl.style.left = `${headerLeft}px`;
         headerEl.style.top = `15px`;
         headerEl.style.transform = "translateX(-50%)";
@@ -649,12 +651,20 @@ document.addEventListener("DOMContentLoaded", () => {
         
         let x, y;
 
-        if (isTwoCol) {
-          // 2-column layout: col 0 = left, col 1 = right
-          const col = idx % 2;         // 0 = left column, 1 = right column
-          const row = Math.floor(idx / 2);
-          x = levelXOffsets[node.level] + col * (CARD_W + COL_GAP);
+        if (numCols > 1) {
+          const col = idx % numCols;
+          const row = Math.floor(idx / numCols);
+          const baseX = levelXOffsets[node.level] + col * (CARD_W + COL_GAP);
           y = startY + row * gap;
+
+          // Apply a subtle premium chessboard stagger (zigzag) per column
+          let staggerX = 0;
+          if ((row + col) % 2 === 1) {
+            staggerX = 15;
+          } else {
+            staggerX = -10;
+          }
+          x = baseX + staggerX;
         } else {
           // Original single-column staggered layout
           x = levelXOffsets[node.level];
@@ -1773,19 +1783,25 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Cap scale between 0.45 and 1.0 (to avoid over-zooming or making it too tiny)
     targetScale = Math.max(0.45, Math.min(targetScale, 1.0));
-    
-    // If all nodes are visible, set a comfortable default full-view scale
-    if (visibleCanvasNodes.length === nodes.length) {
-      targetScale = 0.6;
+        let targetPanX, targetPanY;
+
+    // If all levels are enabled, align L1's top-left to the top-left of the viewport
+    if (currentLevelFilter === "all") {
+      targetScale = 0.6; // comfortable scale for full overview
+      
+      const l1X = levelXOffsets["L1"] !== undefined ? levelXOffsets["L1"] : 1010;
+      // Align L1 column top-left (l1X, y=15) to viewport top-left with custom padding (50px left, 40px top)
+      const paddingX = 50;
+      const paddingY = 40;
+      targetPanX = paddingX - (l1X * targetScale);
+      targetPanY = paddingY - (15 * targetScale);
+    } else {
+      // If a single level is selected, center it as before
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
+      targetPanX = (viewportWidth / 2) - (centerX * targetScale);
+      targetPanY = (viewportHeight / 2) - (centerY * targetScale);
     }
-    
-    const centerX = (minX + maxX) / 2;
-    const centerY = (minY + maxY) / 2;
-    
-    // Center bounding box center in viewport center
-    const targetPanX = (viewportWidth / 2) - (centerX * targetScale);
-    const targetPanY = (viewportHeight / 2) - (centerY * targetScale);
-    
     // Apply class for smooth transition animation
     mapCanvas.classList.add("smooth-transform");
     
