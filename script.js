@@ -84,17 +84,19 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Horizontal offsets based on levels
+  // Single-column levels (L_Insights, L0, L1, L5, L6) step = 430px (240px card + 190px gap)
+  // Two-column levels (L2, L3, L4, L7, L8) occupy 500px (240+20+240), step to next = 690px (500+190)
   const levelXOffsets = {
     L_Insights: 150,
     L0: 580,
     L1: 1010,
-    L2: 1440,
-    L3: 1870,
-    L4: 2300,
-    L5: 2730,
-    L6: 3160,
-    L7: 3590,
-    L8: 4020
+    L2: 1440,   // 2-col: ends at 1440+500=1940, +190 gap → L3 starts at 2130
+    L3: 2130,   // 2-col: ends at 2130+500=2630, +190 gap → L4 starts at 2820
+    L4: 2820,   // 2-col: ends at 2820+500=3320, +190 gap → L5 starts at 3510
+    L5: 3510,   // 1-col: ends at 3510+240=3750, +190 gap → L6 starts at 3940
+    L6: 3940,   // 1-col: ends at 3940+240=4180, +190 gap → L7 starts at 4370
+    L7: 4370,   // 2-col: ends at 4370+500=4870, +190 gap → L8 starts at 5060
+    L8: 5060    // 2-col
   };
 
   // Define connection paths (relationships)
@@ -593,6 +595,12 @@ document.addEventListener("DOMContentLoaded", () => {
       levelNodesMap[lvl].sort((a, b) => trackOrder.indexOf(a.track) - trackOrder.indexOf(b.track));
     });
 
+    // Levels that use 2-column card layout in canvas view
+    const twoColumnLevels = new Set(["L2", "L3", "L4", "L7", "L8"]);
+    // Card width and column gap constants
+    const CARD_W = 240;
+    const COL_GAP = 20; // gap between the two columns
+
     Object.keys(levels).forEach(lvl => {
       const levelNodes = levelNodesMap[lvl];
       const count = levelNodes.length;
@@ -600,17 +608,31 @@ document.addEventListener("DOMContentLoaded", () => {
       // Calculate vertical spacing with a clean, compact gap to keep vertical distances small
       const startY = 55;
       const gap = 160;
+      const isTwoCol = twoColumnLevels.has(lvl);
 
       // Add column header above the column
       if (count > 0) {
-         const headerEl = document.createElement("div");
+        const headerEl = document.createElement("div");
         headerEl.className = "canvas-column-header";
         headerEl.dataset.level = lvl;
-        
-        // Position at: x center of column = levelXOffsets[lvl] - 20; y = 15;
-        const leftPos = levelXOffsets[lvl] - 20;
-        headerEl.style.left = `${leftPos}px`;
+
+        // For 1-col levels: center over single card (CARD_W/2 = 120px from left edge)
+        // For 2-col levels: center over both columns combined width = CARD_W*2 + COL_GAP
+        const baseX = levelXOffsets[lvl];
+        let headerLeft;
+        if (isTwoCol) {
+          // Center of (col0_left + col1_right) / 2 - header_half_width
+          // col0 starts at baseX, col1 ends at baseX + CARD_W + COL_GAP + CARD_W
+          // center point = baseX + CARD_W + COL_GAP/2
+          headerLeft = baseX + CARD_W + COL_GAP / 2;
+        } else {
+          // Center of single card
+          headerLeft = baseX + CARD_W / 2;
+        }
+        // The header element itself uses transform: translateX(-50%) to center on this point
+        headerEl.style.left = `${headerLeft}px`;
         headerEl.style.top = `15px`;
+        headerEl.style.transform = "translateX(-50%)";
         
         headerEl.innerHTML = `
           <div class="column-header-content">
@@ -625,15 +647,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const trackInfo = tracks[node.track];
         const isCompleted = completedNodes.has(node.id);
         
-        let x = levelXOffsets[node.level];
-        // Calculate smooth staggered vertical position
-        let y = startY + idx * gap;
+        let x, y;
 
-        // Apply a subtle premium horizontal stagger (alternating +/- 25px) to make the connection paths flow organically
-        if (idx % 2 === 1) {
-          x += 25;
+        if (isTwoCol) {
+          // 2-column layout: col 0 = left, col 1 = right
+          const col = idx % 2;         // 0 = left column, 1 = right column
+          const row = Math.floor(idx / 2);
+          x = levelXOffsets[node.level] + col * (CARD_W + COL_GAP);
+          y = startY + row * gap;
         } else {
-          x -= 15;
+          // Original single-column staggered layout
+          x = levelXOffsets[node.level];
+          y = startY + idx * gap;
+          // Apply a subtle premium horizontal stagger (alternating +/- 25px)
+          if (idx % 2 === 1) {
+            x += 25;
+          } else {
+            x -= 15;
+          }
         }
 
         // Store resolved coords back to node object for path drawing
