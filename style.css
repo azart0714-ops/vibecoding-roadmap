@@ -842,14 +842,41 @@ body {
 
 .connection-path {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 2.5;
+  stroke: rgba(249, 115, 22, 0.45); /* Incomplete orange (semi-transparent) */
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-dasharray: 8, 6;
   transition: stroke 0.3s, stroke-width 0.3s;
+  animation: flowDash 35s linear infinite;
+  marker-end: url(#arrow-incomplete);
 }
 
 .connection-path.active {
+  stroke: #f97316 !important; /* Vibrant incomplete orange when active */
   stroke-width: 3.5px !important;
   animation: flowDash 12s linear infinite, strokePulse 1.5s infinite alternate !important;
+}
+
+/* Partially completed (yellow/gold) connections */
+.connection-path.partial {
+  stroke: rgba(223, 168, 44, 0.75) !important;
+  stroke-width: 2.2px;
+  marker-end: url(#arrow-partial) !important;
+}
+
+.connection-path.partial.active {
+  stroke: #dfa82c !important; /* Vibrant gold yellow when active */
+}
+
+/* Completed (emerald green) connections */
+.connection-path.completed-conn {
+  stroke: rgba(16, 185, 129, 0.75) !important;
+  stroke-width: 2.5px;
+  marker-end: url(#arrow-completed) !important;
+}
+
+.connection-path.completed-conn.active {
+  stroke: #10b981 !important; /* Vibrant emerald green when active */
 }
 
 @keyframes strokePulse {
@@ -1452,15 +1479,7 @@ body {
   opacity: 0.7;
 }
 
-/* Connection Path Dash Animation */
-.connection-path {
-  stroke-linecap: round;
-  stroke-width: 2px;
-  fill: none;
-  transition: stroke 0.3s, stroke-width 0.3s;
-  stroke-dasharray: 8, 6;
-  animation: flowDash 35s linear infinite;
-}
+
 
 @keyframes flowDash {
   from {

@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let isDragging = false;
   let startX, startY;
 
+
+
+
   // DOM Elements
   const bentoGrid = document.getElementById("bento-grid-content");
   const canvasNodesContainer = document.getElementById("canvas-nodes-container");
@@ -817,19 +820,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 5. Draw Canvas connections
   function drawCanvasConnections() {
-    svgConnections.innerHTML = "";
+    // Keep defs block intact, only remove path elements to prevent arrowhead rendering bugs/flicker
+    let defs = svgConnections.querySelector("defs");
+    if (!defs) {
+      defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      defs.innerHTML = `
+        <marker id="arrow-incomplete" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="rgba(249, 115, 22, 0.75)" />
+        </marker>
+        <marker id="arrow-partial" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="rgba(223, 168, 44, 0.95)" />
+        </marker>
+        <marker id="arrow-completed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="rgba(16, 185, 129, 0.95)" />
+        </marker>
+      `;
+      svgConnections.appendChild(defs);
+    }
     
-    // Inject SVG marker defs so arrowheads render correctly
-    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    defs.innerHTML = `
-      <marker id="arrow-incomplete" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="rgba(249, 115, 22, 0.65)" />
-      </marker>
-      <marker id="arrow-completed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="rgba(16, 185, 129, 0.85)" />
-      </marker>
-    `;
-    svgConnections.appendChild(defs);
+    // Remove only connection paths
+    svgConnections.querySelectorAll(".connection-path").forEach(path => path.remove());
     
     connectionsList.forEach((conn) => {
       const fromNode = nodes.find(n => n.id === conn.from);
@@ -856,20 +866,30 @@ document.addEventListener("DOMContentLoaded", () => {
       path.dataset.from = fromNode.id;
       path.dataset.to = toNode.id;
       
+      // Determine completeness state class from node
       const isFromCompleted = completedNodes.has(fromNode.id);
+      const completedStepsCount = fromNode.steps ? fromNode.steps.filter((_, idx) => {
+        return completedSteps.has(`${fromNode.id}_step_${idx}`);
+      }).length : 0;
+      const isFromPartiallyCompleted = !isFromCompleted && completedStepsCount > 0;
       
       if (isFromCompleted) {
-        path.style.stroke = "rgba(16, 185, 129, 0.8)";
-        path.style.strokeWidth = "2.5px";
-        path.setAttribute("marker-end", "url(#arrow-completed)");
-      } else {
-        path.style.stroke = "rgba(249, 115, 22, 0.5)";
-        path.style.strokeWidth = "2px";
-        path.setAttribute("marker-end", "url(#arrow-incomplete)");
+        path.classList.add("completed-conn");
+      } else if (isFromPartiallyCompleted) {
+        path.classList.add("partial");
       }
       
       svgConnections.appendChild(path);
     });
+
+    // Restore visual highlighter on canvas connections for the currently selected/active node (if any)
+    const selectedNodeEl = document.querySelector(".canvas-node.selected");
+    if (selectedNodeEl) {
+      const activeNodeId = selectedNodeEl.dataset.id;
+      if (activeNodeId) {
+        highlightNodeConnections(activeNodeId);
+      }
+    }
   }
 
   // 6. Setup Zoom and Pan on Canvas
@@ -1039,24 +1059,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (fromVisible && toVisible) {
         path.style.opacity = "1";
+        path.style.stroke = "";
+        path.style.strokeWidth = "";
+        path.removeAttribute("marker-end");
         // Highlight active connections during active searches
         if (query.length > 0) {
           path.classList.add("active");
-          const fromNode = nodes.find(n => n.id === fromId);
-          const isFromCompleted = completedNodes.has(fromNode.id);
-          path.style.stroke = isFromCompleted ? "#10b981" : "#f97316";
-          path.style.strokeWidth = "3";
         } else {
           path.classList.remove("active");
-          const fromNode = nodes.find(n => n.id === fromId);
-          const isFromCompleted = completedNodes.has(fromNode.id);
-          path.style.stroke = isFromCompleted ? "rgba(16, 185, 129, 0.8)" : "rgba(249, 115, 22, 0.5)";
-          path.style.strokeWidth = "2";
         }
       } else {
         path.style.opacity = "0.05";
         path.classList.remove("active");
-        path.style.strokeWidth = "2";
+        path.style.stroke = "";
+        path.style.strokeWidth = "";
+        path.removeAttribute("marker-end");
       }
     });
 
@@ -1236,6 +1253,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("drawer-content-level").style.display = "none";
 
     const trackInfo = tracks[node.track];
+
+    // Select the canvas node visually so that its connections are correctly highlighted
+    document.querySelectorAll(".canvas-node").forEach(n => n.classList.remove("selected"));
+    const canvasNodeEl = document.getElementById(`canvas-node-${nodeId}`);
+    if (canvasNodeEl) {
+      canvasNodeEl.classList.add("selected");
+    }
 
     // Populate drawer elements
     const drawerTitle = document.getElementById("drawer-title");
@@ -1616,10 +1640,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Clear path highlights
     document.querySelectorAll(".connection-path").forEach(path => {
       path.classList.remove("active");
-      const fromNode = nodes.find(n => n.id === path.dataset.from);
-      const isFromCompleted = completedNodes.has(fromNode.id);
-      path.style.stroke = isFromCompleted ? "rgba(16, 185, 129, 0.8)" : "rgba(249, 115, 22, 0.5)";
-      path.style.strokeWidth = "2";
+      path.style.stroke = "";
+      path.style.strokeWidth = "";
+      path.removeAttribute("marker-end");
     });
     
     document.querySelectorAll(".canvas-node").forEach(n => n.classList.remove("selected"));
@@ -1631,19 +1654,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Clear old active classes
     document.querySelectorAll(".connection-path").forEach(path => {
       path.classList.remove("active");
-      const fromNode = nodes.find(n => n.id === path.dataset.from);
-      const isFromCompleted = completedNodes.has(fromNode.id);
-      path.style.stroke = isFromCompleted ? "rgba(16, 185, 129, 0.8)" : "rgba(249, 115, 22, 0.5)";
-      path.style.strokeWidth = "2";
+      path.style.stroke = "";
+      path.style.strokeWidth = "";
+      path.removeAttribute("marker-end");
     });
 
     // Highlight lines leading to or from the selected node
     document.querySelectorAll(`.connection-path[data-from="${nodeId}"], .connection-path[data-to="${nodeId}"]`).forEach(path => {
       path.classList.add("active");
-      const fromNode = nodes.find(n => n.id === path.dataset.from);
-      const isFromCompleted = completedNodes.has(fromNode.id);
-      path.style.stroke = isFromCompleted ? "#10b981" : "#f97316";
-      path.style.strokeWidth = "3.5";
+      path.style.stroke = "";
+      path.style.strokeWidth = "";
+      path.removeAttribute("marker-end");
     });
   }
 
